@@ -1,7 +1,8 @@
 import { Schema, model, Document } from "mongoose";
 
-interface userDocument extends Document {
+export interface userDocument extends Document {
     name: string;
+    recruiter?: string;
     email: string;
     phone?: string;
     password: string;
@@ -15,6 +16,7 @@ interface userDocument extends Document {
 const userSchema = new Schema<userDocument>({
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true },
+    recruiter: { type: Schema.Types.ObjectId  , ref: "recruiter" },
     phone: { type: String },
     password: { type: String, required: true },
     emailOtp: { type: String },
@@ -31,6 +33,8 @@ userSchema.pre("save", function (next) {
     this.email = this.email.toLowerCase();
     next();
 });
+
+
 
 
 
