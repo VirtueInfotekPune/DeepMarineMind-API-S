@@ -11,6 +11,7 @@ export interface userDocument extends Document {
     status: number;
     emailOtp?: string;
     emailVerfied?: boolean;
+    adress : String
 }
 
 const userSchema = new Schema<userDocument>({
@@ -24,6 +25,7 @@ const userSchema = new Schema<userDocument>({
     type: { type: String, required: true },
     role: { type: String, required: true },
     status: { type: Number, enum: [0, 1], default: 1 },
+    adress: { type: String , required : true}
 }, {
     timestamps: true
 });
