@@ -10,6 +10,7 @@ import { connect} from "./core/db";
 //routes imports 
 import hellooRoutes from "./modules/HelloModule";
 import authRoutes from "./modules/AuthModule";
+import vesselRoutes from "./modules/MasterModule";
 
 
 // Load environment variables
@@ -27,6 +28,7 @@ app.use(cors());
 //hello routes 
 app.use("/api/hello", hellooRoutes);
 app.use("/api/auth", authRoutes);
+app.use("/api/master", vesselRoutes);
 
 
 app.listen(process.env.PORT, async () => {
