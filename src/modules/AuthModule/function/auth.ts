@@ -5,9 +5,6 @@ import { UserModel } from "../../../models/user";
 import mongooseService from "../../../services/mongoose";
 
 
-
-
-
 export const registerUser = async (req: any, res: any) => {
     try {
 
@@ -29,7 +26,7 @@ export const registerUser = async (req: any, res: any) => {
 
         const existingUser = await mongooseService.findOne(UserModel , { email });
 
-        if(existingUser) {
+        if(existingUser) { 
             const response = failureResponse({  
                 handler: "auth",
                 messageCode: "E002",

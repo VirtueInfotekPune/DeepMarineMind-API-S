@@ -1,0 +1,31 @@
+{
+    "en": {
+      "S001": "Vessel get successfully",
+      "S002": "Vessel added successfully",
+      "S003": "Vessel updated successfully",
+      "S004": "Vessel deleted successfully",
+      "S005": "Master data fetched successfully",
+  
+      "E001": "All fields are required",
+      "E002": "Vessel already exists",
+      "E003": "Error adding vessel",
+      "E004": "Error updating vessel",
+      "E005": "Error deleting vessel",
+      "E006": "No master data found",
+      "E007": "VesseID not found"
+    },
+    "ru": {
+      "S001": "Судно успешно добавлено",
+      "S002": "Судно успешно обновлено",
+      "S003": "Судно успешно удалено",
+      "S004": "Данные мастера успешно получены",
+  
+      "E001": "Все поля обязательны к заполнению",
+      "E002": "Судно уже существует",
+      "E003": "Ошибка при добавлении судна",
+      "E004": "Ошибка при обновлении судна",
+      "E005": "Ошибка при удалении судна",
+      "E006": "Данные мастера не найдены"
+    }
+  }
+  
