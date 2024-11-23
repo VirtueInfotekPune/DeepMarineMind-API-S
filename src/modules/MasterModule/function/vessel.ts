@@ -7,6 +7,16 @@ export const addVesselRoute = async (req: any, res: any) => {
     try {
         infoLogger("START:- addVesselRoute function");
         dataLogger("req.body", req.body);
+        const existingVessel = await vesselService.findOneVessel({name : req.body.name});
+
+        if(existingVessel) {
+            const response = failureResponse({
+                handler: "master",
+                messageCode: "E002",
+                req: req,
+            });
+            return res.status(response?.statusCode).send(response);
+        }
         const result = await vesselService.saveVessel(req.body);
         const responce = successResponse({
             handler: "master",
@@ -27,7 +37,8 @@ export const addVesselRoute = async (req: any, res: any) => {
     }
 }
 
-export const findAllVesselRoute = async (req: any, res: any) => {
+
+export const findPaginateVesselRoute = async (req: any, res: any) => {
     try {
         infoLogger("START:- findAllVesselRoute function");
         const filter = {} as any;
@@ -35,7 +46,13 @@ export const findAllVesselRoute = async (req: any, res: any) => {
             filter._id = req.query.id
         }
 
-        const result = await vesselService.findAllVessel(filter);
+        const options = {
+            page: req.query.page || 1,
+            limit : req.query.limit || 10
+
+        }
+
+        const result = await vesselService.paginate(filter, options);
         const response = successResponse({
             handler: "master",
             messageCode: "S001",

@@ -1,14 +1,14 @@
-import { infoLogger , errorLogger , dataLogger } from "../../core/logger";
-import { vesselDocument , vesselModel } from "../../models/master/vessel";
+import { dataLogger, errorLogger, infoLogger } from "../../core/logger";
+import { vesselModel } from "../../models/master/vessel";
 
-
+  
 interface VesselService {
   saveVessel: (data: any) => Promise<any>;
   updateVessel: (filter: any, payload: any) => Promise<any>;
   deleteVessel : (filter : any) => Promise<any>;
-  // findOneVessel : (filter: any) => Promise<any>;
+  findOneVessel : (filter: any) => Promise<any>;
   findAllVessel : (filter: any) => Promise<any>;
-  // paginate : (filter: any) => Promise<any>;
+  paginate: (filter: any, options: any) => Promise<any>;
   // aggregatePaginate : (filter: any) => Promise<any>;
 }
 
@@ -49,17 +49,17 @@ const vesselService: VesselService = {
     }
   },
 
-  // findOneVessel : async (filter) => {
-  //   try {
-  //     infoLogger("START:- findOne function in vessel service");
-  //     const result = await vesselModel.findOne(filter);
-  //     dataLogger("result of findOne", result);
-  //     return result;
-  //   } catch (error) {
-  //     errorLogger("error in findOne function in vessel service", error);
-  //     throw error;
-  //   }
-  // },
+  findOneVessel : async (filter) => {
+    try {
+      infoLogger("START:- findOne function in vessel service");
+      const result = await vesselModel.findOne(filter);
+      dataLogger("result of findOne", result);
+      return result;
+    } catch (error) {
+      errorLogger("error in findOne function in vessel service", error);
+      throw error;
+    }
+  },
 
   findAllVessel : async (filter) => {
     try {
@@ -74,17 +74,17 @@ const vesselService: VesselService = {
   },
 
 
-//   paginate : async (filter) => {
-//     try {
-//       infoLogger("START:- paginate function in mongoose service");
-//       const result = await vesselModel.paginate(filter);
-//       dataLogger("result of paginate", result);
-//       return result;
-//     } catch (error) {
-//       errorLogger("error in paginate function in mongoose service", error);
-//       throw error;
-//     }
-//   },
+  paginate: async (filter: any, options: any) => {
+    try {
+        infoLogger("START:- paginate function in mongoose service");
+        const result = await vesselModel.paginate(filter, options);
+        dataLogger("result of paginate", result);
+        return result;
+    } catch (error) {
+        errorLogger("error in paginate function in mongoose service", error);
+        throw error;
+    }
+}
 
 //   aggregatePaginate : async (filter) => {
 //     try {

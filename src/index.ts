@@ -10,7 +10,7 @@ import { connect} from "./core/db";
 //routes imports 
 import hellooRoutes from "./modules/HelloModule";
 import authRoutes from "./modules/AuthModule";
-import vesselRoutes from "./modules/MasterModule";
+import masterRoutes from "./modules/MasterModule";
 
 
 // Load environment variables
@@ -28,13 +28,13 @@ app.use(cors());
 //hello routes 
 app.use("/api/hello", hellooRoutes);
 app.use("/api/auth", authRoutes);
-app.use("/api/master", vesselRoutes);
+app.use("/api/master", masterRoutes);
 
 
 app.listen(process.env.PORT, async () => {
     try {
       await connect();
-      console.log(`Server is running on port ${process.env.PORT}`);
+      console.log(`Server is running on port http://localhost:${process.env.PORT}`);
     } catch (error) {
       console.error("Error starting server:", error);
     }

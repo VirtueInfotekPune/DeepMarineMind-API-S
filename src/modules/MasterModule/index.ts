@@ -1,18 +1,26 @@
 import { Router } from "express";
 import {addVesselRoute , 
-        findAllVesselRoute,
+        findPaginateVesselRoute,
         updateVesselRoute, 
         deleteVesselRoute } from "./function/vessel";
+import { addDepartmentRoute, deleteDepartmentRoute, findPaginateDepartmentRoute, updateDepartmentRoute } from "./function/department";
 
 
-const vesselRoutes = Router()
+const masterRoutes = Router()
 
 
-//routes 
-vesselRoutes.get("/vessel" , findAllVesselRoute)
-vesselRoutes.post("/vessel" , addVesselRoute)
-vesselRoutes.patch("/vessel" , updateVesselRoute)
-vesselRoutes.delete("/vessel" , deleteVesselRoute)
+
+//routes for vessels
+masterRoutes.get("/vessel" , findPaginateVesselRoute)
+masterRoutes.post("/vessel" , addVesselRoute)
+masterRoutes.patch("/vessel" , updateVesselRoute)
+masterRoutes.delete("/vessel" , deleteVesselRoute)
+
+// routes for department 
+masterRoutes.get("/department" , findPaginateDepartmentRoute)
+masterRoutes.post("/department" , addDepartmentRoute)
+masterRoutes.patch("/department" , updateDepartmentRoute)
+masterRoutes.delete("/department" , deleteDepartmentRoute)
 
 
-export default vesselRoutes
+export default masterRoutes

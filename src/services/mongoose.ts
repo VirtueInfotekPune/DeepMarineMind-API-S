@@ -9,6 +9,7 @@ interface MongooseService {
     findAll : (model: any , filter: any) => Promise<any>;
     paginate : (model: any , filter: any) => Promise<any>;
     aggregatePaginate : (model: any , filter: any) => Promise<any>;
+    findById : (model: any , id: any) => Promise<any>;
   }
   
 const mongooseService: MongooseService = {
@@ -91,6 +92,18 @@ const mongooseService: MongooseService = {
         return result;
       } catch (error) {
         errorLogger("error in aggregatePaginate function in mongoose service", error);
+        throw error;
+      }
+    },
+
+    findById : async (model , id) => {
+      try {
+        infoLogger("START:- findById function in mongoose service");
+        const result = await model.findById(id);
+        dataLogger("result of findById", result);
+        return result;
+      } catch (error) {
+        errorLogger("error in findById function in mongoose service", error);
         throw error;
       }
     },
