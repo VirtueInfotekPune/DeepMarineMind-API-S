@@ -4,7 +4,7 @@ import { USER_ROLE } from "../constants/types/userRole";
 import  paginate  from "mongoose-paginate-v2";
 import aggregatePaginate from "mongoose-aggregate-paginate-v2";
 export interface userDocument extends Document {
-    name: string;
+    name?: string;
     recruiter?: string;
     email: string;
     phone?: string;
@@ -32,7 +32,7 @@ export interface userDocument extends Document {
 }
 
 const userSchema = new Schema<userDocument>({
-    name: { type: String, required: true },
+    name: { type: String},
     email: { type: String, required: true},
     recruiter: { type: Schema.Types.ObjectId  , ref: "recruiter" },
     phone: { type: String },

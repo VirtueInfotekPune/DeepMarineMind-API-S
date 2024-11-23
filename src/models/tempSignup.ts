@@ -3,7 +3,7 @@ import { USER_TYPE } from "../constants/types/userType";
 import { USER_ROLE } from "../constants/types/userRole";
 
 
-interface tempSignupDocument extends Document {
+export interface tempSignupDocument extends Document {
     name?: string 
     email?: string 
     emailOtp?: string 

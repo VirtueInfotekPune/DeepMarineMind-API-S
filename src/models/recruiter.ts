@@ -2,7 +2,7 @@ import { Schema, model, Document } from "mongoose";
 import  paginate  from "mongoose-paginate-v2";
 import aggregatePaginate from "mongoose-aggregate-paginate-v2";
 
-interface recruiterDocument extends Document {
+export interface recruiterDocument extends Document {
     name : string,
     email : string,
     phone : string,
