@@ -1,8 +1,7 @@
-import { PaginateResult } from "mongoose";
-import { infoLogger , errorLogger , dataLogger } from "../../core/logger";
-import { vesselDocument , vesselModel } from "../../models/master/vessel";
+import { dataLogger, errorLogger, infoLogger } from "../../core/logger";
+import { vesselModel } from "../../models/master/vessel";
 
-
+  
 interface VesselService {
   saveVessel: (data: any) => Promise<any>;
   updateVessel: (filter: any, payload: any) => Promise<any>;

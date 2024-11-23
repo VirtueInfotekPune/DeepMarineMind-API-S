@@ -1,19 +1,29 @@
-import { timeStamp } from "console";
-import {Schema, model, Document} from "mongoose";
+import { Document, Schema, model } from "mongoose";
+import paginate from "mongoose-paginate-v2";
+import aggregatePaginate from "mongoose-aggregate-paginate-v2";
+import { PaginateModel } from "../../interface/paginate";
 
 interface departmentDocument extends Document{
     name : String,
     image : String,
-    category ?: String
+    vesselId? : {type : Schema.Types.ObjectId , ref : "vessel"}
+    rank?:[{
+        name : String
+    }]
+
 }
 
 const departmentSchema = new Schema<departmentDocument>({
     name : {type : String, required : true},
     image : {type : String, required : true},
-    category : {type : String}
+    rank : [{name : {type : String}}],
+    vesselId : {type : Schema.Types.ObjectId , ref : "vessel"}
 },
 {
     timestamps : true
 })
 
-export default model<departmentDocument>("department", departmentSchema)
+departmentSchema.plugin(paginate);
+departmentSchema.plugin(aggregatePaginate);
+
+export const departmentModel =  model<departmentDocument ,PaginateModel<departmentDocument> >("department", departmentSchema)
