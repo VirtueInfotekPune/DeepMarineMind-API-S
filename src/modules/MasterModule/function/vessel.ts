@@ -1,4 +1,3 @@
-import { Query } from "mongoose";
 import { dataLogger, errorLogger, infoLogger } from "../../../core/logger";
 import { catchResponse, failureResponse, successResponse } from "../../../core/response";
 import vesselService from "../../../services/master/vessel";

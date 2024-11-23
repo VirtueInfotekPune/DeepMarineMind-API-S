@@ -4,28 +4,57 @@
       "S002": "Vessel added successfully",
       "S003": "Vessel updated successfully",
       "S004": "Vessel deleted successfully",
-      "S005": "Master data fetched successfully",
+      "S005": "Vessel data fetched successfully",
   
+      "S006": "Department get successfully",
+      "S007": "Department added successfully",
+      "S008": "Department updated successfully",
+      "S009": "Department deleted successfully",
+      "S010": "Department data fetched successfully",
+
       "E001": "All fields are required",
       "E002": "Vessel already exists",
       "E003": "Error adding vessel",
       "E004": "Error updating vessel",
       "E005": "Error deleting vessel",
       "E006": "No master data found",
-      "E007": "VesseID not found"
+      "E007": "VesseID not found",
+      
+
+      "E008": "All fields are required",
+      "E009": "Department already exists",
+      "E010": "Error adding Department",
+      "E011": "Error updating Department",
+      "E012": "Error deleting Department",
+      "E013": "Error fetching department data",
+      "E014": "DepartmentId not found"
     },
     "ru": {
       "S001": "Судно успешно добавлено",
       "S002": "Судно успешно обновлено",
       "S003": "Судно успешно удалено",
       "S004": "Данные мастера успешно получены",
+
+      "S006": "Отдел успешно получен",
+      "S007": "Отдел успешно добавлен",
+      "S008": "Отдел успешно обновлен",
+      "S009": "Отдел успешно удален",
+      "S010": "Данные отдела успешно получены",
   
       "E001": "Все поля обязательны к заполнению",
       "E002": "Судно уже существует",
       "E003": "Ошибка при добавлении судна",
       "E004": "Ошибка при обновлении судна",
       "E005": "Ошибка при удалении судна",
-      "E006": "Данные мастера не найдены"
+      "E006": "Данные мастера не найдены",
+
+      "E008": "Все поля обязательны",
+      "E009": "Отдел уже существует",
+      "E010": "Ошибка при добавлении отдела",
+      "E011": "Ошибка при обновлении отдела",
+      "E012": "Ошибка при удалении отдела",
+      "E013": "Нет данных мастера",
+      "E014": "Идентификатор отдела не найден"
     }
   }
   
