@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { dataLogger, errorLogger, infoLogger } from "../core/logger";
-import { catchResponse, failureResponse } from "../core/response";
+import { catchResponse, failureResponse, UnauthorizedResponse } from "../core/response";
 import { userDocument, UserModel  } from "../models/user";
 import jwt from "jsonwebtoken";
 
@@ -59,9 +59,9 @@ export const verifyToken = async (req: CustomRequest, res: Response, next: NextF
     }
   } catch (error) {
     errorLogger("Authentication Failed", error);
-    const response = await catchResponse({
+    const response =  UnauthorizedResponse({
       handler: "auth",
-      messageCode: "E014",
+      messageCode: "E018",
       req,
       error,
     });
