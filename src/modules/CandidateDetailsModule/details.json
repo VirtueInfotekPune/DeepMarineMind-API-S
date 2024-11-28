@@ -1,0 +1,39 @@
+{
+    "en": {
+        "S001": "Candidate Personal details get successfully",
+        "S002": "Candidate Personal details added successfully",
+        "S003": "Candidate Personal details updated successfully",
+        "S004": "Candidate Personal details deleted successfully",
+
+        "S005": "Candidate education get successfully",
+        "S006": "Candidate education added successfully",
+        "S007": "Candidate education updated successfully",
+        "S008": "Candidate education deleted successfully",
+
+        "E001": "All fields are required",
+        "E002": "User Id Is required",
+        "E003": "User does not exist",
+        "E004": "Error adding Candidate Personal details",
+        "E005": "Error updating Candidate Personal details",
+        "E006": "Error deleting Candidate Personal details",
+        "E007": "Error fetching Candidate Personal details data",
+        "E008": "ExperienceId not found",
+
+        "E009": "All fields are required",
+        "E010": "User Id Is required",
+        "E011": "User does not exist",
+        "E012": "Error adding Candidate education",
+        "E013": "Error updating Candidate education",
+        "E014": "Error deleting Candidate education",
+        "E015": "Error fetching Candidate education data",
+        "E016": "EducationId not found",
+        "E017": "Candidate Details Already exists"
+},
+
+    "ru": {
+        "S001": "Данные кандидата получены успешно",
+        "S002": "Данные кандидата добавлены успешно",
+        "S003": "Данные кандидата обновлены успешно",
+        "S004": "Данные кандидата удалены успешно"
+    }
+}

@@ -3,6 +3,7 @@ import authMessages from "../modules/AuthModule/auth.json";
 import masterMessages from "../modules/MasterModule/master.json";
 import experienceMesssages  from "../modules/ExperienceModule/experience.json"
 import userMessages from "../modules/UserModule/user.json"
+import personalDetailsMessages from "../modules/CandidateDetailsModule/details.json";
 
 
 const messageCode: Record<string, any> = {
@@ -10,7 +11,8 @@ const messageCode: Record<string, any> = {
   auth: authMessages,
   master : masterMessages,
   experience : experienceMesssages,
-  user : userMessages
+  user : userMessages,
+  personalDetails : personalDetailsMessages
 };
 
 export default messageCode;
