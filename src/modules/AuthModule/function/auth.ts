@@ -344,7 +344,7 @@ const verifyUser = async (req: any, res: any, tempUser: tempSignupDocument) => {
                 data: {
                     accessToken: token,
                     refreshToken: token,
-                    user: { ...user, password: undefined },
+                    user: { ...user._doc, password: undefined },
                 },
             });
             return res.status(response?.statusCode).send(response);
@@ -450,7 +450,7 @@ export const Login = async (req: any, res: any) => {
             return res.status(response?.statusCode).send(response);
         }
 
-        const user = await UserModel.findOne({ email });
+        const user = await mongooseService.findOne(UserModel, filter);
 
         if (!user) {
             const response = failureResponse({
@@ -461,12 +461,21 @@ export const Login = async (req: any, res: any) => {
             return res.status(response?.statusCode).send(response);
         }
 
+        if(!user.password) {
+            const response = failureResponse({
+                handler: "auth",
+                messageCode: "E017",
+                req: req,
+            });
+            return res.status(response?.statusCode).send(response);
+        }
+
         const isMatch = await bcryptjs.compare(password, user.password);
 
         if (!isMatch) {
             const response = failureResponse({
                 handler: "auth",
-                messageCode: "E009",
+                messageCode: "E015",
                 req: req,
             });
             return res.status(response?.statusCode).send(response);
@@ -486,12 +495,12 @@ export const Login = async (req: any, res: any) => {
 
         const response = successResponse({
             handler: "auth",
-            messageCode: "S004",
+            messageCode: "S005",
             req: req,
             data: {
                 accessToken: token,
                 refreshToken: token,
-                user: { ...user, password: undefined },
+                user: { ...user._doc, password: undefined },
             },
         });
         return res.status(response?.statusCode).send(response);
@@ -500,7 +509,7 @@ export const Login = async (req: any, res: any) => {
         errorLogger("error in Login function", error);
         const response = catchResponse({
             handler: "auth",
-            messageCode: "E011",
+            messageCode: "E016",
             req: req,
             error: error,
         });

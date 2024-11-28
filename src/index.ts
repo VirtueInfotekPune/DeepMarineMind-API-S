@@ -11,6 +11,8 @@ import { connect} from "./core/db";
 import hellooRoutes from "./modules/HelloModule";
 import authRoutes from "./modules/AuthModule";
 import masterRoutes from "./modules/MasterModule";
+import experienceRoutes from "./modules/ExperienceModule";
+import userRoutes from "./modules/UserModule";
 
 
 // Load environment variables
@@ -29,6 +31,8 @@ app.use(cors());
 app.use("/api/hello", hellooRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/master", masterRoutes);
+app.use("/api/experience", experienceRoutes);
+app.use("/api/user", userRoutes);
 
 
 app.listen(process.env.PORT, async () => {

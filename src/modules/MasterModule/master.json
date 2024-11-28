@@ -12,6 +12,36 @@
       "S009": "Department deleted successfully",
       "S010": "Department data fetched successfully",
 
+      "S011": "Rank get successfully",
+      "S012": "Rank added successfully",
+      "S013": "Rank updated successfully",
+      "S014": "Rank deleted successfully",
+      "S015": "Rank data fetched successfully",
+
+      "S016": "Cargo get successfully",
+      "S017": "Cargo added successfully",
+      "S018": "Cargo updated successfully",
+      "S019": "Cargo deleted successfully",
+      "S020": "Cargo data fetched successfully",
+
+      "S021": "Industry get successfully",
+      "S022": "Industry added successfully",
+      "S023": "Industry updated successfully",
+      "S024": "Industry deleted successfully",
+      "S025": "Industry data fetched successfully",
+
+      "S026": "Certificates get successfully",
+      "S027": "Certificate added successfully",
+      "S028": "Certificate updated successfully",
+      "S029": "Certificate deleted successfully",
+      "S030": "Certificate data fetched successfully",
+
+      "S031": "Licences get successfully",
+      "S032": "Licence added successfully",
+      "S033": "Licence updated successfully",
+      "S034": "Licence deleted successfully",
+      "S035": "Licence data fetched successfully",
+
       "E001": "All fields are required",
       "E002": "Vessel already exists",
       "E003": "Error adding vessel",
@@ -27,7 +57,50 @@
       "E011": "Error updating Department",
       "E012": "Error deleting Department",
       "E013": "Error fetching department data",
-      "E014": "DepartmentId not found"
+      "E014": "DepartmentId not found",
+
+
+      "E015": "All fields are required",
+      "E016": "Rank already exists",
+      "E017": "Error adding Rank",
+      "E018": "Error updating Rank",
+      "E019": "Error deleting Rank",
+      "E020": "Error fetching Rank data",
+      "E021": "RankId not found",
+
+      
+      "E022": "All fields are required",
+      "E023": "Cargo already exists",
+      "E024": "Error adding Cargo",
+      "E025": "Error updating Cargo",
+      "E026": "Error deleting Cargo",
+      "E027": "Error fetching Cargo data",
+      "E028": "CargoId not found",
+
+      "E029": "All fields are required",
+      "E030": "Industry already exists",
+      "E031": "Error adding Industry",
+      "E032": "Error updating Industry",
+      "E033": "Error deleting Industry",
+      "E034": "Error fetching Industry data",
+      "E035": "IndustryId not found",
+
+      
+      "E036": "All fields are required",
+      "E037": "Certificate already exists",
+      "E038": "Error adding Certificate",
+      "E039": "Error updating Certificate",
+      "E040": "Error deleting Certificate",
+      "E041": "Error fetching Certificate data",
+      "E042": "CertificateId not found",
+
+      "E043": "All fields are required",
+      "E044": "Licence already exists",
+      "E045": "Error adding Licence",
+      "E046": "Error updating Licence",
+      "E047": "Error deleting Licence",
+      "E048": "Error fetching Licence data",
+      "E049": "LicenceId not found"
     },
     "ru": {
       "S001": "Судно успешно добавлено",

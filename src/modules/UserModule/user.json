@@ -1,0 +1,41 @@
+{
+    "en": {
+        "S001": "User get successfully",
+        "S002" : "User updated successfully",
+        "S003" : "User deleted successfully",
+        "S004" : "User added successfully",
+        "S005" : "User data fetched successfully",
+
+
+
+        "E001": "All fields are required",
+        "E002": "User does not exist",
+        "E003": "Error adding user",
+        "E004": "Error updating user",
+        "E005": "Error deleting user",
+        "E006": "Error fetching user data",
+        "E007": "UserId not found",
+        "E008": "You cannot send Email in Body of update Request",
+        "E009": "You cannot send phone in Body of update Request"
+
+
+    },
+    "ru": {
+        "S001": "Пользователь успешно добавлен",
+        "S002" : "Пользователь успешно обновлен",
+        "S003" : "Пользователь успешно удален",
+        "S004" : "Пользователь успешно добавлен",
+        "S005" : "Данные пользователя успешно получены",
+
+
+        "E001": "Все поля обязательны к заполнению",
+        "E002": "Пользователь не существует",
+        "E003": "Ошибка добавления пользователя",
+        "E004": "Ошибка обновления пользователя",
+        "E005": "Ошибка удаления пользователя",
+        "E006": "Ошибка получения данных пользователя",
+        "E007": "UserId не найден"
+
+
+    }
+}
