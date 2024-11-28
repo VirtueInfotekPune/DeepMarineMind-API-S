@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { registerUser, verifyotp } from "./function/auth";
+import { Login, registerUser, verifyotp } from "./function/auth";
 
 
 const authRoutes = Router()
@@ -9,6 +9,8 @@ const authRoutes = Router()
 authRoutes.post("/register" , registerUser)
 
 authRoutes.post("/verify-otp" , verifyotp)
+
+authRoutes.post("/login" , Login)
 
 
 export default authRoutes

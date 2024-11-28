@@ -5,7 +5,7 @@ export const userService = {
     updateUser: async (filter: any, body: any) => {
         infoLogger("START:- updateUser function");
         try {
-            const result = await UserModel.findOneAndUpdate(filter, body, { new: true });
+            const result  : userDocument= await UserModel.findOneAndUpdate(filter, body, { new: true }).select('-password');
             return result;
             
         } catch (error) {
