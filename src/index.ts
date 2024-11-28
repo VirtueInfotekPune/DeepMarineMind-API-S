@@ -13,6 +13,8 @@ import authRoutes from "./modules/AuthModule";
 import masterRoutes from "./modules/MasterModule";
 import experienceRoutes from "./modules/ExperienceModule";
 import userRoutes from "./modules/UserModule";
+import candidateInfo from "./modules/CandidateDetailsModule";
+
 
 
 // Load environment variables
@@ -33,6 +35,8 @@ app.use("/api/auth", authRoutes);
 app.use("/api/master", masterRoutes);
 app.use("/api/experience", experienceRoutes);
 app.use("/api/user", userRoutes);
+app.use("/api", candidateInfo);
+
 
 
 app.listen(process.env.PORT, async () => {
