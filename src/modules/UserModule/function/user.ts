@@ -17,6 +17,8 @@ export const updateUserRoute = async (req: any, res: any) => {
 
     const requestUser = req.user;
 
+    dataLogger("requestUser", requestUser);
+
     if (body.password) {
       const password = await bcrypjs.hash(body.password, 10);
       body.password = password;

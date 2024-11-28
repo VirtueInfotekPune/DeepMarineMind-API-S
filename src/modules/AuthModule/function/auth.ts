@@ -344,7 +344,7 @@ const verifyUser = async (req: any, res: any, tempUser: tempSignupDocument) => {
                 data: {
                     accessToken: token,
                     refreshToken: token,
-                    user: { ...user, password: undefined },
+                    user: { ...user._doc, password: undefined },
                 },
             });
             return res.status(response?.statusCode).send(response);
@@ -450,7 +450,7 @@ export const Login = async (req: any, res: any) => {
             return res.status(response?.statusCode).send(response);
         }
 
-        const user = await UserModel.findOne(filter);
+        const user = await mongooseService.findOne(UserModel, filter);
 
         if (!user) {
             const response = failureResponse({
@@ -500,7 +500,7 @@ export const Login = async (req: any, res: any) => {
             data: {
                 accessToken: token,
                 refreshToken: token,
-                user: { ...user, password: undefined },
+                user: { ...user._doc, password: undefined },
             },
         });
         return res.status(response?.statusCode).send(response);
