@@ -1,8 +1,9 @@
 import { NextFunction, Request, Response } from "express";
 import { dataLogger, errorLogger, infoLogger } from "../core/logger";
 import { catchResponse, failureResponse } from "../core/response";
-import UserModel, { userDocument } from "../models/user";
+import { userDocument, UserModel  } from "../models/user";
 import jwt from "jsonwebtoken";
+
 
 
 // Extend the Express Request interface to include custom properties like recruiter, type, etc.
