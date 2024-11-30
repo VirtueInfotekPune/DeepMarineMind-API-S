@@ -1,7 +1,7 @@
 import { Schema, model, Document } from "mongoose";
 import paginate from "mongoose-paginate-v2";
 import aggregatePaginate from "mongoose-aggregate-paginate-v2";
-import { PaginateModel } from "../interface/paginate";
+import { PaginateModel } from "../../interface/paginate";
 
 interface experienceDocument extends Document {
     candidate: String,

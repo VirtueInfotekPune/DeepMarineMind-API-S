@@ -48,7 +48,8 @@ export const findPaginateVesselRoute = async (req: any, res: any) => {
 
         const options = {
             page: req.query.page || 1,
-            limit : req.query.limit || 10
+            limit : req.query.limit || 10,
+            sort: { createdAt: -1 },
 
         }
 

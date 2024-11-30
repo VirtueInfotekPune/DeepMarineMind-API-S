@@ -107,6 +107,16 @@ export const deleteIndustryRoute = async (req: any, res: any) => {
         infoLogger("START:- deleteIndustryRoute function");
         dataLogger("req.body", req.body);
         const body = req.body;
+
+        const existingIndusrty = await industryService.findOneIndustry({ _id: body.id });
+        if (!existingIndusrty) {
+            const response = failureResponse({
+                handler: "master",
+                req: req,
+                messageCode: "E035",
+            });
+            return res.status(response?.statusCode).send(response);
+        }
         const filter = {} as any;
         if (!body.id) {
             const response = failureResponse({

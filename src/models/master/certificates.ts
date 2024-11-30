@@ -5,11 +5,13 @@ import aggregatePaginate from "mongoose-aggregate-paginate-v2";
 
 interface certificatesDocuments extends Document {
     name : String,
+    rankId : String
 
 }
 
 const certificateSchema = new Schema<certificatesDocuments>({
     name : {type : String , required : true},
+    rankId : {type : Schema.Types.ObjectId , ref : "rank"}
 },
 {
     timestamps : true

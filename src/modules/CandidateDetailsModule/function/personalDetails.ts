@@ -85,7 +85,7 @@ export const updatePersonalDetailsRoute = async (req:any , res:any) => {
                 messageCode: "E008",
                 req: req,
             });
-            return res.status(response?.statusCode || 400).send(response); // Default to 400 for missing ID
+            return res.status(response?.statusCode).send(response); // Default to 400 for missing ID
         }
         filter._id = body.id;
         const result = await personalDetailsService.update(filter, body);

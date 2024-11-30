@@ -7,16 +7,16 @@ interface departmentDocument extends Document{
     name : String,
     image : String,
     vesselId? : {type : Schema.Types.ObjectId , ref : "vessel"}
-    rank?:[{
-        name : String
-    }]
+    // rank?:[{
+    //     name : String
+    // }]
 
 }
 
 const departmentSchema = new Schema<departmentDocument>({
     name : {type : String, required : true},
     image : {type : String, required : true},
-    rank : [{name : {type : String}}],
+    // rank : [{name : {type : String}}],
     vesselId : {type : Schema.Types.ObjectId , ref : "vessel"}
 },
 {

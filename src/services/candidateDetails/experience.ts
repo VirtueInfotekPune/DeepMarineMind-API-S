@@ -1,5 +1,5 @@
-import { dataLogger, errorLogger, infoLogger } from "../core/logger";
-import { experienceModel } from "../models/experience";
+import { dataLogger, errorLogger, infoLogger } from "../../core/logger";
+import { experienceModel } from "../../models/cabdidateDetails/experience";
 
 
 interface ExperienceService{
