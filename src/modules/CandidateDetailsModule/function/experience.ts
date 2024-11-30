@@ -1,6 +1,6 @@
 import { successResponse, catchResponse, failureResponse } from "../../../core/response";
 import { dataLogger, errorLogger, infoLogger } from "../../../core/logger";
-import experienceService from "../../../services/experience";
+import experienceService from "../../../services/candidateDetails/experience";
 
 export const addExperienceRoute = async (req: any, res: any) => {
     try {
@@ -10,8 +10,8 @@ export const addExperienceRoute = async (req: any, res: any) => {
         const result = await experienceService.save(payload);
         dataLogger("result of save", result);
         const response = successResponse({
-            handler: "experience",
-            messageCode: "S002",
+            handler: "personalDetails",
+            messageCode: "S022",
             req: req,
             data: result,
         });
@@ -20,8 +20,8 @@ export const addExperienceRoute = async (req: any, res: any) => {
         errorLogger("error in addExperienceRouter function", error);
         const response = catchResponse(
             {
-                handler: "experience",
-                messageCode: "E016",
+                handler: "personalDetails",
+                messageCode: "E039",
                 req: req,
                 error: error
             });
@@ -49,8 +49,8 @@ export const findPaginateExperienceRoute = async (req: any, res: any) => {
         };
         const result = await experienceService.paginate(filter, options);
         const response = successResponse({
-            handler: "experience",
-            messageCode: "S001",
+            handler: "personalDetails",
+            messageCode: "S021",
             req: req,
             data: result,
         });
@@ -59,8 +59,8 @@ export const findPaginateExperienceRoute = async (req: any, res: any) => {
         errorLogger("error in findPaginateExperienceRouter function", error);
         const response = catchResponse(
             {
-                handler: "experience",
-                messageCode: "E007",
+                handler: "personalDetails",
+                messageCode: "E042",
                 req: req,
                 error: error
             });
@@ -73,11 +73,21 @@ export const updateExperienceRoute = async (req: any, res: any) => {
         infoLogger("START:- updateExperienceRouter function");
         dataLogger("req.body", req.body);
         const body = req.body;
+
+        const existingExperience = await experienceService.findOne({ _id: body.id });
+        if (!existingExperience) {
+            const response = failureResponse({
+                handler: "personalDetails",
+                messageCode: "E044",
+                req: req,
+            });
+            return res.status(response?.statusCode || 400).send(response); // Default to 400 for missing ID
+        }
         const filter = {} as any;
         if (!body.id) {
             const response = failureResponse({
-                handler: "experience",
-                messageCode: "E008",
+                handler: "personalDetails",
+                messageCode: "E045",
                 req: req,
             });
             return res.status(response?.statusCode || 400).send(response); // Default to 400 for missing ID
@@ -85,9 +95,9 @@ export const updateExperienceRoute = async (req: any, res: any) => {
         filter._id = body.id;
         const result = await experienceService.update(filter, body);
         const response = successResponse({
-            handler: "experience",
+            handler: "personalDetails",
             data: result,
-            messageCode: "S003",
+            messageCode: "S023",
         });
         return res.status(response?.statusCode).send(response);
     } catch (error) {
@@ -95,7 +105,7 @@ export const updateExperienceRoute = async (req: any, res: any) => {
         const response = catchResponse(
             {
                 handler: "experience",
-                messageCode: "E005",
+                messageCode: "E040",
                 req: req,
                 error: error
             });
@@ -108,10 +118,20 @@ export const deleteExperienceRoute = async (req: any, res: any) => {
         infoLogger("START:- deleteExperienceRouter function");
         dataLogger("req.body", req.body);
         const body = req.body;
+
+        const existingExperience = await experienceService.findOne({ _id: body.id });
+        if (!existingExperience) {
+            const response = failureResponse({            
+                handler: "personalDetails",
+                messageCode: "E044",
+                req: req,
+            });            
+            return res.status(response?.statusCode || 400).send(response); // Default to 400 for missing ID
+        }
         if (!body.id) {
             const response = failureResponse({
-                handler: "experience",
-                messageCode: "E008",
+                handler: "personalDetails",
+                messageCode: "E045",
                 req: req,
             });
             return res.status(response?.statusCode || 400).send(response); // Default to 400 for missing ID
@@ -119,9 +139,9 @@ export const deleteExperienceRoute = async (req: any, res: any) => {
         const filter = { _id: body.id };
         const result = await experienceService.delete(filter);
         const response = successResponse({
-            handler: "experience",
+            handler: "personalDetails",
             data: result,
-            messageCode: "S004",
+            messageCode: "S024",
         });
         return res.status(response?.statusCode).send(response);
     } catch (error) {
@@ -129,7 +149,7 @@ export const deleteExperienceRoute = async (req: any, res: any) => {
         const response = catchResponse(
             {
                 handler: "experience",
-                messageCode: "E006",
+                messageCode: "E041",
                 req: req,
                 error: error
             });

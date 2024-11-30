@@ -108,6 +108,15 @@ export const deleteLicenceRoute = async (req: any, res: any) => {
         infoLogger("START:- deleteLicenceRoute function");
         dataLogger("req.body", req.body);
         const body = req.body;
+        const existingLicence = await licencesService.findOneLicence({ _id: body.id });
+        if (!existingLicence) {
+            const response = failureResponse({
+                handler: "master",
+                messageCode: "E049",
+                req: req,
+            });
+            return res.status(response?.statusCode).send(response);
+        }
         const filter = {} as any;
         if (!body.id) {
             const response = failureResponse({

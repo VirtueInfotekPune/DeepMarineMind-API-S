@@ -5,11 +5,13 @@ import { PaginateModel } from "../../interface/paginate";
 
 interface cargoDocument extends Document{
     name : String,
+    rankId : String
 
 }
 
 const cargoSchema = new Schema<cargoDocument>({
     name : {type : String , required : true},
+    rankId : {type : Schema.Types.ObjectId , ref : "rank"}
 },
 {
     timestamps : true
