@@ -79,7 +79,15 @@
         "E041" : "Error deleting experience",
         "E042" : "Error fetching experience data",
         "E044" : "ExperienceId not found",
-        "E045" : "ExperienceId not found"
+        "E045" : "ExperienceId not found",
+
+        "E046" : "Experience can add by only candidate",
+        "E047" : "Personal Details can add by only candidate",
+        "E048" : "Educations can add by only candidate",
+        "E049" : "Awards can add by only candidate",
+        "E050" : "Courses can add by only candidate",
+        "E051" : "Activities can add by only candidate"
+
 
 },
 
