@@ -6,7 +6,20 @@ export const addActivitiesRoute = async (req: any, res: any) => {
     try{
         infoLogger("START:- addActivitiesRoute function");
         dataLogger("req.body", req.body);
-        const result = await activityService.save(req.body);
+        if(req.user.type !== 'candidate'){
+            const response = failureResponse({
+                handler: "personalDetails",
+                messageCode: "E051",
+                req: req,
+            });
+            return res.status(response?.statusCode).send(response);
+        }
+        const payload = {
+            ...req.body,
+            candidate: req.user._id
+        }
+            
+        const result = await activityService.save(payload);
         const response = successResponse({
             handler: "personalDetails",
             data: result,
@@ -32,7 +45,7 @@ export const findPaginateActivitiesRoute = async (req: any, res: any) => {
         dataLogger("req.body", req.body);
         const filter = {} as any;
         if(req.query.id) {
-            filter._id = req.query.id;
+            filter._id = req.user._id || req.query.id;
         }
         if(req.query.candidate) {
             filter.candidate = req.query.candidate;
@@ -40,6 +53,7 @@ export const findPaginateActivitiesRoute = async (req: any, res: any) => {
         const options = {
             page: req.query.page || 1,
             limit: req.query.limit || 10,
+            sort : { createdAt: -1 },
         }
         const result = await activityService.paginate(filter, options);
         dataLogger("result of save", result);

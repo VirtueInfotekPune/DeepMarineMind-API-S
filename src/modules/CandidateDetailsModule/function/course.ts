@@ -8,7 +8,19 @@ export const addCourseRoute  = async (req: any, res: any) => {
     try{
         infoLogger("START:- addCourseRoute function");
         dataLogger("req.body", req.body);
-        const payload = req.body;
+
+        if(req.user.type !== 'candidate'){
+            const response = failureResponse({
+                handler: "personalDetails",
+                messageCode: "E050",
+                req: req,
+            });
+            return res.status(response?.statusCode).send(response);
+        }
+        const payload = {
+            ...req.body,
+            candidate: req.user._id
+        };
         const result = await courseService.save(payload);
         dataLogger("result of save", result);
         const response = successResponse({
@@ -36,7 +48,7 @@ export const findPaginateCourseRoute = async (req: any, res: any) => {
         dataLogger("req.body", req.body);
         const filter = {} as any;
         if(req.query.id) {
-            filter._id = req.query.id;
+            filter._id = req.user._id || req.query.id;
         }
         if(req.query.candidate) {
             filter.candidate = req.query.candidate;
@@ -44,6 +56,7 @@ export const findPaginateCourseRoute = async (req: any, res: any) => {
         const options = {
             page: req.query.page || 1,
             limit: req.query.limit || 10,
+            sort : { createdAt: -1 },
         }
         const result = await courseService.paginate(filter, options);
         dataLogger("result of save", result);
