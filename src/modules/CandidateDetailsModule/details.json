@@ -30,6 +30,11 @@
         "S023" : "Experience updated successfully",
         "S024" : "Experience deleted successfully",
 
+        "S025" : "Ashore Experience get successfully",
+        "S026" : "Ashore Experience added successfully",
+        "S027" : "Ashore Experience updated successfully",
+        "S028" : "Ashore Experience deleted successfully",
+
         "E001": "All fields are required",
         "E002": "User Id Is required",
         "E003": "User does not exist",
@@ -86,7 +91,19 @@
         "E048" : "Educations can add by only candidate",
         "E049" : "Awards can add by only candidate",
         "E050" : "Courses can add by only candidate",
-        "E051" : "Activities can add by only candidate"
+        "E051" : "Activities can add by only candidate",
+        "E052" : "Ashore Job Experience can add by only candidate",
+
+        "E053" : "All fields are required",
+        "E054" : "User Id Is required",
+        "E055" : "User does not exist",
+        "E056" : "Error adding ashore experience",
+        "E057" : "Error updating ashore experience",
+        "E058" : "Error deleting ashore experience",
+        "E059" : "Error fetching ashore experience data",
+        "E060" : "AshoreExperienceId not found",
+        "E061" : "AshoreExperienceId is required"
+
 
 
 },
