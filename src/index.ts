@@ -13,6 +13,7 @@ import authRoutes from "./modules/AuthModule";
 import masterRoutes from "./modules/MasterModule";
 import userRoutes from "./modules/UserModule";
 import candidateInfo from "./modules/CandidateDetailsModule";
+import recruiterDetailsRoutes from "./modules/RecruiterDetailsModule"
 
 
 
@@ -34,6 +35,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/master", masterRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api", candidateInfo);
+app.use("/api", recruiterDetailsRoutes);
 
 
 

@@ -520,6 +520,172 @@ export const Login = async (req: any, res: any) => {
 
 }
 
+export const forgotPassword = async (req: any, res: any) => {
+    try {
+        infoLogger("START:- forgotPassword function");
+        dataLogger("req.body", req.body);
+
+        const { email, type , role} = req.body;
+
+        if (!email || !type) {
+            const response = failureResponse({
+                handler: "auth",
+                messageCode: "E001",
+                req: req,
+            });
+            return res.status(response?.statusCode).send(response);
+        }
+
+        const user = await mongooseService.findOne(TempSignupModel, { email, type });
+
+        if (!user) {
+            const response = failureResponse({
+                handler: "auth",
+                messageCode: "E008",
+                req: req,
+            });
+            return res.status(response?.statusCode).send(response);
+        }
+
+        else if (type === 'recruiter' && !role) {
+            const response = failureResponse({
+                handler: "auth",
+                messageCode: "E014",
+                req: req,
+            });
+            return res.status(response?.statusCode).send(response);
+        }
+
+    
+
+        // Generate OTP and expiry
+        const emailOtp = Math.floor(1000 + Math.random() * 9000);
+        const otpExpiry = new Date(new Date().getTime() + 1 * 60 * 1000); // OTP valid for 5 minutes
+
+        // Update user schema with OTP and expiry
+        const updatePayload = { emailOtp, otpExpiry };
+        const result = await mongooseService.update(
+            TempSignupModel,
+            { email, type },
+            updatePayload,
+            {new : true}
+        );
+
+        if (result) {
+            // Logic to send email with OTP
+            // Example: await sendOtpEmail(email, otp);
+
+            const response = successResponse({
+                handler: "auth",
+                messageCode: "S001",
+                req: req,
+                data: "OTP sent to registered email.",
+            });
+            return res.status(response?.statusCode).send(response);
+        } else {
+            const response = failureResponse({
+                handler: "auth",
+                messageCode: "E003",
+                req: req,
+            });
+            return res.status(response?.statusCode).send(response);
+        }
+    } catch (error) {
+        errorLogger("error in forgotPassword function", error);
+        const response = catchResponse({
+            handler: "auth",    
+            messageCode: "E016",
+            req: req,
+            error: error,
+        });
+        return res.status(response?.statusCode).send(response);
+    }
+};
+
+export const resetPassword = async (req: any, res: any) => {
+    try {
+        infoLogger("START:- resetPassword function");
+        dataLogger("req.body", req.body);
+
+        const { email, type, emailOtp, newPassword } = req.body;
+
+        // Validate required fields
+        if (!email || !type || !emailOtp || !newPassword) {
+            const response = failureResponse({
+                handler: "auth",
+                messageCode: "E001",
+                req: req,
+            });
+            return res.status(response?.statusCode).send(response);
+        }
+
+        // Fetch the user from TempSignupModel
+        const user = await mongooseService.findOne(TempSignupModel, { email, type });
+
+        if (!user) {
+            const response = failureResponse({
+                handler: "auth",
+                messageCode: "E008",
+                req: req,
+            });
+            return res.status(response?.statusCode).send(response);
+        }
+
+        // Check if the OTP matches and is not expired
+        if (user.emailOtp !== emailOtp || new Date(user.otpExpiry) < new Date()) {
+            const response = failureResponse({
+                handler: "auth",
+                messageCode: "E009", // Custom message code for invalid or expired OTP
+                req: req,
+            });
+            return res.status(response?.statusCode).send(response);
+        }
+
+        // Hash the new password
+        const hashedPassword = await bcryptjs.hash(newPassword, 10);
+
+        // Update the user's password in UserModel
+        const updateResult = await mongooseService.update(
+            UserModel,
+            { email, type },
+            { password: hashedPassword },
+            { new: true }
+        );
+
+        if (updateResult) {
+            // Remove OTP details from TempSignupModel (optional, for security)
+            await mongooseService.update(
+                TempSignupModel,
+                { email, type },
+                { emailOtp: null, otpExpiry: null },{}
+            );
+
+            const response = successResponse({
+                handler: "auth",
+                messageCode: "S006", // Custom success message code for password reset
+                req: req,
+                
+            });
+            return res.status(response?.statusCode).send(response);
+        } else {
+            const response = failureResponse({
+                handler: "auth",
+                messageCode: "E003",
+                req: req,
+            });
+            return res.status(response?.statusCode).send(response);
+        }
+    } catch (error) {
+        errorLogger("error in resetPassword function", error);
+        const response = catchResponse({
+            handler: "auth",
+            messageCode: "E016",
+            req: req,
+            error: error,
+        });
+        return res.status(response?.statusCode).send(response);
+    }
+};
 
 
 
