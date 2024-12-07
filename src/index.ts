@@ -13,7 +13,7 @@ import authRoutes from "./modules/AuthModule";
 import masterRoutes from "./modules/MasterModule";
 import userRoutes from "./modules/UserModule";
 import candidateInfo from "./modules/CandidateDetailsModule";
-import recruiterDetailsRoutes from "./modules/RecruiterDetailsModule"
+import recruiterDetailsRoutes from "./modules/FleetModules"
 
 
 

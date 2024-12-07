@@ -1,6 +1,6 @@
 import { errorLogger, dataLogger, infoLogger } from "../../../core/logger";
 import { successResponse, catchResponse, failureResponse } from "../../../core/response";
-import fleetService from "../../../services/recruiterDetails/fleet";
+import fleetService from "../../../services/fleet/fleet";
 
 
 
@@ -24,7 +24,7 @@ export const findPaginateFleetRoute = async (req : any , res : any) => {
         const result = await fleetService.paginate(filter, options);
         dataLogger("result of save", result);
         const response = successResponse({
-            handler: "recruiterDetaiils",
+            handler: "fleet",
             messageCode: "S001",
             req: req,
             data: result,
@@ -34,7 +34,7 @@ export const findPaginateFleetRoute = async (req : any , res : any) => {
     }catch(error){
         errorLogger("error in findPaginateFleetRoute function", error);
         const response = catchResponse({
-            handler: "recruiterDetaiils",
+            handler: "fleet",
             messageCode: "E001",
             req: req,
             error: error,
@@ -50,7 +50,7 @@ export const addFleetRoute = async (req : any , res : any) => {
 
         if(req.user.type !== 'recruiter'){
             const response = failureResponse({
-                handler: "recruiterDetaiils",
+                handler: "fleet",
                 messageCode: "E001",
                 req: req,
             })
@@ -63,7 +63,7 @@ export const addFleetRoute = async (req : any , res : any) => {
         const result = await fleetService.save(payload);
         dataLogger("result of save", result);
         const response = successResponse({
-            handler: "recruiterDetaiils",
+            handler: "fleet",
             messageCode: "S002",
             req: req,
             data: result,
@@ -72,7 +72,7 @@ export const addFleetRoute = async (req : any , res : any) => {
     }catch(error){
         errorLogger("error in addFleetRoute function", error);
         const response = catchResponse({
-            handler: "recruiterDetaiils",
+            handler: "fleet",
             messageCode: "E002",
             req: req,
             error: error,
@@ -90,7 +90,7 @@ export const updateFleetRoute = async (req : any , res : any) => {
         const filter = {} as any;
         if(!body.id){
             const response = failureResponse({
-                handler: "recruiterDetaiils",
+                handler: "fleet",
                 messageCode: "E003",
                 req: req,
             })
@@ -100,7 +100,7 @@ export const updateFleetRoute = async (req : any , res : any) => {
         const result = await fleetService.update(filter, body); 
         dataLogger("result of save", result);
         const response = successResponse({
-            handler: "recruiterDetaiils",
+            handler: "fleet",
             messageCode: "S003",
             req: req,
             data: result,
@@ -109,7 +109,7 @@ export const updateFleetRoute = async (req : any , res : any) => {
     }catch(error){
         errorLogger("error in updateFleetRoute function", error);
         const response = catchResponse({
-            handler: "recruiterDetaiils",
+            handler: "fleet",
             messageCode: "E003",
             req: req,
             error: error,
@@ -128,7 +128,7 @@ export const deleteFleetRoute = async (req : any , res : any) => {
         const existingFleet = await fleetService.findOne({_id : body.id});
         if(!existingFleet){
             const response = failureResponse({  
-                handler: "recruiterDetaiils",
+                handler: "fleet",
                 messageCode: "E006",
                 req: req,
             })
@@ -136,7 +136,7 @@ export const deleteFleetRoute = async (req : any , res : any) => {
         }
         if(!body.id){
             const response = failureResponse({
-                handler: "recruiterDetaiils",
+                handler: "fleet",
                 messageCode: "E005",
                 req: req,
             })
@@ -146,7 +146,7 @@ export const deleteFleetRoute = async (req : any , res : any) => {
         const result = await fleetService.delete(filter); 
         dataLogger("result of save", result);
         const response = successResponse({
-            handler: "recruiterDetaiils",
+            handler: "fleet",
             messageCode: "S004",
             req: req,
             data: result,
@@ -155,7 +155,7 @@ export const deleteFleetRoute = async (req : any , res : any) => {
     }catch(error){
         errorLogger("error in deleteFleetRoute function", error);
         const response = catchResponse({
-            handler: "recruiterDetaiils",
+            handler: "fleet",
             messageCode: "E004",
             req: req,
             error: error,

@@ -3,7 +3,7 @@ import authMessages from "../modules/AuthModule/auth.json";
 import masterMessages from "../modules/MasterModule/master.json";
 import userMessages from "../modules/UserModule/user.json"
 import candidateDetailsMessages from "../modules/CandidateDetailsModule/details.json";
-import recruiterDetailsMessages from "../modules/RecruiterDetailsModule/recruiterdetails.json"
+import fleetMessages from "../modules/FleetModules/fleet.json";
 
 const messageCode: Record<string, any> = {
   hello: helloMessages,
@@ -11,7 +11,7 @@ const messageCode: Record<string, any> = {
   master : masterMessages,
   user : userMessages,
   personalDetails : candidateDetailsMessages,
-  recruiterDetaiils : recruiterDetailsMessages
+  fleet : fleetMessages
 };
 
 export default messageCode;

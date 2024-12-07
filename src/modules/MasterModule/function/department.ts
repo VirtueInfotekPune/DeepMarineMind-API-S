@@ -44,6 +44,9 @@ export const findPaginateDepartmentRoute = async (req: any, res: any) => {
         if(req.query.id) {
             filter._id = req.query.id
         }
+        else if(req.query.vesselId) {
+            filter.vesselId = req.query.vesselId
+        }
 
         const options = {
             page: req.query.page || 1,

@@ -36,12 +36,6 @@
       "S029": "Certificate deleted successfully",
       "S030": "Certificate data fetched successfully",
 
-      "S031": "Licences get successfully",
-      "S032": "Licence added successfully",
-      "S033": "Licence updated successfully",
-      "S034": "Licence deleted successfully",
-      "S035": "Licence data fetched successfully",
-
       "E001": "All fields are required",
       "E002": "Vessel already exists",
       "E003": "Error adding vessel",
@@ -92,15 +86,8 @@
       "E039": "Error updating Certificate",
       "E040": "Error deleting Certificate",
       "E041": "Error fetching Certificate data",
-      "E042": "CertificateId not found",
+      "E042": "CertificateId not found"
 
-      "E043": "All fields are required",
-      "E044": "Licence already exists",
-      "E045": "Error adding Licence",
-      "E046": "Error updating Licence",
-      "E047": "Error deleting Licence",
-      "E048": "Error fetching Licence data",
-      "E049": "LicenceId not found"
     },
     "ru": {
       "S001": "Судно успешно добавлено",
