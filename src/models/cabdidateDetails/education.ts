@@ -13,6 +13,7 @@ interface educationDocument extends Document {
     endDate ?: Date,
     marrkingSystem ?: String,
     result ?: String,
+    status ?: number
 }
 
 const educationSchema = new Schema<educationDocument>({
@@ -24,6 +25,7 @@ const educationSchema = new Schema<educationDocument>({
     endDate: { type: Date },
     marrkingSystem: { type: String },
     result: { type: String },
+    status : { type: Number, enum: [0, 1], default: 1 },
 },
 {
     timestamps: true

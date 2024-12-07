@@ -5,6 +5,7 @@ import { PaginateModel } from "../../interface/paginate";
 
 interface experienceDocument extends Document {
     candidate: String,
+    position: String,
     vesselType: String,
     vesselName: String,
     companyName: String,
@@ -13,28 +14,33 @@ interface experienceDocument extends Document {
     cargoType: String,
     startDate: Date,
     endDate: Date,
+    type: String,
+    status : number ,
     totalDuration: String,
 
 }
 
 const experienceSchema = new Schema<experienceDocument>({
     candidate: { type: Schema.Types.ObjectId, ref: "user" },
-    vesselType: { type: String, required: true },
-    vesselName: { type: String, required: true },
-    companyName: { type: String, required: true },
-    department: { type: String, required: true },
-    rank: { type: String, required: true },
-    cargoType: { type: String, required: true },
-    startDate: { type: Date, required: true },
-    endDate: { type: Date, required: true },
+    vesselType: { type: String, },
+    vesselName: { type: String, },
+    position: { type: String, },
+    companyName: { type: String, },
+    department: { type: String, },
+    rank: { type: String, },
+    cargoType: { type: String, },
+    startDate: { type: Date,  },
+    endDate: { type: Date,  },
+    type: { type: String, enum: ["onshore", "offshore"], default: "onshore" },
     totalDuration: { type: String, required: false },
+    status : { type: Number, enum: [0, 1], default: 1 },
 },
     {
         timestamps: true
     })
 
 
-    // Pre-save middleware to calculate total duration
+// Pre-save middleware to calculate total duration
 experienceSchema.pre("save", function (next) {
     const experience = this;
 
@@ -55,6 +61,9 @@ experienceSchema.pre("save", function (next) {
 
         // Assign the calculated total duration
         experience.totalDuration = duration;
+    }
+    else if (experience.totalDuration) {
+        experience.totalDuration = experience.totalDuration;
     }
 
     next();
