@@ -536,7 +536,7 @@ export const forgotPassword = async (req: any, res: any) => {
             return res.status(response?.statusCode).send(response);
         }
 
-        const user = await mongooseService.findOne(TempSignupModel, { email, type });
+        const user = await mongooseService.findOne(TempSignupModel, { email });
 
         if (!user) {
             const response = failureResponse({

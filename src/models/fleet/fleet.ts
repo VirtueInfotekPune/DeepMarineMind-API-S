@@ -1,11 +1,11 @@
-import { Schema, model, Document } from "mongoose";
+import { Schema, model, Document, Types } from "mongoose";
 import paginate from "mongoose-paginate-v2";
 import aggregatePaginate from "mongoose-aggregate-paginate-v2";
 import { PaginateModel } from "../../interface/paginate";
 
 interface fleetDocument extends Document {
-    recruiter: string,
-    industry: string
+    recruiter: Types.ObjectId,
+    industry: Types.ObjectId
     vesselDetails: {
         vesselName: string,
         shipType: string,
@@ -50,27 +50,27 @@ const fleetSchema = new Schema({
         flag: { type: String },
         engineType: {
             name: { type: String },
-            visibility: { type: Boolean },
+            visibility: { type:  Boolean, default : true },
         },
         cargoType: {
             name: { type: String },
-            visibility: { type: Boolean }
+            visibility: { type:  Boolean, default : true }
         },
         shipBuilt: {
             name: { type: String },
-            visibility: { type: Boolean }
+            visibility: { type:  Boolean, default : true }
         },
         DWT: {
             name: { type: String },
-            visibility: { type: Boolean }
+            visibility: { type:  Boolean, default : true }
         },
         GT: {
             name: { type: String },
-            visibility: { type: Boolean }
+            visibility: { type:  Boolean, default : true }
         },
         imoNumber: {
             name: { type: String },
-            visibility: { type: Boolean }
+            visibility: { type:  Boolean, default : true }
         }
     }
 },

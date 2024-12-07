@@ -10,8 +10,8 @@ export const findCertificatePaginateRoute = async (req: any, res: any) => {
             filter._id = req.query.id
         }
         const options = {
-            page: req.body.page,
-            limit: req.body.limit,
+            page: req.query.page,
+            limit: req.query.limit,
             sort: { createdAt: -1 },
         }
         const result = await certificateService.paginate(filter, options);

@@ -8,7 +8,6 @@ import aggregatePaginate from "mongoose-aggregate-paginate-v2";
 interface activitiesDocument extends Document {
     candidate : String,
     activity : String,
-
 }
 
 const activitiesSchema = new Schema<activitiesDocument>({

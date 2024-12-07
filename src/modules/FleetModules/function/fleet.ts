@@ -1,3 +1,4 @@
+import { USER_TYPE } from "../../../constants/types/userType";
 import { errorLogger, dataLogger, infoLogger } from "../../../core/logger";
 import { successResponse, catchResponse, failureResponse } from "../../../core/response";
 import fleetService from "../../../services/fleet/fleet";
@@ -14,7 +15,7 @@ export const findPaginateFleetRoute = async (req : any , res : any) => {
             filter._id = req.query.id;
         }
         if(req.query.recruiter) {
-            filter.recruiter = req.query.recruiter;
+            filter.recruiter = req.query.recruiter || req.user.recruiter._id;
         }
         const options = {
             page : req.query.page || 1,
@@ -48,7 +49,7 @@ export const addFleetRoute = async (req : any , res : any) => {
         infoLogger("START:- addFleetRoute function");
         dataLogger("req.body", req.body);
 
-        if(req.user.type !== 'recruiter'){
+        if(req.user.type === USER_TYPE.CANDIDATE ){
             const response = failureResponse({
                 handler: "fleet",
                 messageCode: "E001",
@@ -58,7 +59,7 @@ export const addFleetRoute = async (req : any , res : any) => {
         }
         const payload = {
             ...req.body,
-            recruiter : req.user._id
+            recruiter : req.user.recruiter._id
         }
         const result = await fleetService.save(payload);
         dataLogger("result of save", result);
