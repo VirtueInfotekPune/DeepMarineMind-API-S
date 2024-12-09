@@ -10,7 +10,7 @@ export const addExperienceRoute = async (req: any, res: any) => {
         infoLogger("START:- addExperienceRouter function");
         dataLogger("req.body", req.body);
 
-        if(req.user.type !== USER_TYPE.CANDIDATE){
+        if (req.user.type !== USER_TYPE.CANDIDATE) {
             const response = failureResponse({
                 handler: "personalDetails",
                 messageCode: "E046",
@@ -51,20 +51,23 @@ export const findPaginateExperienceRoute = async (req: any, res: any) => {
 
 
 
-        if (req.query.id) {                      
+        if (req.query.id) {
             filter._id = req.query.id
         }
-        if(req.user.type === USER_TYPE.CANDIDATE){
+        else if (req.user.type === USER_TYPE.CANDIDATE) {
             filter.candidate = req.user._id
         }
-        else if(req.query.candidate){                   
+        else if (req.query.candidate) {
             filter.candidate = req.query.candidate
         }
-     
+        else if (req.query.type) {
+            filter.type = req.query.type; // Filter by type (e.g., "offshore")
+        }
+
         const options = {
-            page: req.query.page || 1,              
+            page: req.query.page || 1,
             limit: req.query.limit || 10,
-            sort : { createdAt: -1 },
+            sort: { createdAt: -1 },
 
         };
         const result = await experienceService.paginate(filter, options);
@@ -141,11 +144,11 @@ export const deleteExperienceRoute = async (req: any, res: any) => {
 
         const existingExperience = await experienceService.findOne({ _id: body.id });
         if (!existingExperience) {
-            const response = failureResponse({            
+            const response = failureResponse({
                 handler: "personalDetails",
                 messageCode: "E044",
                 req: req,
-            });            
+            });
             return res.status(response?.statusCode || 400).send(response); // Default to 400 for missing ID
         }
         if (!body.id) {
