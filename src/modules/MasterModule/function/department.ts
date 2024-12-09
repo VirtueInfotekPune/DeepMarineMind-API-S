@@ -7,16 +7,7 @@ export const addDepartmentRoute = async (req: any, res: any) => {
     try {
         infoLogger("START:- addDepartmentRoute function");
         dataLogger("req.body", req.body);
-        const existingDepartment = await departmentService.findOneDepartment({name : req.body.name});
-
-        if(existingDepartment) {
-            const response = failureResponse({
-                handler: "master",
-                messageCode: "E009",
-                req: req,
-            });
-            return res.status(response?.statusCode).send(response);
-        }
+       
         const result = await departmentService.saveDepartment(req.body);
         const responce = successResponse({
             handler: "master",
