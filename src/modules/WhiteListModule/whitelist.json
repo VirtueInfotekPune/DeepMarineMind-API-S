@@ -1,0 +1,18 @@
+{
+    "en" : {
+        "S001" : "Request get successfully",
+        "S002" : "Request Send Successfully",
+        "S003" : "Request updated successfully",
+        "S004" : "Request deleted successfully",
+        "S005" : "Request data fetched successfully",
+
+        "E001" : "We Have your Request already in our list",
+        "E002" : "Error adding in Request",
+        "E003" : "Error updating in Request",
+        "E004" : "Error deleting in Request",
+        "E005" : "Request Id is required",
+        "E006" : "Error in fetching Request data",
+        "E007" : "Only Admin Can Approve Request"
+       
+    }
+}

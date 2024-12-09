@@ -1,0 +1,10 @@
+{
+    "en":{
+        "S001" : "Recruiter get successfully",
+        "S002" : "Recruiter updated successfully",
+        "S003" : "Recruiter deleted successfully",
+        "S004" : "Recruiter added successfully",
+        "S005" : "Recruiter data fetched successfully"
+     
+    }
+}

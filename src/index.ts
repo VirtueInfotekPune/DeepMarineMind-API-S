@@ -14,6 +14,7 @@ import masterRoutes from "./modules/MasterModule";
 import userRoutes from "./modules/UserModule";
 import candidateInfo from "./modules/CandidateDetailsModule";
 import recruiterDetailsRoutes from "./modules/FleetModules"
+import whiteListRoutes from "./modules/WhiteListModule";
 
 
 
@@ -36,6 +37,7 @@ app.use("/api/master", masterRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api", candidateInfo);
 app.use("/api", recruiterDetailsRoutes);
+app.use("/api", whiteListRoutes);
 
 
 

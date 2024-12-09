@@ -4,6 +4,7 @@ import masterMessages from "../modules/MasterModule/master.json";
 import userMessages from "../modules/UserModule/user.json"
 import candidateDetailsMessages from "../modules/CandidateDetailsModule/details.json";
 import fleetMessages from "../modules/FleetModules/fleet.json";
+import whitelistMessages from "../modules/WhiteListModule/whitelist.json";
 
 const messageCode: Record<string, any> = {
   hello: helloMessages,
@@ -11,7 +12,8 @@ const messageCode: Record<string, any> = {
   master : masterMessages,
   user : userMessages,
   personalDetails : candidateDetailsMessages,
-  fleet : fleetMessages
+  fleet : fleetMessages , 
+  whiteList : whitelistMessages
 };
 
 export default messageCode;
