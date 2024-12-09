@@ -1,13 +1,16 @@
 import { successResponse, catchResponse, failureResponse } from "../../../core/response";
 import { dataLogger, errorLogger, infoLogger } from "../../../core/logger";
 import experienceService from "../../../services/candidateDetails/experience";
+import { USER_TYPE } from "../../../constants/types/userType";
+import { FilterQuery } from "mongoose";
+import { experienceDocument } from "../../../models/cabdidateDetails/experience";
 
 export const addExperienceRoute = async (req: any, res: any) => {
     try {
         infoLogger("START:- addExperienceRouter function");
         dataLogger("req.body", req.body);
 
-        if(req.user.type !== 'candidate'){
+        if(req.user.type !== USER_TYPE.CANDIDATE){
             const response = failureResponse({
                 handler: "personalDetails",
                 messageCode: "E046",
@@ -46,15 +49,18 @@ export const findPaginateExperienceRoute = async (req: any, res: any) => {
         infoLogger("START:- findPaginateExperienceRouter function");
         const filter = {} as any;
 
-        if (req.query.id) {                       // retrive object by id using query
-            filter._id = req.user._id || req.query.id
+
+
+        if (req.query.id) {                      
+            filter._id = req.query.id
         }
-        if (req.query.name) {                    // retrive object by name using query
-            filter.name = req.query.name
+        if(req.user.type === USER_TYPE.CANDIDATE){
+            filter.candidate = req.user._id
         }
-        if(req.query.candidate){                   // retrive object by candidate ObjetId using query
+        else if(req.query.candidate){                   
             filter.candidate = req.query.candidate
         }
+     
         const options = {
             page: req.query.page || 1,              
             limit: req.query.limit || 10,
@@ -97,7 +103,7 @@ export const updateExperienceRoute = async (req: any, res: any) => {
             });
             return res.status(response?.statusCode || 400).send(response); // Default to 400 for missing ID
         }
-        const filter = {} as any;
+        const filter = {} as FilterQuery<experienceDocument>;
         if (!body.id) {
             const response = failureResponse({
                 handler: "personalDetails",

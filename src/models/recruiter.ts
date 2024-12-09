@@ -46,7 +46,7 @@ const recruiterSchema = new Schema<recruiterDocument>({
         website: { type: String },
         viber: { type: String },
     },
-    status : {type : Number}
+    status : {type : Number , enum : [0, 1], default: 1},
 }, {
     timestamps: true
 });

@@ -1,5 +1,5 @@
 import { dataLogger, errorLogger, infoLogger } from "../../core/logger";
-import { fleetModel } from "../../models/recruiterDetails/fleet";
+import { fleetModel } from "../../models/fleet/fleet";
 
 interface FleetService {
     save : (data : any) => Promise<any>;

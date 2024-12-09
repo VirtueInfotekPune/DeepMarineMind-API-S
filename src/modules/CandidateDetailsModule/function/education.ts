@@ -1,13 +1,16 @@
 import { successResponse, catchResponse, failureResponse } from "../../../core/response";
 import { dataLogger, errorLogger, infoLogger } from "../../../core/logger";
 import educationService from "../../../services/candidateDetails/education";
+import { USER_TYPE } from "../../../constants/types/userType";
+import { FilterQuery } from "mongoose";
+import { educationDocument } from "../../../models/cabdidateDetails/education";
 
 
 export const addEducationRoute = async (req: any, res: any) => {
     try {
         infoLogger("START:- addEductionRoute function");
         dataLogger("req.body", req.body);
-        if(req.user.type !== 'candidate'){
+        if(req.user.type !== USER_TYPE.CANDIDATE){
             const response = failureResponse({
                 handler: "personalDetails",
                 messageCode: "E047",
@@ -44,12 +47,12 @@ export const findpaginateEducationRoute = async (req: any, res: any) => {
     try {
         infoLogger("START:- findpaginateEducationRoute function");
         dataLogger("req.body", req.body);
-        const filter = {} as any;
+        const filter = {} as FilterQuery<educationDocument>;
         if(req.query.id) {
-            filter._id = req.user._id || req.query.id;
+            filter._id = req.query.id;
         }
         if(req.query.candidate) {
-            filter.candidate = req.query.candidate;
+            filter.candidate = req.query.candidate || req.user._id;
         }
         const options = {
             page: req.query.page || 1,
@@ -82,14 +85,14 @@ export const updateEducationRoute = async (req: any, res: any) => {
         infoLogger("START:- updateEducationRoute function");
         dataLogger("req.body", req.body);
         const body = req.body;
-        const filter = {} as any;
+        const filter = {} as FilterQuery<educationDocument>;
         if(!body.id){
             const response = failureResponse({
                 handler: "personalDetails",
-                messageCode: "E0016",
+                messageCode: "E016",
                 req: req,
             });
-            return res.status(response?.statusCode || 400).send(response); // Default to 400 for missing ID
+            return res.status(response?.statusCode || 400).send(response); 
         }
         filter._id = body.id;
         const result = await educationService.update(filter, body);
@@ -121,7 +124,7 @@ export const deleteEducationRoute = async (req: any, res: any) => {
         if(!body.id){
             const response = failureResponse({
                 handler: "personalDetails",
-                messageCode: "E0016",
+                messageCode: "E016",
                 req: req,
             });
             return res.status(response?.statusCode || 400).send(response); // Default to 400 for missing ID

@@ -1,6 +1,7 @@
 import { successResponse, catchResponse, failureResponse } from "../../../core/response";
 import { dataLogger, errorLogger, infoLogger } from "../../../core/logger";
 import courseService from "../../../services/candidateDetails/course";
+import { USER_TYPE } from "../../../constants/types/userType";
 
 
 
@@ -9,7 +10,7 @@ export const addCourseRoute  = async (req: any, res: any) => {
         infoLogger("START:- addCourseRoute function");
         dataLogger("req.body", req.body);
 
-        if(req.user.type !== 'candidate'){
+        if(req.user.type !== USER_TYPE.CANDIDATE){
             const response = failureResponse({
                 handler: "personalDetails",
                 messageCode: "E050",
@@ -48,10 +49,10 @@ export const findPaginateCourseRoute = async (req: any, res: any) => {
         dataLogger("req.body", req.body);
         const filter = {} as any;
         if(req.query.id) {
-            filter._id = req.user._id || req.query.id;
+            filter._id = req.query.id;
         }
         if(req.query.candidate) {
-            filter.candidate = req.query.candidate;
+            filter.candidate = req.query.candidate || req.user._id;
         }
         const options = {
             page: req.query.page || 1,

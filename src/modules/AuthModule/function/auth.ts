@@ -15,6 +15,7 @@ import { RecruiterModel } from "../../../models/recruiter";
 import * as jwt from "jsonwebtoken";
 import * as  bcryptjs from "bcryptjs"
 import dotenv from "dotenv";
+import { whitelistModel } from "../../../models/whitelist";
 
 // Load environment variables
 dotenv.config();
@@ -27,6 +28,34 @@ export const registerUser = async (req: any, res: any) => {
         dataLogger("req.body", req.body);
 
         const { email, type , role } = req.body;
+
+        if(type === "recruiter"){
+            const isWhilteListed = await mongooseService.findOne(whitelistModel, { email });
+
+            if(!isWhilteListed){
+                const response = failureResponse({
+                    handler: "auth",
+                    messageCode: "E020",
+                    req: req,
+                });
+                return res.status(response?.statusCode).send(response);
+            }
+            const isApprove = isWhilteListed.approvalStatus === "approved"? true : false;
+
+            
+
+            if(!isApprove){
+                const code: string = isWhilteListed.approvalStatus === "pending" ? "E021" : isWhilteListed.approvalStatus === "rejected" ? "E022" : "E023";
+                const response = failureResponse({
+                    handler: "auth",
+                    messageCode: code ,
+                    req: req,
+                });
+                return res.status(response?.statusCode).send(response);
+            }
+        }
+        
+         
 
         if (!email || !type) {
             const response = failureResponse({
@@ -536,7 +565,7 @@ export const forgotPassword = async (req: any, res: any) => {
             return res.status(response?.statusCode).send(response);
         }
 
-        const user = await mongooseService.findOne(TempSignupModel, { email, type });
+        const user = await mongooseService.findOne(TempSignupModel, { email });
 
         if (!user) {
             const response = failureResponse({

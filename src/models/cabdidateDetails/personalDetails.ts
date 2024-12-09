@@ -26,7 +26,7 @@ interface personalDocument extends Document {
 }
 
 const personalSchema = new Schema<personalDocument>({
-    candidate: { type: Schema.Types.ObjectId, ref: "user" },
+    candidate: { type: Schema.Types.ObjectId, ref: "user"  , required : true },
     maritialStatus: { type: String },
     nextOfKin: { type: String },
     kinName: { type: String },

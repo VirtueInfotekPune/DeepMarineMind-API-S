@@ -5,7 +5,6 @@ import { addAwardRoute, deleteAwardRoute, findPaginateAwardRoute, updateAwardRou
 import { addCourseRoute, deleteCourseRoute, findPaginateCourseRoute, updateCourseRoute } from "./function/course";
 import { addActivitiesRoute, deleteActivitiesRoute, findPaginateActivitiesRoute, updateActivitiesRoute } from "./function/activities";
 import {addExperienceRoute, deleteExperienceRoute, findPaginateExperienceRoute, updateExperienceRoute} from "./function/experience";
-import { addAshoreRoute, deleteAshoreRoute, findPaginateAshoreRoute, updateAshoreRoute } from "./function/ashoreJobExp";
 import { verifyToken } from "../../auth/authorizer";
 const candidateInfo = Router();
 
@@ -46,11 +45,7 @@ candidateInfo.post("/course" , verifyToken, addCourseRoute);
 candidateInfo.patch("/course" , verifyToken, updateCourseRoute);
 candidateInfo.delete("/course" , verifyToken, deleteCourseRoute);
 
-// routes for Ashore Job Experience 
-candidateInfo.get("/ashoreJobExp" , verifyToken, findPaginateAshoreRoute);
-candidateInfo.post("/ashoreJobExp" , verifyToken, addAshoreRoute);
-candidateInfo.patch("/ashoreJobExp" , verifyToken, updateAshoreRoute);
-candidateInfo.delete("/ashoreJobExp" , verifyToken, deleteAshoreRoute);
+
 
 
 export default candidateInfo

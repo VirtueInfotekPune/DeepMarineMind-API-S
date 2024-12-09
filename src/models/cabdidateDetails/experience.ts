@@ -3,7 +3,7 @@ import paginate from "mongoose-paginate-v2";
 import aggregatePaginate from "mongoose-aggregate-paginate-v2";
 import { PaginateModel } from "../../interface/paginate";
 
-interface experienceDocument extends Document {
+export interface experienceDocument extends Document {
     candidate: String,
     position: String,
     vesselType: String,

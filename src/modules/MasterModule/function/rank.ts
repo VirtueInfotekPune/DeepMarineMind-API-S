@@ -11,6 +11,9 @@ export const findPaginateRankRoute = async (req: any, res: any) => {
     if(req.query.id) {
         filter._id = req.query.id
     }
+    else if (req.query.departmentId){
+        filter.departmentId = req.query.departmentId
+    }
 
     const options = {
         page: req.query.page || 1,
