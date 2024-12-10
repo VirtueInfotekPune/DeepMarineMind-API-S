@@ -13,7 +13,7 @@ interface courseDocument extends Document {
 }
 
 const courseSchema = new Schema<courseDocument>({
-    candidate: { type: Schema.Types.ObjectId, ref: "user" , required : true },
+    candidate: { type: Schema.Types.ObjectId, ref: "users" , required : true },
     courseName: { type: String, required: true },
     startDate: { type: Date, required: true },
     endDate: { type: Date, required: true },

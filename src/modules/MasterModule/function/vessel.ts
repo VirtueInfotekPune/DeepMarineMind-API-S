@@ -7,7 +7,10 @@ export const addVesselRoute = async (req: any, res: any) => {
     try {
         infoLogger("START:- addVesselRoute function");
         dataLogger("req.body", req.body);
-        const existingVessel = await vesselService.findOneVessel({name : req.body.name});
+        const existingVessel = await vesselService.findOneVessel({
+            name: req.body.name,
+            industry: req.body.industry,
+        });
 
         if(existingVessel) {
             const response = failureResponse({
@@ -36,7 +39,6 @@ export const addVesselRoute = async (req: any, res: any) => {
         return res.status(response?.statusCode).send(response);
     }
 }
-
 
 export const findPaginateVesselRoute = async (req: any, res: any) => {
     try {

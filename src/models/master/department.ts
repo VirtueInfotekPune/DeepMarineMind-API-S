@@ -6,18 +6,14 @@ import { PaginateModel } from "../../interface/paginate";
 interface departmentDocument extends Document{
     name : String,
     image : String,
-    vesselId? : {type : Schema.Types.ObjectId , ref : "vessel"}
-    // rank?:[{
-    //     name : String
-    // }]
-
+    shiptype? : {type : Schema.Types.ObjectId , ref : "vessel"}
+   
 }
 
 const departmentSchema = new Schema<departmentDocument>({
     name : {type : String, required : true},
     image : {type : String, required : true},
-    // rank : [{name : {type : String}}],
-    vesselId : {type : Schema.Types.ObjectId , ref : "vessel"}
+    shiptype : {type : Schema.Types.ObjectId , ref : "shipType"}
 },
 {
     timestamps : true

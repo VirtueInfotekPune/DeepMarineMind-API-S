@@ -12,7 +12,7 @@ interface ashoreJobExpDocument extends Document {
 }
 
 const ashoreJobSchema = new Schema<ashoreJobExpDocument>({
-    candidate : {type : Schema.Types.ObjectId , ref : "user"},
+    candidate : {type : Schema.Types.ObjectId , ref : "users"},
     positionName : {type : String , required : true},
     companyName : {type : String , required : true},
     experience : {type : String , required : true}

@@ -22,7 +22,7 @@ export interface experienceDocument extends Document {
 }
 
 const experienceSchema = new Schema<experienceDocument>({
-    candidate: { type: Schema.Types.ObjectId, ref: "user" },
+    candidate: { type: Schema.Types.ObjectId, ref: "users" },
     vesselType: { type: String, },
     vesselName: { type: String, },
     position: { type: String, },

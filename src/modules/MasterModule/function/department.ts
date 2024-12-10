@@ -7,7 +7,20 @@ export const addDepartmentRoute = async (req: any, res: any) => {
     try {
         infoLogger("START:- addDepartmentRoute function");
         dataLogger("req.body", req.body);
-       
+       const exisitingDepartment = await departmentService.findOneDepartment({
+           name: req.body.name,
+           shiptype : req.body.shiptype
+           
+       })
+
+       if(exisitingDepartment) {
+           const response = failureResponse({
+               handler: "master",
+               messageCode: "E009",
+               req: req,
+           });
+           return res.status(response?.statusCode).send(response);
+       }
         const result = await departmentService.saveDepartment(req.body);
         const responce = successResponse({
             handler: "master",
@@ -35,8 +48,8 @@ export const findPaginateDepartmentRoute = async (req: any, res: any) => {
         if(req.query.id) {
             filter._id = req.query.id
         }
-        else if(req.query.vesselId) {
-            filter.vesselId = req.query.vesselId
+        else if(req.query.shiptype) {
+            filter.shiptype = req.query.shiptype
         }
 
         const options = {
@@ -66,7 +79,6 @@ export const findPaginateDepartmentRoute = async (req: any, res: any) => {
         return res.status(response?.statusCode).send(response); 
     }
 } 
-
 
 export const updateDepartmentRoute = async (req: any, res: any) => {
     try {

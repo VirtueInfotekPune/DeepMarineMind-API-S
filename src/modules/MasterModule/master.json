@@ -36,6 +36,12 @@
       "S029": "Certificate deleted successfully",
       "S030": "Certificate data fetched successfully",
 
+      "S031": "ShipType get successfully",
+      "S032": "ShipType added successfully",
+      "S033": "ShipType updated successfully",
+      "S034": "ShipType deleted successfully",
+      "S035": "ShipType data fetched successfully",
+
       "E001": "All fields are required",
       "E002": "Vessel already exists",
       "E003": "Error adding vessel",
@@ -86,7 +92,16 @@
       "E039": "Error updating Certificate",
       "E040": "Error deleting Certificate",
       "E041": "Error fetching Certificate data",
-      "E042": "CertificateId not found"
+      "E042": "CertificateId not found",
+
+      "E043": "All fields are required",
+      "E044": "ShipType already exists",
+      "E045": "Error adding ShipType",
+      "E046": "Error updating ShipType",
+      "E047": "Error deleting ShipType",
+      "E048": "Error fetching ShipType data",
+      "E049": "ShipTypeId not found",
+      "E050": "ShipTypeId Is Required"
 
     },
     "ru": {

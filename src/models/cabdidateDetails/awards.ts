@@ -13,7 +13,7 @@ interface awardsDocument extends Document {
 }
 
 const awardSchema = new Schema<awardsDocument>({
-    candidate : { type: Schema.Types.ObjectId, ref: "user" , required : true },
+    candidate : { type: Schema.Types.ObjectId, ref: "users" , required : true },
     awardName : { type: String , required : true },
     institute : { type: String , required : true },
     date : { type: Date },

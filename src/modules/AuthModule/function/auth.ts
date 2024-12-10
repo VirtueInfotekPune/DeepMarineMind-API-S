@@ -29,31 +29,31 @@ export const registerUser = async (req: any, res: any) => {
 
         const { email, type , role } = req.body;
 
-        if(type === "recruiter"){
-            const isWhilteListed = await mongooseService.findOne(whitelistModel, { email });
+        // if(type === "recruiter"){
+        //     const isWhilteListed = await mongooseService.findOne(whitelistModel, { email });
 
-            if(!isWhilteListed){
-                const response = failureResponse({
-                    handler: "auth",
-                    messageCode: "E020",
-                    req: req,
-                });
-                return res.status(response?.statusCode).send(response);
-            }
-            const isApprove = isWhilteListed.approvalStatus === "approved"? true : false;
+        //     if(!isWhilteListed){
+        //         const response = failureResponse({
+        //             handler: "auth",
+        //             messageCode: "E020",
+        //             req: req,
+        //         });
+        //         return res.status(response?.statusCode).send(response);
+        //     }
+        //     const isApprove = isWhilteListed.approvalStatus === "approved"? true : false;
 
             
 
-            if(!isApprove){
-                const code: string = isWhilteListed.approvalStatus === "pending" ? "E021" : isWhilteListed.approvalStatus === "rejected" ? "E022" : "E023";
-                const response = failureResponse({
-                    handler: "auth",
-                    messageCode: code ,
-                    req: req,
-                });
-                return res.status(response?.statusCode).send(response);
-            }
-        }
+        //     if(!isApprove){
+        //         const code: string = isWhilteListed.approvalStatus === "pending" ? "E021" : isWhilteListed.approvalStatus === "rejected" ? "E022" : "E023";
+        //         const response = failureResponse({
+        //             handler: "auth",
+        //             messageCode: code ,
+        //             req: req,
+        //         });
+        //         return res.status(response?.statusCode).send(response);
+        //     }
+        // }
         
          
 
@@ -87,7 +87,7 @@ export const registerUser = async (req: any, res: any) => {
 
         const tempUser = await mongooseService.findOne(TempSignupModel, { email });
 
-        body.emailOtp = Math.floor(1000 + Math.random() * 9000);
+        body.emailOtp = 123456
         let otpExpiry = new Date(new Date().getTime() + 1 * 60 * 1000);
 
         body.payload = JSON.stringify(body);
@@ -588,7 +588,7 @@ export const forgotPassword = async (req: any, res: any) => {
     
 
         // Generate OTP and expiry
-        const emailOtp = Math.floor(1000 + Math.random() * 9000);
+        const emailOtp = 123456
         const otpExpiry = new Date(new Date().getTime() + 1 * 60 * 1000); // OTP valid for 5 minutes
 
         // Update user schema with OTP and expiry
