@@ -11,7 +11,7 @@ interface activitiesDocument extends Document {
 }
 
 const activitiesSchema = new Schema<activitiesDocument>({
-    candidate: { type: Schema.Types.ObjectId, ref: "user" , required : true },
+    candidate: { type: Schema.Types.ObjectId, ref: "users" , required : true },
     activity: { type: String , required : true },
 },
 {

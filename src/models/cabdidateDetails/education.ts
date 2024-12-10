@@ -17,7 +17,7 @@ export interface educationDocument extends Document {
 }
 
 const educationSchema = new Schema<educationDocument>({
-    candidate: { type: Schema.Types.ObjectId, ref: "user" },
+    candidate: { type: Schema.Types.ObjectId, ref: "users" },
     fieldOfStudy: { type: String },
     degree: { type: String },
     collage: { type: String },
@@ -34,4 +34,4 @@ const educationSchema = new Schema<educationDocument>({
 educationSchema.plugin(paginate);
 educationSchema.plugin(aggregatePaginate);
 
-export const educationModel = model<educationDocument, PaginateModel<educationDocument>>("candidate", educationSchema)
+export const educationModel = model<educationDocument, PaginateModel<educationDocument>>("education", educationSchema)

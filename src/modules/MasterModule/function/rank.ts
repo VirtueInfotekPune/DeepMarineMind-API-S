@@ -45,16 +45,19 @@ export const addRankRoute = async (req: any, res: any) => {
     try {
         infoLogger("START:- addRankRoute function");
         dataLogger("req.body", req.body);
-        const existingRank = await rankService.findOneRank({name : req.body.name});
+      const existingRank = await rankService.findOneRank({
+          name : req.body.name,
+          departmentId : req.body.departmentId
+      })
 
-        if(existingRank) {
-            const response = failureResponse({
-                handler: "master",
-                req: req,
-                messageCode: "E016",
-            });
-            return res.status(response?.statusCode).send(response);
-        }
+      if(existingRank) {
+          const response = failureResponse({
+              handler: "master",
+              messageCode: "E016",
+              req: req,
+          });
+          return res.status(response?.statusCode).send(response);
+      }
         const result = await rankService.saveRank(req.body);
         const responce = successResponse({
             handler: "master",
