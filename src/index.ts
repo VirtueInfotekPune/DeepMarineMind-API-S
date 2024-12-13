@@ -15,6 +15,7 @@ import userRoutes from "./modules/UserModule";
 import candidateInfo from "./modules/CandidateDetailsModule";
 import recruiterDetailsRoutes from "./modules/FleetModules"
 import whiteListRoutes from "./modules/WhiteListModule";
+import recruiterRoutes from "./modules/RecruiterModule";
 
 
 
@@ -35,6 +36,7 @@ app.use("/api/hello", hellooRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/master", masterRoutes);
 app.use("/api/user", userRoutes);
+app.use("/api/recruiter" , recruiterRoutes)
 app.use("/api", candidateInfo);
 app.use("/api", recruiterDetailsRoutes);
 app.use("/api", whiteListRoutes);
