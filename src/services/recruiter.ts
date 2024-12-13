@@ -1,3 +1,4 @@
+import { paginate } from "mongoose-paginate-v2";
 import { infoLogger , errorLogger , dataLogger } from "../core/logger";
 import { recruiterDocument, RecruiterModel } from "../models/recruiter";
 
@@ -13,5 +14,31 @@ export const recruiterService = {
             throw error;
           }
 
+    },
+
+    findOne : async (filter : any) => {
+        try {
+            infoLogger("START:- findOne function in recruiter service");
+            const result = await RecruiterModel.findOne(filter);
+            dataLogger("result of findOne", result);
+            return result;
+          } catch (error) {
+            errorLogger("error in findOne function in recruiter service", error);
+            throw error;
+          }
+    },
+
+    paginate : async (filter : any , options : any) => {
+        try {
+            infoLogger("START:- paginate function in recruiter service");
+            const result = await RecruiterModel.paginate(filter , options);
+            dataLogger("result of paginate", result);
+            return result;
+          } catch (error) {
+            errorLogger("error in paginate function in recruiter service", error);
+            throw error;
+          }
     }
+
+
 }

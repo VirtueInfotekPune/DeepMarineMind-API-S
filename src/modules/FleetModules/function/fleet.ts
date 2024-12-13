@@ -17,10 +17,13 @@ export const findPaginateFleetRoute = async (req : any , res : any) => {
         if(req.query.recruiter) {
             filter.recruiter = req.query.recruiter || req.user.recruiter._id;
         }
+       
         const options = {
             page : req.query.page || 1,
             limit : req.query.limit || 10,
-            sort : { createdAt : -1 }
+            sort : { createdAt : -1 },
+            // get by vessel name and _id
+            // select: 'vesselDetails.vesselName _id', 
         }
         const result = await fleetService.paginate(filter, options);
         dataLogger("result of save", result);

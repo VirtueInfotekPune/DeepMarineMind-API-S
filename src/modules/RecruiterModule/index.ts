@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { verifyToken } from "../../auth/authorizer";
-import { updateRecruiterRoute } from "./function/recruiter";
+import { updateRecruiterRoute , getRecruiterByIdRoute} from "./function/recruiter";
 
 
 const recruiterRoutes = Router();
@@ -8,6 +8,7 @@ const recruiterRoutes = Router();
 
 //routes
 recruiterRoutes.patch("/" ,verifyToken, updateRecruiterRoute);
+recruiterRoutes.get("/" ,verifyToken,  getRecruiterByIdRoute);
 
 
 export default recruiterRoutes
