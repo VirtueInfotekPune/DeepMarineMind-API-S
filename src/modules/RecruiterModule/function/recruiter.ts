@@ -1,5 +1,8 @@
+import { FilterQuery, QueryOptions } from "mongoose";
+import { infoLogger } from "../../../core/logger";
 import { catchResponse, failureResponse, successResponse } from "../../../core/response";
 import { recruiterService } from "../../../services/recruiter";
+import { recruiterDocument } from "../../../models/recruiter";
 
 
 
@@ -167,5 +170,59 @@ export const updateRecruiterRoute = async (req: any, res: any) => {
         });
         return res.status(response?.statusCode).send(response);
 
+    }
+};
+
+
+
+export const getRecruiterByIdRoute = async (req: any, res: any) => {
+    try {
+        infoLogger("START:- getRecruiterByIdRoute function");
+
+     
+
+        if (req.query.id) {
+            const recruiter = await recruiterService.findOne({ _id: req.query.id });
+            const response = successResponse({
+                handler: "recruiter",
+                messageCode: "S001",
+                data: recruiter,
+                req: req,
+            });
+            return res.status(response.statusCode).send(response);
+        }
+
+        const filter = {} as FilterQuery<recruiterDocument>;
+        const options = {
+            page : req.query.page || 1,
+            limit : req.query.limit || 10,
+            sort: { createdAt: -1 },
+        } as QueryOptions<recruiterDocument>;
+
+        if(req.query.search) {
+            filter.$or = [
+                { organisationName: { $regex: req.query.search, $options: "i" } },
+                { companyEmail: { $regex: req.query.search, $options: "i" } },
+                { companyPhone: { $regex: req.query.search, $options: "i" } },
+            ];
+        }
+
+        const recruiter = await recruiterService.paginate(filter, options);
+        
+        const response = successResponse({
+            handler: "recruiter",
+            messageCode: "S001",
+            data: recruiter,
+            req: req,
+        });
+        return res.status(response.statusCode).send(response);
+    } catch (error) {
+        const response = catchResponse({
+            handler: "recruiter",
+            messageCode: "E006",
+            req: req,
+            error: error,
+        });
+        return res.status(response.statusCode).send(response);
     }
 };
