@@ -22,6 +22,7 @@ export interface userDocument extends Document {
     address2?: string
     pincode?: string
     nearestAirport?: string
+    phoneVerified?: boolean
     socialLink? : {
        linkedin?: string,
        twitter?: string,
@@ -49,6 +50,7 @@ const userSchema = new Schema<userDocument>({
     address2 : { type: String },
     pincode : { type: String },
     nearestAirport : { type: String },
+    phoneVerified : { type: Boolean, default: false },
     socialLink: {
         linkedin: { type: String },
         twitter: { type: String },
