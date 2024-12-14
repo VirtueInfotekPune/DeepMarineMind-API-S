@@ -1,7 +1,17 @@
-import { catchResponse, failureResponse, successResponse } from "../../../core/response";
+import { USER_ROLE } from "../../../constants/types/userRole";
+import { USER_TYPE } from "../../../constants/types/userType";
+import {
+  catchResponse,
+  failureResponse,
+  successResponse,
+} from "../../../core/response";
+import {
+  tempSignupDocument,
+  TempSignupModel,
+} from "../../../models/tempSignup";
+import { userDocument, UserModel } from "../../../models/user";
+import mongooseService from "../../../services/mongoose";
 import { recruiterService } from "../../../services/recruiter";
-
-
 
 // export const updateRecruiterRoute = async (req: any, res: any) => {
 
@@ -34,8 +44,8 @@ import { recruiterService } from "../../../services/recruiter";
 
 //         // Fields that can be updated in both user and recruiter collections
 //         const commonFields = [
-//             'name', 'image', 'country', 'city', 'state', 
-//             'address1', 'address2', 'pincode', 'nearestAirport', 
+//             'name', 'image', 'country', 'city', 'state',
+//             'address1', 'address2', 'pincode', 'nearestAirport',
 //             'socialLink', 'status'
 //         ];
 
@@ -131,41 +141,93 @@ import { recruiterService } from "../../../services/recruiter";
 //     }
 // };
 
-
 export const updateRecruiterRoute = async (req: any, res: any) => {
-    try {
-        const user = req.user
+  try {
+    const user = req.user;
 
-        if (user.type !== "recruiter" && user.role !== "superadmin") {
-            const response = failureResponse({
-                handler: "recruiter",
-                messageCode: "E010",
-                req: req,
-            });
-            return res.status(response?.statusCode).send(response);
-        }
-        const { email, phone, ...updateFields } = req.body
-
-        const updateRecruiter = await recruiterService.update({ _id: user.recruiter._id }, updateFields)
-
-        const response = successResponse({
-            handler: "recruiter",
-            messageCode: "S002",
-            data: updateRecruiter,
-            req: req,
-        });
-        return res.status(response.statusCode).send(response);
-
-
-    } catch (error) {
-
-        const response = catchResponse({
-            handler: "recruiter",
-            messageCode: "E004",
-            req: req,
-            error: error,
-        });
-        return res.status(response?.statusCode).send(response);
-
+    if (user.type !== "recruiter" && user.role !== "superadmin") {
+      const response = failureResponse({
+        handler: "recruiter",
+        messageCode: "E010",
+        req: req,
+      });
+      return res.status(response?.statusCode).send(response);
     }
+    const { email, phone, ...updateFields } = req.body;
+
+    const updateRecruiter = await recruiterService.update(
+      { _id: user.recruiter._id },
+      updateFields
+    );
+
+    const response = successResponse({
+      handler: "recruiter",
+      messageCode: "S002",
+      data: updateRecruiter,
+      req: req,
+    });
+    return res.status(response.statusCode).send(response);
+  } catch (error) {
+    const response = catchResponse({
+      handler: "recruiter",
+      messageCode: "E004",
+      req: req,
+      error: error,
+    });
+    return res.status(response?.statusCode).send(response);
+  }
+};
+
+export const addTeamRoute = async (req: any, res: any) => {
+  try {
+    const { email} = req.body;
+    let body = req.body;
+
+    const user: userDocument = await mongooseService.findOne(UserModel, {
+      email,
+    });
+
+    if (user) {
+      const response = failureResponse({
+        handler: "auth",
+        messageCode: "E002",
+        req: req,
+      });
+      return res.status(response?.statusCode).send(response);
+    }
+
+    body.recruiter = req.user.recruiter._id;
+    body.type = USER_TYPE.RECRUITER;
+    body.role = USER_ROLE.Team;
+    const stringifyPayload = JSON.stringify(body);
+
+    const newBody: tempSignupDocument = {
+      ...body,
+      createdBy: req.user._id,
+      payload: stringifyPayload,
+      emailOtp: null,
+      otpExpiry: null,
+    };
+
+    const tempUserCreated = await mongooseService.save(
+      TempSignupModel,
+      newBody
+    );
+
+    const response = successResponse({
+      handler: "recruiter",
+      messageCode: "S006",
+      data: tempUserCreated,
+      req: req,
+    });
+    return res.status(response.statusCode).send(response);
+  } catch (error) {
+    const response = catchResponse({
+      handler: "recruiter",
+      messageCode: "E011",
+      req: req,
+      error: error,
+    });
+    return res.status(response?.statusCode).send(response);
+  }
 };

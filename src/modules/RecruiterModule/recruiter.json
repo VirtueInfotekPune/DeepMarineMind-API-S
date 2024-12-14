@@ -5,6 +5,7 @@
         "S003" : "Recruiter deleted successfully",
         "S004" : "Recruiter added successfully",
         "S005" : "Recruiter data fetched successfully",
+        "S006" : "Team member added successfully",
 
         "E001" : "All fields are required",
         "E002" : "Recruiter does not exist",
@@ -15,7 +16,8 @@
         "E007" : "RecruiterId not found",
         "E008" : "You cannot send Email in Body of update Request",
         "E009" : "You cannot send phone in Body of update Request",
-        "E010" : "You cannot Update Recruiter profile "
+        "E010" : "You cannot Update Recruiter profile ",
+        "E011" : "Failed to add Team member"
      
     }
 }
