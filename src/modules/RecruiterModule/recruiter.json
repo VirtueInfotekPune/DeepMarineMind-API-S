@@ -17,7 +17,8 @@
         "E008" : "You cannot send Email in Body of update Request",
         "E009" : "You cannot send phone in Body of update Request",
         "E010" : "You cannot Update Recruiter profile ",
-        "E011" : "Failed to add Team member"
+        "E011" : "missing recruiter ID",
+        "E012" : "Failed to add Team member"
      
     }
 }
