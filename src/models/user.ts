@@ -29,7 +29,13 @@ export interface userDocument extends Document {
        website?: string,
        viber?: string,
     }
-    rights? : string
+    right ? : {
+        fleet: [{
+            type: Schema.Types.ObjectId,
+            ref: "fleet"
+        }],
+        can : [string]
+    }
 }
 
 const userSchema = new Schema<userDocument>({
@@ -57,7 +63,17 @@ const userSchema = new Schema<userDocument>({
         website: { type: String },
         viber: { type: String },
     },
-    rights : { type: String },
+    right: {
+        fleet: [{
+            type: Schema.Types.ObjectId,
+            ref: "fleet"
+        }],
+        can: {
+            type: [String], 
+            enum: ["read", "write", "create", "delete"], 
+            default: ["read"] 
+        }
+    },
     status: { type: Number, enum: [0, 1], default: 1 },
 }, {
     timestamps: true
