@@ -55,7 +55,7 @@ export const registerUser = async (req: any, res: any) => {
     const tempUser = await mongooseService.findOne(TempSignupModel, { email });
 
     if (
-      tempUser.type === USER_TYPE.RECRUITER &&
+      tempUser && tempUser.type === USER_TYPE.RECRUITER &&
       tempUser.role === USER_ROLE.Team
     ) {
       const getRecruiter = await mongooseService.findOne(RecruiterModel, {
@@ -445,11 +445,11 @@ const verifyUser = async (req: any, res: any, tempUser: tempSignupDocument) => {
         email: tempUser.email,
       };
 
-      const user = await mongooseService.save(UserModel, insertUser);
+      const userData = await mongooseService.save(UserModel, insertUser);
 
-      dataLogger("user", user);
+      dataLogger("user", userData);
 
-      if (!user) {
+      if (!userData) {
         const response = failureResponse({
           handler: "auth",
           messageCode: "E011",
@@ -461,11 +461,11 @@ const verifyUser = async (req: any, res: any, tempUser: tempSignupDocument) => {
       const token = jwt.sign(
         {
           expiresIn: Math.floor(Date.now() / 1000) + 6 * 30 * 24 * 60 * 60,
-          id: user._id,
-          recruiter: user.recruiter,
-          type: user?.type,
-          email: user.email,
-          phone: user?.phone,
+          id: userData._id,
+          recruiter: userData.recruiter,
+          type: userData?.type,
+          email: userData.email,
+          phone: userData?.phone,
         },
         process.env.JWT_ACCESS_SECRET as string
       );
@@ -477,7 +477,7 @@ const verifyUser = async (req: any, res: any, tempUser: tempSignupDocument) => {
         data: {
           accessToken: token,
           refreshToken: token,
-          user: { ...user, password: undefined },
+          user: { ...userData._doc, password: undefined },
         },
       });
       return res.status(response?.statusCode).send(response);
