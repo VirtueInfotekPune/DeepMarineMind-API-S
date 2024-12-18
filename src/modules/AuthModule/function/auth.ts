@@ -108,6 +108,16 @@ export const registerUser = async (req: any, res: any) => {
         return res.status(response?.statusCode).send(response);
       }
     }
+    else if (!tempUser && body.type === USER_TYPE.RECRUITER &&
+      body.role === USER_ROLE.Team){
+
+      const response = failureResponse({
+        handler: "auth",
+        messageCode: "E024",
+        req: req,
+      });
+      return res.status(response?.statusCode).send(response);
+      }
 
     if (type === "recruiter" && !role) {
       const response = failureResponse({
