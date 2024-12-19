@@ -39,7 +39,7 @@ export const whitelistService = {
         }
     },
 
-    update : async (filter : FilterQuery<whitelistDocument> , payload : whitelistDocument) => {
+    update : async (filter : FilterQuery<whitelistDocument> , payload : any) => {
         try{
             infoLogger("START:- update function in whitelist service");
             const result = await whitelistModel.findOneAndUpdate(filter, payload);

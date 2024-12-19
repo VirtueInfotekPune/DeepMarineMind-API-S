@@ -5,6 +5,7 @@
         "S003" : "Request updated successfully",
         "S004" : "Request deleted successfully",
         "S005" : "Request data fetched successfully",
+        "S006" : "Request Approved Successfully",
 
         "E001" : "We Have your Request already in our list",
         "E002" : "Error adding in Request",

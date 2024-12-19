@@ -2,13 +2,17 @@ import { catchResponse, failureResponse, successResponse } from "../../../core/r
 import { dataLogger, errorLogger, infoLogger } from "../../../core/logger";
 import whitelistService from "../../../services/whitelist";
 import { USER_TYPE } from "../../../constants/types/userType";
+import { whitelistDocument } from "../../../models/whitelist";
+import { USER_ROLE } from "../../../constants/types/userRole";
+import mongooseService from "../../../services/mongoose";
+import { TempSignupModel } from "../../../models/tempSignup";
 
 
 export const SaveWhiteListRoute = async (req: any, res: any) => {
     try {
         infoLogger("START:- whiteListRoute function");
         dataLogger("req.body", req.body);
-        const existingRequest = await whitelistService.findOne({email : req.body.email});
+        const existingRequest = await whitelistService.findOne({ email: req.body.email });
         if (existingRequest) {
             const response = failureResponse({
                 handler: "whiteList",
@@ -34,7 +38,7 @@ export const SaveWhiteListRoute = async (req: any, res: any) => {
             req: req,
         });
         return res.status(response?.statusCode).send(response);
-        
+
     }
 }
 
@@ -43,7 +47,7 @@ export const DeleteWhiteListRoute = async (req: any, res: any) => {
     try {
         infoLogger("START:- whiteListRoute function");
         dataLogger("req.body", req.body);
-        if(!req.body.id){
+        if (!req.body.id) {
             const response = failureResponse({
                 handler: "whiteList",
                 messageCode: "E005",
@@ -51,7 +55,7 @@ export const DeleteWhiteListRoute = async (req: any, res: any) => {
             });
             return res.status(response?.statusCode).send(response);
         }
-        const result = await whitelistService.delete({_id : req.body.id});
+        const result = await whitelistService.delete({ _id: req.body.id });
         const response = successResponse({
             handler: "whiteList",
             messageCode: "S004",
@@ -67,28 +71,28 @@ export const DeleteWhiteListRoute = async (req: any, res: any) => {
             req: req,
         });
         return res.status(response?.statusCode).send(response);
-        
+
     }
 }
 
 export const GetWhiteListRoute = async (req: any, res: any) => {
     try {
         infoLogger("START:- whiteListRoute function");
-       
+
         const filter = {} as any;
         const options = {
-            page : req.query.page || 1,
-            limit : req.query.limit || 10,
-            sort : { createdAt : -1 }
+            page: req.query.page || 1,
+            limit: req.query.limit || 10,
+            sort: { createdAt: -1 }
         } as any;
 
-        if(req.query.id){
+        if (req.query.id) {
             filter._id = req.query.id;
         }
-        if(req.query.email){
+        if (req.query.email) {
             filter.email = new RegExp(req.query.email, "i");
         }
-        const result = await whitelistService.paginate(filter , options);
+        const result = await whitelistService.paginate(filter, options);
         const response = successResponse({
             handler: "whiteList",
             messageCode: "S001",
@@ -104,49 +108,99 @@ export const GetWhiteListRoute = async (req: any, res: any) => {
             req: req,
         });
         return res.status(response?.statusCode).send(response);
-        
+
     }
 }
 
 
 export const UpdateWhiteListRoute = async (req: any, res: any) => {
     try {
-        infoLogger("START:- whiteListRoute function");
-        dataLogger("req.body", req.body);
-        if(!req.body.id){
+        infoLogger("START: UpdateWhiteListRoute function");
+        dataLogger("Request body:", req.body);
+
+        const body: whitelistDocument = req.body;
+
+        if (!body.id) {
             const response = failureResponse({
                 handler: "whiteList",
                 messageCode: "E005",
-                req: req,
+                req,
             });
             return res.status(response?.statusCode).send(response);
         }
-        
-        // todo : for dev not required
-        // if(req.body.approvalStatus && req.user.type !== USER_TYPE.SUPERADMIN){
-        //     const response = failureResponse({
-        //         handler: "whiteList",
-        //         messageCode: "E007",
-        //         req: req,
-        //     });
-        //     return res.status(response?.statusCode).send(response);
-        // }
-        const result = await whitelistService.update({_id : req.body.id} , req.body);
+
+        const findRequest = await whitelistService.findOne({ _id: body.id });
+        if (!findRequest) {
+            const response = failureResponse({
+                handler: "whiteList",
+                messageCode: "E006",
+                req,
+            });
+            return res.status(response?.statusCode).send(response);
+        }
+
+        if (body.approvalStatus === "approved") {
+            const emailOtp = 123456;
+            const otpExpiry = new Date(new Date().getTime() + 1 * 60 * 1000); // OTP valid for 1 minute
+
+            const tempUserPayload = {
+                ...findRequest,
+                type: USER_TYPE.RECRUITER,
+                role: USER_ROLE.SUPERADMIN,
+                emailOtp,
+                otpExpiry,
+            };
+
+            const result = await mongooseService.update(
+                TempSignupModel,
+                { email: findRequest.email },
+                tempUserPayload,
+                { upsert: true }
+            );
+
+            if (result) {
+                const whiteList = await whitelistService.update(
+                    { _id: body.id },
+                    { approvalStatus: "approved" }
+                );
+
+                const response = successResponse({
+                    handler: "whiteList",
+                    messageCode: "S006",
+                    req,
+                    data: whiteList,
+                });
+                return res.status(response?.statusCode).send(response);
+            } else {
+                const response = failureResponse({
+                    handler: "whiteList",
+                    messageCode: "E003",
+                    req,
+                });
+                return res.status(response?.statusCode).send(response);
+            }
+        }
+
+        const updatedWhitelist = await whitelistService.update(
+            { _id: body.id },
+            body
+        );
+
         const response = successResponse({
             handler: "whiteList",
             messageCode: "S003",
-            req: req,
-            data: result,
+            req,
+            data: updatedWhitelist,
         });
         return res.status(response?.statusCode).send(response);
     } catch (error) {
-        errorLogger("error in whiteListRoute function", error);
+        errorLogger("Error in UpdateWhiteListRoute function", error);
+
         const response = catchResponse({
             handler: "whiteList",
             messageCode: "E003",
-            req: req,
+            req,
         });
         return res.status(response?.statusCode).send(response);
-        
     }
-}
+};

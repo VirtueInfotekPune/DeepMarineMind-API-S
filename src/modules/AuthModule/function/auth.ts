@@ -19,7 +19,6 @@ import { whitelistModel } from "../../../models/whitelist";
 import { USER_TYPE } from "../../../constants/types/userType";
 import { USER_ROLE } from "../../../constants/types/userRole";
 
-
 // Load environment variables
 dotenv.config();
 
@@ -41,14 +40,14 @@ export const registerUser = async (req: any, res: any) => {
       return res.status(response?.statusCode).send(response);
     }
 
-    if (type === "recruiter" && !role) {
-      const response = failureResponse({
-        handler: "auth",
-        messageCode: "E014",
-        req: req,
-      });
-      return res.status(response?.statusCode).send(response);
-    }
+    // if (type === "recruiter" && !role) {
+    //   const response = failureResponse({
+    //     handler: "auth",
+    //     messageCode: "E014",
+    //     req: req,
+    //   });
+    //   return res.status(response?.statusCode).send(response);
+    // }
 
     const existingUser = await mongooseService.findOne(UserModel, { email });
 
@@ -61,53 +60,161 @@ export const registerUser = async (req: any, res: any) => {
       return res.status(response?.statusCode).send(response);
     }
 
-
-    else if (body.type === USER_TYPE.RECRUITER &&
-      body.role === USER_ROLE.Team){
-
-      const tempUserofTeam = await mongooseService.findOne(TempSignupModel, { email });
-      if(!tempUserofTeam){
-        const response = failureResponse({
-          handler: "auth",
-          messageCode: "E024",
-          req: req,
-        });
-        return res.status(response?.statusCode).send(response);
-      }
-      const getRecruiter = await mongooseService.findOne(RecruiterModel, {
-        _id: tempUserofTeam.recruiter,
-      });
-
-      if (!getRecruiter) {
-        const response = failureResponse({
-          handler: "auth",
-          messageCode: "E023",
-          req: req,
-        });
-        return res.status(response?.statusCode).send(response);
-      }
-
-      const emailOtp = 123456;
-      let otpExpiry = new Date(new Date().getTime() + 1 * 60 * 1000);
-      body.payload = JSON.stringify(body);
-
-      const updatePayload = {
-        emailOtp,
-        otpExpiry,
-        payload: body.payload,
-      };
-
-      const updateTempUser = await mongooseService.update(
+    if (type === USER_TYPE.RECRUITER) {
+      const findTemp: tempSignupDocument = await mongooseService.findOne(
         TempSignupModel,
-        { email },
-        updatePayload,
-        { new: true }
+        { email }
       );
 
-      if (updateTempUser) {
+      if (findTemp && findTemp.role === USER_ROLE.Team && findTemp.recruiter !== null) {
+        const getRecruiter = await mongooseService.findOne(RecruiterModel, {
+          _id: findTemp.recruiter,
+        });
+
+        if (!getRecruiter) {
+          const response = failureResponse({
+            handler: "auth",
+            messageCode: "E023",
+            req: req,
+          });
+          return res.status(response?.statusCode).send(response);
+        }
+
+        const emailOtp = 123456;
+        let otpExpiry = new Date(new Date().getTime() + 1 * 60 * 1000);
+        body.payload = JSON.stringify(body);
+
+        const updatePayload = {
+          emailOtp,
+          otpExpiry,
+          payload: body.payload,
+        };
+
+        const updateTempUser = await mongooseService.update(
+          TempSignupModel,
+          { email },
+          updatePayload,
+          { new: true }
+        );
+
         // todo : logic for sending email
         //logic for sending otp
 
+        const response = successResponse({
+          handler: "auth",
+          messageCode: "S001",
+          req: req,
+          data: "email send successfully",
+        });
+        return res.status(response?.statusCode).send(response);
+      }
+      else if (findTemp && findTemp.role === USER_ROLE.SUPERADMIN) {
+        // todo : this is the logic of the whitelisting process
+        // if(type === "recruiter" && role === "superadmin"){
+        //     const isWhilteListed = await mongooseService.findOne(whitelistModel, { email });
+
+        //     if(!isWhilteListed){
+        //         const response = failureResponse({
+        //             handler: "auth",
+        //             messageCode: "E020",
+        //             req: req,
+        //         });
+        //         return res.status(response?.statusCode).send(response);
+        //     }
+        //     const isApprove = isWhilteListed.approvalStatus === "approved"? true : false;
+
+        //     if(!isApprove){
+        //         const code: string = isWhilteListed.approvalStatus === "pending" ? "E021" : isWhilteListed.approvalStatus === "rejected" ? "E022" : "E023";
+        //         const response = failureResponse({
+        //             handler: "auth",
+        //             messageCode: code ,
+        //             req: req,
+        //         });
+        //         return res.status(response?.statusCode).send(response);
+        //     }
+        // }
+
+        const emailOtp = 123456;
+        let otpExpiry = new Date(new Date().getTime() + 1 * 60 * 1000);
+        body.payload = JSON.stringify(body);
+
+        const updatePayload = {
+          
+          emailOtp,
+          otpExpiry,
+          payload: body.payload,
+        };
+        const result = await mongooseService.update(
+          TempSignupModel,
+          { email: email },
+          updatePayload,
+          { upsert: true }
+        );
+    
+        if (result) {
+          // todo : logic for sending email
+          //logic for sending otp
+    
+          const response = successResponse({
+            handler: "auth",
+            messageCode: "S001",
+            req: req,
+            data: "email send successfully",
+          });
+          return res.status(response?.statusCode).send(response);
+        } else {
+          const response = failureResponse({
+            handler: "auth",
+            messageCode: "E003",
+            req: req,
+          });
+          return res.status(response?.statusCode).send(response);
+        }
+      }
+      else {
+        const response = failureResponse({
+          handler: "auth",
+          messageCode: "E026",
+          req: req,
+        });
+        return res.status(response?.statusCode).send(response);
+      }
+    }
+
+    else if (type === USER_TYPE.CANDIDATE) {
+      const tempUser = await mongooseService.findOne(TempSignupModel, { email });
+
+      body.emailOtp = 123456;
+      let otpExpiry = new Date(new Date().getTime() + 1 * 60 * 1000);
+  
+      body.payload = JSON.stringify(body);
+      let payload = {};
+      if (tempUser) {
+        payload = {
+          emailOtp: body.emailOtp,
+          otpExpiry: otpExpiry,
+          payload: body.payload,
+        };
+      } else {
+        payload = {
+          ...body,
+          email: body.email,
+          emailOtp: body.emailOtp,
+          otpExpiry: otpExpiry,
+        };
+      }
+  
+      const result = await mongooseService.update(
+        TempSignupModel,
+        { email: email },
+        payload,
+        { upsert: true }
+      );
+  
+      if (result) {
+        // todo : logic for sending email
+        //logic for sending otp
+  
         const response = successResponse({
           handler: "auth",
           messageCode: "S001",
@@ -123,83 +230,20 @@ export const registerUser = async (req: any, res: any) => {
         });
         return res.status(response?.statusCode).send(response);
       }
-
- 
     }
-
-    const tempUser = await mongooseService.findOne(TempSignupModel, { email });
-   
-
-    // if(type === "recruiter" && role === "superadmin"){
-    //     const isWhilteListed = await mongooseService.findOne(whitelistModel, { email });
-
-    //     if(!isWhilteListed){
-    //         const response = failureResponse({
-    //             handler: "auth",
-    //             messageCode: "E020",
-    //             req: req,
-    //         });
-    //         return res.status(response?.statusCode).send(response);
-    //     }
-    //     const isApprove = isWhilteListed.approvalStatus === "approved"? true : false;
-
-    //     if(!isApprove){
-    //         const code: string = isWhilteListed.approvalStatus === "pending" ? "E021" : isWhilteListed.approvalStatus === "rejected" ? "E022" : "E023";
-    //         const response = failureResponse({
-    //             handler: "auth",
-    //             messageCode: code ,
-    //             req: req,
-    //         });
-    //         return res.status(response?.statusCode).send(response);
-    //     }
-    // }
-
-    body.emailOtp = 123456;
-    let otpExpiry = new Date(new Date().getTime() + 1 * 60 * 1000);
-
-    body.payload = JSON.stringify(body);
-    let payload = {};
-    if (tempUser) {
-      payload = {
-        emailOtp: body.emailOtp,
-        otpExpiry: otpExpiry,
-        payload: body.payload,
-      };
-    } else {
-      payload = {
-        ...body,
-        email: body.email,
-        emailOtp: body.emailOtp,
-        otpExpiry: otpExpiry,
-      };
-    }
-
-    const result = await mongooseService.update(
-      TempSignupModel,
-      { email: email },
-      payload,
-      { upsert: true }
-    );
-
-    if (result) {
-      // todo : logic for sending email
-      //logic for sending otp
-
-      const response = successResponse({
-        handler: "auth",
-        messageCode: "S001",
-        req: req,
-        data: "email send successfully",
-      });
-      return res.status(response?.statusCode).send(response);
-    } else {
+    else {
       const response = failureResponse({
         handler: "auth",
-        messageCode: "E003",
+        messageCode: "E025",
         req: req,
       });
       return res.status(response?.statusCode).send(response);
     }
+
+
+    
+
+
   } catch (error) {
     errorLogger("error in registerUser function", error);
     const response = catchResponse({
@@ -240,14 +284,16 @@ export const verifyotp = async (req: any, res: any) => {
         req: req,
       });
       return res.status(response?.statusCode).send(response);
-    } else if (type === "recruiter" && !role) {
-      const response = failureResponse({
-        handler: "auth",
-        messageCode: "E014",
-        req: req,
-      });
-      return res.status(response?.statusCode).send(response);
     }
+
+    // else if (type === "recruiter" && !role) {
+    //   const response = failureResponse({
+    //     handler: "auth",
+    //     messageCode: "E014",
+    //     req: req,
+    //   });
+    //   return res.status(response?.statusCode).send(response);
+    // }
     query.email = email;
 
     const tempUser = await mongooseService.findOne(TempSignupModel, query);
@@ -570,9 +616,6 @@ export const Login = async (req: any, res: any) => {
     const { email, password, type } = req.body;
     const filter = {} as any;
 
-    // if (role) {
-    //   filter.role = role;
-    // }
     filter.email = email;
     filter.type = type;
 
@@ -583,15 +626,7 @@ export const Login = async (req: any, res: any) => {
         req: req,
       });
       return res.status(response?.statusCode).send(response);
-    } 
-    // else if (type === "recruiter" && !role) {
-    //   const response = failureResponse({
-    //     handler: "auth",
-    //     messageCode: "E014",
-    //     req: req,
-    //   });
-    //   return res.status(response?.statusCode).send(response);
-    // }
+    }
 
     dataLogger("filter", filter);
 
