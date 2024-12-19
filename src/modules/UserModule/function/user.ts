@@ -15,13 +15,36 @@ export const updateUserRoute = async (req: any, res: any) => {
   try {
     const body: userDocument = req.body;
 
-    const requestUser = req.user;
+    const requestUser: userDocument = req.user;
 
     dataLogger("requestUser", requestUser);
 
-    if (body.password) {
+    if (body.password && requestUser.type !== "superadmin") {
+      if (requestUser.firstTimePasswordChange === false) {
+        const response = failureResponse({
+          handler: "user",
+          messageCode: "E010",
+          req,
+        });
+        return res.status(response?.statusCode).send(response);
+      }
+
       const password = await bcrypjs.hash(body.password, 10);
-      body.password = password;
+
+      const result = await userService.updateUser(
+        { _id: requestUser._id },
+        {
+          password : password,
+          firstTimePasswordChange : false
+        }
+      );
+
+      const response = successResponse({
+        handler: "user",
+        data: result,
+        messageCode: "S006",
+      });
+      return res.status(response?.statusCode).send(response);
     } else if (body.email) {
       const response = failureResponse({
         handler: "user",
@@ -78,30 +101,26 @@ export const updateUserRoute = async (req: any, res: any) => {
 
 export const userProfile = async (req: any, res: any) => {
   try {
-
     const user = req.user;
 
     const response = successResponse({
       handler: "user",
       data: {
-        userData :  { ...user , password : undefined },
+        userData: { ...user, password: undefined },
       },
       messageCode: "S005",
-      req
+      req,
     });
     return res.status(response?.statusCode).send(response);
-    
   } catch (error) {
-
     errorLogger("error in userProfile function", error);
 
-    const response = catchResponse({  
+    const response = catchResponse({
       handler: "user",
       messageCode: "E006",
       req,
       error: error,
     });
     return res.status(response?.statusCode).send(response);
-    
   }
 };

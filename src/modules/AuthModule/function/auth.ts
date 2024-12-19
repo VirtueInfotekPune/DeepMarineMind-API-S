@@ -41,6 +41,15 @@ export const registerUser = async (req: any, res: any) => {
       return res.status(response?.statusCode).send(response);
     }
 
+    if (type === "recruiter" && !role) {
+      const response = failureResponse({
+        handler: "auth",
+        messageCode: "E014",
+        req: req,
+      });
+      return res.status(response?.statusCode).send(response);
+    }
+
     const existingUser = await mongooseService.findOne(UserModel, { email });
 
     if (existingUser) {
@@ -52,14 +61,21 @@ export const registerUser = async (req: any, res: any) => {
       return res.status(response?.statusCode).send(response);
     }
 
-    const tempUser = await mongooseService.findOne(TempSignupModel, { email });
 
-    if (
-      tempUser && tempUser.type === USER_TYPE.RECRUITER &&
-      tempUser.role === USER_ROLE.Team
-    ) {
+    else if (body.type === USER_TYPE.RECRUITER &&
+      body.role === USER_ROLE.Team){
+
+      const tempUserofTeam = await mongooseService.findOne(TempSignupModel, { email });
+      if(!tempUserofTeam){
+        const response = failureResponse({
+          handler: "auth",
+          messageCode: "E024",
+          req: req,
+        });
+        return res.status(response?.statusCode).send(response);
+      }
       const getRecruiter = await mongooseService.findOne(RecruiterModel, {
-        _id: tempUser.recruiter,
+        _id: tempUserofTeam.recruiter,
       });
 
       if (!getRecruiter) {
@@ -107,26 +123,12 @@ export const registerUser = async (req: any, res: any) => {
         });
         return res.status(response?.statusCode).send(response);
       }
-    }
-    else if (!tempUser && body.type === USER_TYPE.RECRUITER &&
-      body.role === USER_ROLE.Team){
 
-      const response = failureResponse({
-        handler: "auth",
-        messageCode: "E024",
-        req: req,
-      });
-      return res.status(response?.statusCode).send(response);
-      }
-
-    if (type === "recruiter" && !role) {
-      const response = failureResponse({
-        handler: "auth",
-        messageCode: "E014",
-        req: req,
-      });
-      return res.status(response?.statusCode).send(response);
+ 
     }
+
+    const tempUser = await mongooseService.findOne(TempSignupModel, { email });
+   
 
     // if(type === "recruiter" && role === "superadmin"){
     //     const isWhilteListed = await mongooseService.findOne(whitelistModel, { email });
