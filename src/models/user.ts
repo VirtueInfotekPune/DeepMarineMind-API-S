@@ -9,6 +9,7 @@ export interface userDocument extends Document {
     email: string;
     phone?: string;
     password: string;
+    firstTimePasswordChange?: boolean;
     type: string;
     role?: string;
     status: number;
@@ -44,6 +45,7 @@ const userSchema = new Schema<userDocument>({
     recruiter: { type: Schema.Types.ObjectId  , ref: "recruiter" },
     phone: { type: String },
     password: { type: String },
+    firstTimePasswordChange: { type: Boolean, default: true },
     type: { type: String, required: true , enum : USER_TYPE },
     role: { type: String , enum : USER_ROLE},
     industry: { type: Schema.Types.ObjectId, ref: "industry" },

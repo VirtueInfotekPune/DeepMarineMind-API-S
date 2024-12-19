@@ -5,6 +5,7 @@
         "S003" : "User deleted successfully",
         "S004" : "User added successfully",
         "S005" : "User data fetched successfully",
+        "S006" : "Password set Successfully",
 
 
 
@@ -16,7 +17,9 @@
         "E006": "Error fetching user data",
         "E007": "UserId not found",
         "E008": "You cannot send Email in Body of update Request",
-        "E009": "You cannot send phone in Body of update Request"
+        "E009": "You cannot send phone in Body of update Request" , 
+        "E010" : "You already setup your first Password , Please use the 'Forgot Password' option."
+         
 
 
     },
