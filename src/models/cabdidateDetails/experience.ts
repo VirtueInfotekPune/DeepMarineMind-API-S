@@ -17,7 +17,8 @@ export interface experienceDocument extends Document {
     type: String,
     status : number ,
     totalDuration: String,
-    expirence : String
+    expirence : String,
+    flag : String
 
 }
 
@@ -35,42 +36,13 @@ const experienceSchema = new Schema<experienceDocument>({
     type: { type: String, enum: ["onshore", "offshore"], default: "onshore" },
     totalDuration: { type: String, required: false },
     status : { type: Number, enum: [0, 1], default: 1 },
-    expirence : {type : String}
+    expirence : {type : String},
+    flag : {type : String}
 },
     {
         timestamps: true
     })
 
-// this calculation will handle from ffrontend side 
-
-// Pre-save middleware to calculate total duration
-// experienceSchema.pre("save", function (next) {
-//     const experience = this;
-
-//     if (experience.startDate && experience.endDate) {
-//         const startDate = new Date(experience.startDate);
-//         const endDate = new Date(experience.endDate);
-
-//         // Calculate the total duration
-//         const totalMonths =
-//             (endDate.getFullYear() - startDate.getFullYear()) * 12 +
-//             (endDate.getMonth() - startDate.getMonth());
-//         const totalDays = endDate.getDate() - startDate.getDate();
-
-//         let duration = `${totalMonths} Months`;
-//         if (totalDays > 0) {
-//             duration += ` & ${totalDays} Days`;
-//         }
-
-//         // Assign the calculated total duration
-//         experience.totalDuration = duration;
-//     }
-//     else if (experience.totalDuration) {
-//         experience.totalDuration = experience.totalDuration;
-//     }
-
-//     next();
-// });
 
 experienceSchema.plugin(paginate);
 experienceSchema.plugin(aggregatePaginate);
