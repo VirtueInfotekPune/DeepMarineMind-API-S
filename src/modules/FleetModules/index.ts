@@ -1,6 +1,7 @@
 import {Router} from "express";
 import { addFleetRoute, findPaginateFleetRoute, updateFleetRoute, deleteFleetRoute } from "./function/fleet";
 import { verifyToken } from "../../auth/authorizer";
+import {addBulkFleetRoute} from "./function/bulkFleets"
 const recruiterDetailsRoutes = Router();
 
 
@@ -9,5 +10,8 @@ recruiterDetailsRoutes.get("/fleets" , findPaginateFleetRoute);
 recruiterDetailsRoutes.post("/fleets" , verifyToken, addFleetRoute);
 recruiterDetailsRoutes.patch("/fleets" , verifyToken, updateFleetRoute);
 recruiterDetailsRoutes.delete("/fleets" , verifyToken, deleteFleetRoute);
+
+
+recruiterDetailsRoutes.post("/bulkfleets" , verifyToken, addBulkFleetRoute);
 
 export default recruiterDetailsRoutes

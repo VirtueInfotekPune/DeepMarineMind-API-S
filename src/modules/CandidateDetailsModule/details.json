@@ -35,6 +35,13 @@
         "S027" : "Ashore Experience updated successfully",
         "S028" : "Ashore Experience deleted successfully",
 
+        "S029" : "Candidate Profile successfully created",
+
+        "S030" : "Candidate Docs get successfully",
+        "S031" : "Candidate Docs added successfully",
+        "S032" : "Candidate Docs updated successfully",
+        "S033" : "Candidate Docs deleted successfully",
+
         "E001": "All fields are required",
         "E002": "User Id Is required",
         "E003": "User does not exist",
@@ -94,6 +101,8 @@
         "E051" : "Activities can add by only candidate",
         "E052" : "Ashore Job Experience can add by only candidate",
 
+
+
         "E053" : "All fields are required",
         "E054" : "User Id Is required",
         "E055" : "User does not exist",
@@ -102,7 +111,20 @@
         "E058" : "Error deleting ashore experience",
         "E059" : "Error fetching ashore experience data",
         "E060" : "AshoreExperienceId not found",
-        "E061" : "AshoreExperienceId is required"
+        "E061" : "AshoreExperienceId is required",
+
+        "E062" : "Sea experience data is missing or invalid",
+        "E063" : "Error in Adding candidate experience",
+        "E064" : "Error in candidate cv parsing",
+
+        "E065" : "Candidate Docs can add by only candidate",
+        "E066" : "User Id Is required for Adding Candidate Docs",
+        "E067" : "Error adding Candidate Docs",
+        "E068" : "Error updating Candidate Docs",
+        "E069" : "Error deleting Candidate Docs",
+        "E070" : "Candidate Docs Id Not found",
+        "E071" : "Error fetching Candidate Docs"
+        
 
 
 

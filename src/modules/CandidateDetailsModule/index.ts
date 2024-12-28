@@ -5,9 +5,19 @@ import { addAwardRoute, deleteAwardRoute, findPaginateAwardRoute, updateAwardRou
 import { addCourseRoute, deleteCourseRoute, findPaginateCourseRoute, updateCourseRoute } from "./function/course";
 import { addActivitiesRoute, deleteActivitiesRoute, findPaginateActivitiesRoute, updateActivitiesRoute } from "./function/activities";
 import {addExperienceRoute, deleteExperienceRoute, findPaginateExperienceRoute, updateExperienceRoute} from "./function/experience";
+import { addCandidateDocsRoute, deleteCandidateDocsRoute, findPaginateCandidateDocsRoute, updateCandidateDocsRoute } from "./function/candidateDocs";
 import { verifyToken } from "../../auth/authorizer";
+import {handleUploadCVCandidate} from "../../modules/CandidateDetailsModule/function/signupCV"
 const candidateInfo = Router();
 
+// route for profile with cv 
+candidateInfo.post("/upload-cv" ,verifyToken,  handleUploadCVCandidate)
+
+// routes for candidate Documents 
+candidateInfo.get("/candidateDocs" , verifyToken, findPaginateCandidateDocsRoute);
+candidateInfo.post("/candidateDocs" , verifyToken, addCandidateDocsRoute);
+candidateInfo.patch("/candidateDocs" , verifyToken, updateCandidateDocsRoute);
+candidateInfo.delete("/candidateDocs" , verifyToken, deleteCandidateDocsRoute);
 
 // routes for candidate experience 
 candidateInfo.get("/experience" ,verifyToken, findPaginateExperienceRoute);
