@@ -9,7 +9,8 @@ export const addDepartmentRoute = async (req: any, res: any) => {
         dataLogger("req.body", req.body);
        const exisitingDepartment = await departmentService.findOneDepartment({
            name: req.body.name,
-           shiptype : req.body.shiptype
+           shiptype : req.body.shiptype,
+           vessel : req.body.vessel
            
        })
 
@@ -50,6 +51,9 @@ export const findPaginateDepartmentRoute = async (req: any, res: any) => {
         }
         else if(req.query.shiptype) {
             filter.shiptype = req.query.shiptype
+        }
+        else if(req.query.vessel){
+            filter.vessel = req.query.vessel
         }
 
         const options = {

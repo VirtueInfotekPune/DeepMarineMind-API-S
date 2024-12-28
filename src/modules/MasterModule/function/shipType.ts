@@ -24,7 +24,7 @@ export const addShipTypeRoute = async (req: any, res: any) => {
         const result = await shipTypeService.save(req.body);
         const responce = successResponse({
             handler: "master",
-            messageCode: "S031",
+            messageCode: "S032",
             req: req,
             data: result,
         })

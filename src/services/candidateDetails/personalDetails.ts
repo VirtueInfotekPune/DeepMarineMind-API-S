@@ -2,7 +2,7 @@ import { infoLogger, errorLogger, dataLogger } from "../../core/logger";
 import { personalDetailsModel } from "../../models/cabdidateDetails/personalDetails";
 
 interface PersonalDetailsService {
-    save : (data : any) => Promise<any>
+    save : (data : any, session?: any) => Promise<any>
     update : (filter : any , payload : any) => Promise<any>
     delete : (filter : any) => Promise<any>
     findOne : (filter : any) => Promise<any>
@@ -11,13 +11,13 @@ interface PersonalDetailsService {
 }
 
 const personalDetailsService : PersonalDetailsService = {
-    save : async (data : any) => {
-        try{
+    save: async (data: any, session: any) => {
+        try {
             infoLogger("START:- save function in personal details service");
-            const result = await personalDetailsModel.create(data);
+            const result = await personalDetailsModel.create(data, { session });
             dataLogger("result of save", result);
             return result;
-        }catch(error){
+        } catch (error) {
             errorLogger("error in save function in personal details service", error);
             throw error;
         }

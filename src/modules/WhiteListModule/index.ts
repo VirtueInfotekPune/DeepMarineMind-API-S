@@ -7,9 +7,9 @@ const whiteListRoutes = Router()
 
 //routes
 whiteListRoutes.post("/whitelist" ,  SaveWhiteListRoute)
-whiteListRoutes.patch("/whitelist" ,verifyToken , haveAccess(["superadmin"]) , UpdateWhiteListRoute)
-whiteListRoutes.get("/whitelist" ,verifyToken , haveAccess(["superadmin"]) , GetWhiteListRoute)
-whiteListRoutes.delete("/whitelist" ,verifyToken , haveAccess(["superadmin"]) , DeleteWhiteListRoute)
+whiteListRoutes.patch("/verify-recruiter" ,verifyToken  , UpdateWhiteListRoute)
+whiteListRoutes.get("/whitelist" ,verifyToken  , GetWhiteListRoute)
+whiteListRoutes.delete("/whitelist" ,verifyToken  , DeleteWhiteListRoute)
 
 export default whiteListRoutes
 

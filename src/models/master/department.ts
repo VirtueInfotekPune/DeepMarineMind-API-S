@@ -7,13 +7,15 @@ interface departmentDocument extends Document{
     name : String,
     image : String,
     shiptype? : {type : Schema.Types.ObjectId , ref : "vessel"}
+    vessel? : {type : Schema.Types.ObjectId , ref : "vessel"}
    
 }
 
 const departmentSchema = new Schema<departmentDocument>({
     name : {type : String, required : true},
     image : {type : String, required : true},
-    shiptype : {type : Schema.Types.ObjectId , ref : "shipType"}
+    shiptype : {type : Schema.Types.ObjectId , ref : "shipType"},
+    vessel : {type : Schema.Types.ObjectId , ref : "vessel"},
 },
 {
     timestamps : true

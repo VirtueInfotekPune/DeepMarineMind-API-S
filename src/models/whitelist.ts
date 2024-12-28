@@ -6,9 +6,9 @@ import paginate from "mongoose-paginate-v2";
 export interface whitelistDocument extends Document {
     name: string;
     email: string;
-    mobile: string;
+    phone: string;
     comments : string;
-    companyDescription : string;
+    aboutCompany : string;
     approvalStatus : string;
     status: number;
 }
@@ -16,9 +16,9 @@ export interface whitelistDocument extends Document {
 const whitelistSchema = new Schema<whitelistDocument>({
     name: { type: String },
     email: { type: String , required : true },
-    mobile: { type: String  },
+    phone: { type: String  },
     comments : { type: String },
-    companyDescription : { type: String },
+    aboutCompany : { type: String },
     approvalStatus : { type: String , enum : ["pending" , "approved" , "rejected"] , default : "pending" },
     status: { type: Number , enum : [0 , 1] , default : 1 },
 },

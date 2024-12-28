@@ -10,7 +10,9 @@
         "E003" : "Error updating in Fleet details",
         "E004" : "Error deleting in Fleet details",
         "E005" : "Fleet Id is required",
-        "E006" : "Fleet Id not found"
+        "E006" : "Fleet Id not found",
+        "E007" : "Missing required vessel details",
+        "E008" : "User type is required"
     },
 
     "ru" : {

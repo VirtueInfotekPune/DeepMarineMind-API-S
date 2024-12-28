@@ -6,6 +6,8 @@ import { PaginateModel } from "../../interface/paginate";
 interface fleetDocument extends Document {
     recruiter: Types.ObjectId,
     industry: Types.ObjectId
+    industryName: string,
+    shipType : string,
     vesselDetails: {
         vesselName: string,
         shipType: string,
@@ -43,6 +45,7 @@ interface fleetDocument extends Document {
 const fleetSchema = new Schema({
     recruiter: { type: Schema.Types.ObjectId, ref: "recruiter" },
     industry: { type: Schema.Types.ObjectId, ref: "industry" },
+    industryName: { type: String },
     vesselDetails: {
         vesselName: { type: String },
         shipType: { type: String },
