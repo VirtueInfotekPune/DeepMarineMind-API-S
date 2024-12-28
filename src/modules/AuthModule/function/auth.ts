@@ -447,6 +447,8 @@ const verifyUser = async (req: any, res: any, tempUser: tempSignupDocument) => {
         ...tempUserPayload,
         _id: userId,
         email: tempUser.email,
+        type : tempUser.type , 
+        role: tempUser.role,
         recruiter: recruterId,
       };
 
