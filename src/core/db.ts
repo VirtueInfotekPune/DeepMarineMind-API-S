@@ -92,11 +92,11 @@ export const openDBConnection = async (): Promise<typeof mongoose | null> => {
   try {
     const connectionState = mongoose.connection.readyState;
 
-    if (connectionState !== 1) {
-      console.log('Opening new connection');
-      connection = await mongoose.connect(getConnectionUrl());
-      return connection;
-    }
+    // if (connectionState !== 1) {
+    //   console.log('Opening new connection');
+    //   return connection;
+    // }
+    connection = await mongoose.connect(getConnectionUrl());
 
     return connection;
   } catch (error) {

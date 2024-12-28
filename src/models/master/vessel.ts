@@ -8,15 +8,13 @@ import { PaginateModel } from "../../interface/paginate";
 export interface vesselDocument extends Document {
     name: String,
     image : String
-    shipType : [{
-        name : String,
-    }]
+    industry : String
 }
 
 const vesselSchema = new Schema<vesselDocument>({
     name: { type: String, required: true },
     image: { type: String, required: true },
-    shipType: [{ name: { type: String } }]
+    industry : {type : Schema.Types.ObjectId , ref : "industry"},
 }, {
     timestamps: true
 })

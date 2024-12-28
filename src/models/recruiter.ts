@@ -1,4 +1,4 @@
-import { Schema, model, Document } from "mongoose";
+import { Schema, model, Document, PaginateModel } from "mongoose";
 import  paginate  from "mongoose-paginate-v2";
 import aggregatePaginate from "mongoose-aggregate-paginate-v2";
 
@@ -8,6 +8,8 @@ export interface recruiterDocument extends Document {
     phone : string,
     organisationName : string,
     aboutCompany : string,
+    companyEmail : string,
+    companyPhone : string,
     image : string, 
     country : string,
     city : string,
@@ -21,6 +23,7 @@ export interface recruiterDocument extends Document {
         twitter: string,
         website: string,
         viber: string,
+        telegram: string,
     },
     status : number
 
@@ -32,6 +35,8 @@ const recruiterSchema = new Schema<recruiterDocument>({
     phone : {type : String},
     organisationName : {type : String},
     aboutCompany : {type : String},
+    companyEmail : {type : String},
+    companyPhone : {type : String},
     image : {type : String},
     country : {type : String},
     city : {type : String},
@@ -45,8 +50,9 @@ const recruiterSchema = new Schema<recruiterDocument>({
         twitter: { type: String },
         website: { type: String },
         viber: { type: String },
+        telegram: { type: String },
     },
-    status : {type : Number}
+    status : {type : Number , enum : [0, 1], default: 1},
 }, {
     timestamps: true
 });
@@ -55,4 +61,4 @@ const recruiterSchema = new Schema<recruiterDocument>({
 
 recruiterSchema.plugin(paginate);
 recruiterSchema.plugin(aggregatePaginate);
-export const RecruiterModel = model<recruiterDocument>("recruiter", recruiterSchema);
+export const RecruiterModel = model<recruiterDocument , PaginateModel<recruiterDocument>>("recruiter", recruiterSchema);

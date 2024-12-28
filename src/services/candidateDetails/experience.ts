@@ -1,9 +1,9 @@
-import { dataLogger, errorLogger, infoLogger } from "../core/logger";
-import { experienceModel } from "../models/experience";
+import { dataLogger, errorLogger, infoLogger } from "../../core/logger";
+import { experienceModel } from "../../models/cabdidateDetails/experience";
 
 
 interface ExperienceService{
-    save : (data : any) => Promise<any>
+    save : (data : any, session?: any) => Promise<any>
     update : (filter : any , payload : any) => Promise<any>
     delete : (filter : any) => Promise<any>
     findOne : (filter : any) => Promise<any>
@@ -12,10 +12,10 @@ interface ExperienceService{
 }
 
 const experienceService : ExperienceService = {
-    save : async (data : any) => {
+    save : async (data : any, session : any) => {
         try{
             infoLogger("START:- save function in experience service");
-            const result = await experienceModel.create(data);
+            const result = await experienceModel.create(data ,{session});
             dataLogger("result of save", result);
             return result;
         }catch(error){
@@ -23,6 +23,7 @@ const experienceService : ExperienceService = {
             throw error;
         }
     },
+
 
     findOne : async (filter : any) => {
         try{

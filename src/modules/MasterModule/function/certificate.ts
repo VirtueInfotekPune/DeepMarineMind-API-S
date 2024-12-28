@@ -10,8 +10,9 @@ export const findCertificatePaginateRoute = async (req: any, res: any) => {
             filter._id = req.query.id
         }
         const options = {
-            page: req.body.page,
-            limit: req.body.limit
+            page: req.query.page,
+            limit: req.query.limit,
+            sort: { createdAt: -1 },
         }
         const result = await certificateService.paginate(filter, options);
         const response = successResponse({
@@ -106,6 +107,15 @@ export const deleteCertificateRoute = async (req: any, res: any) => {
         infoLogger("START:- deleteCertificateRoute function in master module");
         dataLogger("req.body", req.body);
         const body = req.body;
+        const existingCertificates = await certificateService.findOneCertificate({ _id: body.id });
+        if (!existingCertificates) {
+            const response = failureResponse({
+                handler: "master",
+                messageCode: "E042",
+                req: req,
+            });
+            return res.status(response?.statusCode).send(response);
+        }
         const filter = {} as any;
         if (!body.id) {
             const response = failureResponse({

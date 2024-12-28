@@ -1,0 +1,24 @@
+{
+    "en":{
+        "S001" : "Recruiter get successfully",
+        "S002" : "Recruiter updated successfully",
+        "S003" : "Recruiter deleted successfully",
+        "S004" : "Recruiter added successfully",
+        "S005" : "Recruiter data fetched successfully",
+        "S006" : "Team member added successfully",
+
+        "E001" : "All fields are required",
+        "E002" : "Recruiter does not exist",
+        "E003" : "Error adding recruiter",
+        "E004" : "Error updating recruiter",
+        "E005" : "Error deleting recruiter",
+        "E006" : "Error fetching recruiter data",
+        "E007" : "RecruiterId not found",
+        "E008" : "You cannot send Email in Body of update Request",
+        "E009" : "You cannot send phone in Body of update Request",
+        "E010" : "You cannot Update Recruiter profile ",
+        "E011" : "missing recruiter ID",
+        "E012" : "Failed to add Team member"
+     
+    }
+}

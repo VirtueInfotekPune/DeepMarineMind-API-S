@@ -1,0 +1,139 @@
+{
+    "en": {
+        "S001": "Candidate Personal details get successfully",
+        "S002": "Candidate Personal details added successfully",
+        "S003": "Candidate Personal details updated successfully",
+        "S004": "Candidate Personal details deleted successfully",
+
+        "S005": "Candidate education get successfully",
+        "S006": "Candidate education added successfully",
+        "S007": "Candidate education updated successfully",
+        "S008": "Candidate education deleted successfully",
+
+        "S009": "Course get successfully",
+        "S010": "Course added successfully",
+        "S011": "Course updated successfully",
+        "S012": "Course deleted successfully",
+
+        "S013": "Awards get successfully",
+        "S014": "Award added successfully",
+        "S015": "Award updated successfully",
+        "S016": "Award deleted successfully",
+
+        "S017": "Activities get successfully",
+        "S018": "Activities added successfully",
+        "S019": "Activities updated successfully",
+        "S020": "Activities deleted successfully",
+
+        "S021" : "Experience get successfully",
+        "S022" : "Experience added successfully",
+        "S023" : "Experience updated successfully",
+        "S024" : "Experience deleted successfully",
+
+        "S025" : "Ashore Experience get successfully",
+        "S026" : "Ashore Experience added successfully",
+        "S027" : "Ashore Experience updated successfully",
+        "S028" : "Ashore Experience deleted successfully",
+
+        "S029" : "Candidate Profile successfully created",
+
+        "S030" : "Candidate Docs get successfully",
+        "S031" : "Candidate Docs added successfully",
+        "S032" : "Candidate Docs updated successfully",
+        "S033" : "Candidate Docs deleted successfully",
+
+        "E001": "All fields are required",
+        "E002": "User Id Is required",
+        "E003": "User does not exist",
+        "E004": "Error adding Candidate Personal details",
+        "E005": "Error updating Candidate Personal details",
+        "E006": "Error deleting Candidate Personal details",
+        "E007": "Error fetching Candidate Personal details data",
+        "E008": "ExperienceId not found",
+
+        "E009": "All fields are required",
+        "E010": "User Id Is required",
+        "E011": "User does not exist",
+        "E012": "Error adding Candidate education",
+        "E013": "Error updating Candidate education",
+        "E014": "Error deleting Candidate education",
+        "E015": "Error fetching Candidate education data",
+        "E016": "EducationId not found",
+        "E017": "Candidate Details Already exists",
+
+
+        "E018": "CourseId Not found",
+        "E019": "CourseId is required",
+        "E020": "Error adding Candidate course",
+        "E021": "Error updating Candidate course",
+        "E022": "Error deleting Candidate course",
+        "E023": "Error fetching Candidate course data",
+
+        "E024": "AwardId Not found",
+        "E025": "AwardId is required",
+        "E026": "Error adding in Candidate award",
+        "E027": "Error updating Candidate award",
+        "E028": "Error deleting Candidate award",
+        "E029": "Error fetching Candidate award data",
+
+        "E030": "ActivitieId Not found",
+        "E031": "ActivitieId is required",
+        "E032": "Error adding in Candidate Activities",
+        "E033": "Error updating Candidate Activities",
+        "E034": "Error deleting Candidate Activities",
+        "E035": "Error fetching Candidate Activities data",
+
+        "E036" : "All fields are required",
+        "E037" : "User Id Is required",
+        "E038" : "User does not exist",
+        "E039" : "Error adding experience",
+        "E040" : "Error updating experience",
+        "E041" : "Error deleting experience",
+        "E042" : "Error fetching experience data",
+        "E044" : "ExperienceId not found",
+        "E045" : "ExperienceId not found",
+
+        "E046" : "Experience can add by only candidate",
+        "E047" : "Personal Details can add by only candidate",
+        "E048" : "Educations can add by only candidate",
+        "E049" : "Awards can add by only candidate",
+        "E050" : "Courses can add by only candidate",
+        "E051" : "Activities can add by only candidate",
+        "E052" : "Ashore Job Experience can add by only candidate",
+
+
+
+        "E053" : "All fields are required",
+        "E054" : "User Id Is required",
+        "E055" : "User does not exist",
+        "E056" : "Error adding ashore experience",
+        "E057" : "Error updating ashore experience",
+        "E058" : "Error deleting ashore experience",
+        "E059" : "Error fetching ashore experience data",
+        "E060" : "AshoreExperienceId not found",
+        "E061" : "AshoreExperienceId is required",
+
+        "E062" : "Sea experience data is missing or invalid",
+        "E063" : "Error in Adding candidate experience",
+        "E064" : "Error in candidate cv parsing",
+
+        "E065" : "Candidate Docs can add by only candidate",
+        "E066" : "User Id Is required for Adding Candidate Docs",
+        "E067" : "Error adding Candidate Docs",
+        "E068" : "Error updating Candidate Docs",
+        "E069" : "Error deleting Candidate Docs",
+        "E070" : "Candidate Docs Id Not found",
+        "E071" : "Error fetching Candidate Docs"
+        
+
+
+
+},
+
+    "ru": {
+        "S001": "Данные кандидата получены успешно",
+        "S002": "Данные кандидата добавлены успешно",
+        "S003": "Данные кандидата обновлены успешно",
+        "S004": "Данные кандидата удалены успешно"
+    }
+}

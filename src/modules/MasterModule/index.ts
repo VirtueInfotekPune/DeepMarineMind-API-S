@@ -6,7 +6,7 @@ import { addCargoRoute, deleteCargoRoute, findPaginateCargoRoute, updateCargoRou
 import { findPaginateIndustryRoute, addIndustryRoute, updateIndustryRoute, deleteIndustryRoute } from "./function/industry";
 import { findCertificatePaginateRoute, addCertificateRoute, updateCertificateRoute, deleteCertificateRoute } from "./function/certificate";
 import { findPaginateLicenceRoute, addLicenceRoute, updateLicenceRoute, deleteLicenceRoute } from "./function/licence";
-
+import { addShipTypeRoute, findAllPaginateShipTypeRoute, updateShipTypeRoute, deleteShipTypeRoute } from "./function/shipType";
 
 const masterRoutes = Router();
 
@@ -22,6 +22,13 @@ masterRoutes.get("/vessel" , findPaginateVesselRoute);
 masterRoutes.post("/vessel" , addVesselRoute);
 masterRoutes.patch("/vessel" , updateVesselRoute);
 masterRoutes.delete("/vessel" , deleteVesselRoute);
+
+
+// routes for shipType
+masterRoutes.get("/shiptype" , findAllPaginateShipTypeRoute);
+masterRoutes.post("/shiptype" , addShipTypeRoute);
+masterRoutes.patch("/shiptype" , updateShipTypeRoute);
+masterRoutes.delete("/shiptype" , deleteShipTypeRoute);
 
 // routes for department 
 masterRoutes.get("/department" , findPaginateDepartmentRoute);

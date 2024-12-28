@@ -68,11 +68,11 @@ export const catchResponse = (data: Data): Record<string, any> => {
 };
 
 
-export const UnauthorizedResponse = (data: Data): Record<string, any> => {
+export const UnauthorizedResponse = (data: Data ): Record<string, any> => {
   try {
     const responseData = {
       statusCode: statusCode.Unauthorized,
-      message: getMessage(data.handler, (data.req?.headers['locale'] as string) || "en", data.messageCode),
+      message: getMessage(data.handler, (data.req?.headers['locale'] as string) || "en", data.messageCode) ,
       error: data.error ?? undefined,
     };
     dataLogger("responseData" , responseData)

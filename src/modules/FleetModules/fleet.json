@@ -1,0 +1,24 @@
+{
+    "en" : {
+        "S001" : "Fleets details get successfully",
+        "S002" : "Fleet details added successfully",
+        "S003" : "Fleet details updated successfully",
+        "S004" : "Fleet details deleted successfully",
+
+        "E001" : "Fleet can add by only recruiter",
+        "E002" : "Error adding in Fleet details",
+        "E003" : "Error updating in Fleet details",
+        "E004" : "Error deleting in Fleet details",
+        "E005" : "Fleet Id is required",
+        "E006" : "Fleet Id not found",
+        "E007" : "Missing required vessel details",
+        "E008" : "User type is required"
+    },
+
+    "ru" : {
+        "S001" : "Данные флота получены успешно",
+        "S002" : "Данные флота добавлены успешно",
+        "S003" : "Данные флота обновлены успешно",
+        "S004" : "Данные флота удалены успешно"
+    }
+}

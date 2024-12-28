@@ -9,6 +9,7 @@ export interface userDocument extends Document {
     email: string;
     phone?: string;
     password: string;
+    firstTimePasswordChange?: boolean;
     type: string;
     role?: string;
     status: number;
@@ -22,13 +23,20 @@ export interface userDocument extends Document {
     address2?: string
     pincode?: string
     nearestAirport?: string
+    phoneVerified?: boolean
     socialLink? : {
        linkedin?: string,
        twitter?: string,
        website?: string,
        viber?: string,
     }
-    rights? : string
+    right ? : {
+        fleet: [{
+            type: Schema.Types.ObjectId,
+            ref: "fleet"
+        }],
+        can : [string]
+    }
 }
 
 const userSchema = new Schema<userDocument>({
@@ -37,6 +45,7 @@ const userSchema = new Schema<userDocument>({
     recruiter: { type: Schema.Types.ObjectId  , ref: "recruiter" },
     phone: { type: String },
     password: { type: String },
+    firstTimePasswordChange: { type: Boolean, default: true },
     type: { type: String, required: true , enum : USER_TYPE },
     role: { type: String , enum : USER_ROLE},
     industry: { type: Schema.Types.ObjectId, ref: "industry" },
@@ -49,13 +58,24 @@ const userSchema = new Schema<userDocument>({
     address2 : { type: String },
     pincode : { type: String },
     nearestAirport : { type: String },
+    phoneVerified : { type: Boolean, default: false },
     socialLink: {
         linkedin: { type: String },
         twitter: { type: String },
         website: { type: String },
         viber: { type: String },
     },
-    rights : { type: String },
+    right: {
+        fleet: [{
+            type: Schema.Types.ObjectId,
+            ref: "fleet"
+        }],
+        can: {
+            type: [String], 
+            enum: ["read", "write", "create", "delete"], 
+            default: ["read"] 
+        }
+    },
     status: { type: Number, enum: [0, 1], default: 1 },
 }, {
     timestamps: true

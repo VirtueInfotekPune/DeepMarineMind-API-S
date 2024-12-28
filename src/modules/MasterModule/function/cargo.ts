@@ -16,6 +16,7 @@ export const findPaginateCargoRoute = async (req: any, res: any) => {
     const options = {    
         page: req.query.page || 1,
         limit: req.query.limit || 10,
+        sort: { createdAt: -1 },
     };
     try {
         const result = await cargoService.paginate(filter, options);
@@ -42,16 +43,19 @@ export const addCargoRoute = async (req: any, res: any) => {
     infoLogger("START:- addCargoRoute function");
     dataLogger("req.body", req.body);
     try {
-        const existingCargo = await cargoService.findOneCargo({name : req.body.name});
 
-        if(existingCargo) {
-            const response = failureResponse({
-                handler: "master",
-                messageCode: "E023",
-                req: req,
-            });
-            return res.status(response?.statusCode).send(response);
-        }
+        // Query - check if cargo name already exist and cargo will same name for different ranks
+
+        // const existingCargo = await cargoService.findOneCargo({name : req.body.name});
+
+        // if(existingCargo) {
+        //     const response = failureResponse({
+        //         handler: "master",
+        //         messageCode: "E023",
+        //         req: req,
+        //     });
+        //     return res.status(response?.statusCode).send(response);
+        // }
         const result = await cargoService.saveCargo(req.body);
         const responce = successResponse({
             handler: "master",
@@ -111,6 +115,15 @@ export const deleteCargoRoute = async (req: any, res: any) => {
     dataLogger("req.body", req.body);
     try {
         const body = req.body;
+        const existingCargo = await cargoService.findOneCargo({ _id: body.id });
+        if (!existingCargo) {
+            const response = failureResponse({
+                handler: "master",
+                messageCode: "E028",
+                req: req,
+            });
+            return res.status(response?.statusCode).send(response);
+        }
         if (!body.id) {
             const response = failureResponse({
                 handler: "master",
