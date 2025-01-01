@@ -9,7 +9,8 @@ export const addDepartmentRoute = async (req: any, res: any) => {
         dataLogger("req.body", req.body);
        const exisitingDepartment = await departmentService.findOneDepartment({
            name: req.body.name,
-           shiptype : req.body.shiptype
+           shiptype : req.body.shiptype,
+           vessel : req.body.vessel
            
        })
 
