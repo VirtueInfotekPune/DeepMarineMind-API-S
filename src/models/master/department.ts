@@ -7,7 +7,7 @@ interface departmentDocument extends Document{
     name : String,
     image : String,
     shiptype? : {type : Schema.Types.ObjectId , ref : "vessel"}
-    vessel? : {type : Schema.Types.ObjectId , ref : "vessel"}
+    vessel : {type : Schema.Types.ObjectId , ref : "vessel"}
    
 }
 
