@@ -286,3 +286,38 @@ export const getRecruiterByIdRoute = async (req: any, res: any) => {
       return res.status(response.statusCode).send(response);
   }
 }
+
+export const getTeamMembersRoutes = async (req: any, res: any) => {
+  try {
+
+    const user = req.user;
+    const filter = {} as FilterQuery<tempSignupDocument>;
+
+    filter.recruiter = user.recruiter._id;
+    filter.type = USER_TYPE.RECRUITER;
+    filter.role = USER_ROLE.Team;
+
+
+    const teamMembers = await recruiterService.findTeamMembers(filter);
+
+    const response = successResponse({
+      handler: "recruiter",
+      messageCode: "S007",
+      data: teamMembers,
+      req: req,
+    });
+    return res.status(response.statusCode).send(response);
+
+    
+  } catch (error) {
+
+    const response = catchResponse({
+      handler: "recruiter",
+      messageCode: "E013",
+      req: req,
+      error: error,
+    });
+    return res.status(response.statusCode).send(response);
+    
+  }
+}
