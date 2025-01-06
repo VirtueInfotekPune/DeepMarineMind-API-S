@@ -12,7 +12,7 @@ import {
 import { userDocument, UserModel } from "../../../models/user";
 import mongooseService from "../../../services/mongoose";
 import { FilterQuery, QueryOptions } from "mongoose";
-import { infoLogger } from "../../../core/logger";
+import { dataLogger, infoLogger } from "../../../core/logger";
 import { recruiterService } from "../../../services/recruiter";
 import { recruiterDocument } from "../../../models/recruiter";
 
@@ -199,6 +199,21 @@ export const addTeamRoute = async (req: any, res: any) => {
       return res.status(response?.statusCode).send(response);
     }
 
+    // const tempUser = await mongooseService.findOne(TempSignupModel , {
+    //   email
+    // })
+
+    // dataLogger("tempUser", tempUser);
+
+    // if(tempUser) {
+    //   const response = failureResponse({  
+    //     handler: "recruiter",
+    //     messageCode: "E014",
+    //     req: req,
+    //   });
+    //   return res.status(response?.statusCode).send(response);
+    // }
+
     body.recruiter = req.user.recruiter._id;
     body.type = USER_TYPE.RECRUITER;
     body.role = USER_ROLE.Team;
@@ -212,10 +227,7 @@ export const addTeamRoute = async (req: any, res: any) => {
       otpExpiry: null,
     };
 
-    const tempUserCreated = await mongooseService.save(
-      TempSignupModel,
-      newBody
-    );
+    const tempUserCreated = await mongooseService.update(TempSignupModel , {email} , newBody , {upsert : true , new : true});
 
     const response = successResponse({
       handler: "recruiter",
@@ -284,5 +296,40 @@ export const getRecruiterByIdRoute = async (req: any, res: any) => {
           error: error,
       });
       return res.status(response.statusCode).send(response);
+  }
+}
+
+export const getTeamMembersRoutes = async (req: any, res: any) => {
+  try {
+
+    const user = req.user;
+    const filter = {} as FilterQuery<tempSignupDocument>;
+
+    filter.recruiter = user.recruiter._id;
+    filter.type = USER_TYPE.RECRUITER;
+    filter.role = USER_ROLE.Team;
+
+
+    const teamMembers = await recruiterService.findTeamMembers(filter);
+
+    const response = successResponse({
+      handler: "recruiter",
+      messageCode: "S007",
+      data: teamMembers,
+      req: req,
+    });
+    return res.status(response.statusCode).send(response);
+
+    
+  } catch (error) {
+
+    const response = catchResponse({
+      handler: "recruiter",
+      messageCode: "E013",
+      req: req,
+      error: error,
+    });
+    return res.status(response.statusCode).send(response);
+    
   }
 }

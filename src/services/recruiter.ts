@@ -1,6 +1,7 @@
 import { paginate } from "mongoose-paginate-v2";
 import { infoLogger , errorLogger , dataLogger } from "../core/logger";
 import { recruiterDocument, RecruiterModel } from "../models/recruiter";
+import { TempSignupModel } from "../models/tempSignup";
 
 export const recruiterService = {
     update : async (filter : any  , payload : recruiterDocument ) => {
@@ -36,6 +37,18 @@ export const recruiterService = {
             return result;
           } catch (error) {
             errorLogger("error in paginate function in recruiter service", error);
+            throw error;
+          }
+    },
+
+    findTeamMembers : async (filter : any) => {
+        try {
+            infoLogger("START:- findTeamMembers function in recruiter service");
+            const result = await TempSignupModel.find(filter);
+            dataLogger("result of findTeamMembers", result);
+            return result;
+          } catch (error) {
+            errorLogger("error in findTeamMembers function in recruiter service", error);
             throw error;
           }
     }
