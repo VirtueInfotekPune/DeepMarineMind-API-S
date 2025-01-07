@@ -945,14 +945,49 @@ export const resetPassword = async (req: any, res: any) => {
     infoLogger("START:- resetPassword function");
     dataLogger("req.body", req.body);
 
-    const { newPassword } = req.body;
-    const requestUser = req.user; 
+    const { newPassword , email  } = req.body;
+    
 
-   
+    const requestUser = await mongooseService.findOne(UserModel, { email });
+
+    if (!requestUser) {
+      const response = failureResponse({
+        handler: "auth",
+        messageCode: "E008",
+        req: req,
+      });
+      return res.status(response?.statusCode).send(response);
+    }
+
+    
+
+
     if (!newPassword) {
       const response = failureResponse({
         handler: "auth",
         messageCode: "E001",
+        req: req,
+      });
+      return res.status(response?.statusCode).send(response);
+    }
+
+
+    else if (!requestUser.firstTimePasswordChange){
+      const response = failureResponse({
+        handler: "auth",
+        messageCode: "E030",
+        req: req,
+      });
+      return res.status(response?.statusCode).send(response); 
+    }
+
+    
+    const currentTime = new Date();
+
+    if (currentTime > requestUser.forgotPasswordExpiry) {
+      const response = failureResponse({
+        handler: "auth",
+        messageCode: "E031",
         req: req,
       });
       return res.status(response?.statusCode).send(response);
@@ -988,6 +1023,153 @@ export const resetPassword = async (req: any, res: any) => {
     const response = catchResponse({
       handler: "auth",
       messageCode: "E016", 
+      req: req,
+      error: error,
+    });
+    return res.status(response?.statusCode).send(response);
+  }
+};
+
+
+export const verifyOtpForForgotPassword = async (req: any, res: any) => {
+  try {
+
+    const { email , emailOtp } = req.body
+
+    if(!email || !emailOtp){
+      const response = failureResponse({
+        handler: "auth",
+        messageCode: "E001",
+        req: req,
+      });
+      return res.status(response?.statusCode).send(response);
+    }
+
+    const user = await mongooseService.findOne(TempSignupModel, { email });
+
+    if (!user) {
+      const response = failureResponse({
+        handler: "auth",
+        messageCode: "E008",
+        req: req,
+      });
+      return res.status(response?.statusCode).send(response);
+    }
+
+    const currentTime = new Date();
+
+    if (currentTime > user.otpExpiry) {
+      const response = failureResponse({
+        handler: "auth",
+        messageCode: "E009",
+        req: req,
+      });
+      return res.status(response?.statusCode).send(response);
+    }
+
+    if (user.emailOtp !== emailOtp) {
+      const response = failureResponse({
+        handler: "auth",
+        messageCode: "E010",
+        req: req,
+      });
+      return res.status(response?.statusCode).send(response);
+    }
+
+    const getUser = await mongooseService.findOne(UserModel, { email });
+
+    if(!getUser){
+      const response = failureResponse({
+        handler: "auth",
+        messageCode: "E008",
+        req: req,
+      });
+      return res.status(response?.statusCode).send(response);
+    }
+
+    let forgotPasswordExpiry = new Date(new Date().getTime() + 2 * 60 * 1000);
+
+
+    const updateUser = await mongooseService.update(
+      UserModel,
+      { email },
+      { firstTimePasswordChange : true , forgotPasswordExpiry },
+      { new: true }
+    );
+
+
+    const response = successResponse({
+      handler: "auth",
+      messageCode: "S002",
+      req: req,
+    });
+    return res.status(response?.statusCode).send(response);
+
+    
+  } catch (error) { 
+
+    errorLogger("error in verifyOtpForForgotPassword function", error);
+    const response = catchResponse({
+      handler: "auth",
+      messageCode: "E028",
+      req: req,
+      error: error,
+    });
+    return res.status(response?.statusCode).send(response);
+    
+  }
+}
+
+
+export const resendOtp = async (req: any, res: any) => {
+  try {
+    infoLogger("START:- resendOtp function");
+    dataLogger("req.body", req.body);
+
+    const { email } = req.body;
+
+    if (!email) {
+      const response = failureResponse({
+        handler: "auth",
+        messageCode: "E001",
+        req: req,
+      });
+      return res.status(response?.statusCode).send(response);
+    }
+
+    const user = await mongooseService.findOne(TempSignupModel, { email });
+
+    if (!user) {
+      const response = failureResponse({
+        handler: "auth",
+        messageCode: "E008",
+        req: req,
+      });
+      return res.status(response?.statusCode).send(response);
+    }
+
+    const emailOtp = 123456;
+    let otpExpiry = new Date(new Date().getTime() + 1 * 60 * 1000);
+
+    const updateUser = await mongooseService.update(
+      TempSignupModel,
+      { email },
+      { emailOtp, otpExpiry },
+      { new: true }
+    );
+
+    const response = successResponse({
+      handler: "auth",
+      messageCode: "S001",
+      req: req,
+    });
+    return res.status(response?.statusCode).send(response);
+
+  } catch (error) {
+    errorLogger("error in resendOtp function", error);
+    const response = catchResponse({
+      handler: "auth",
+      messageCode: "E029",
       req: req,
       error: error,
     });
