@@ -15,7 +15,7 @@ export const updateUserRoute = async (req: any, res: any) => {
   try {
     const body: userDocument = req.body;
 
-    const requestUser: userDocument = req.user;
+    const requestUser: userDocument = req.user; 
 
     dataLogger("requestUser", requestUser);
 
@@ -124,3 +124,68 @@ export const userProfile = async (req: any, res: any) => {
     return res.status(response?.statusCode).send(response);
   }
 };
+
+export const updateUserProfileRoute = async (req: any, res: any) => {
+  infoLogger("START:- updateUserProfileRoute function");
+  dataLogger("req.body", req.body);
+
+  try {
+    const body: userDocument = req.body;
+    const requestUser: userDocument = req.user;
+
+    dataLogger("requestUser", requestUser);
+
+    // Allow updates only for candidates
+    if (requestUser.type !== "candidate") {
+      const response = failureResponse({
+        handler: "user",
+        messageCode: "E011",
+        req,
+      });
+      return res.status(response?.statusCode).send(response);
+    }
+
+    // Prevent updating email or password
+    if (body.email || body.password) {
+      const response = failureResponse({
+        handler: "user",
+        messageCode: body.email ? "E008" : "E010",
+        req,
+      });
+      return res.status(response?.statusCode).send(response);
+    }
+
+    const filter = { _id: requestUser._id };
+
+    // Directly use req.body for the update
+    const result = await userService.updateUser(filter, body);
+
+    if (!result) {
+      const response = failureResponse({
+        handler: "user",
+        messageCode: "E004",
+        req,
+      });
+      return res.status(response?.statusCode).send(response);
+    }
+
+    const response = successResponse({
+      handler: "user",
+      messageCode: "S002",
+      data: result,
+    });
+    return res.status(response?.statusCode).send(response);
+  } catch (error) {
+    errorLogger("Error in updateUserProfileRoute function", error);
+
+    const response = catchResponse({
+      handler: "user",
+      messageCode: "E004",
+      req,
+      error: error,
+    });
+    return res.status(response?.statusCode).send(response);
+  }
+};
+
+

@@ -29,6 +29,8 @@ export interface userDocument extends Document {
        twitter?: string,
        website?: string,
        viber?: string,
+       whatsapp?: string,
+       telegram?: string,
     }
     right ? : {
         fleet: [{
@@ -64,6 +66,8 @@ const userSchema = new Schema<userDocument>({
         twitter: { type: String },
         website: { type: String },
         viber: { type: String },
+        whatsapp: { type: String },
+        telegram: { type: String },
     },
     right: {
         fleet: [{

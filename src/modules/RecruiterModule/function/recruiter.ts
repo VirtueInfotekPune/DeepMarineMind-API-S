@@ -12,7 +12,7 @@ import {
 import { userDocument, UserModel } from "../../../models/user";
 import mongooseService from "../../../services/mongoose";
 import { FilterQuery, QueryOptions } from "mongoose";
-import { infoLogger } from "../../../core/logger";
+import { dataLogger, infoLogger } from "../../../core/logger";
 import { recruiterService } from "../../../services/recruiter";
 import { recruiterDocument } from "../../../models/recruiter";
 
@@ -199,6 +199,21 @@ export const addTeamRoute = async (req: any, res: any) => {
       return res.status(response?.statusCode).send(response);
     }
 
+    // const tempUser = await mongooseService.findOne(TempSignupModel , {
+    //   email
+    // })
+
+    // dataLogger("tempUser", tempUser);
+
+    // if(tempUser) {
+    //   const response = failureResponse({  
+    //     handler: "recruiter",
+    //     messageCode: "E014",
+    //     req: req,
+    //   });
+    //   return res.status(response?.statusCode).send(response);
+    // }
+
     body.recruiter = req.user.recruiter._id;
     body.type = USER_TYPE.RECRUITER;
     body.role = USER_ROLE.Team;
@@ -212,10 +227,7 @@ export const addTeamRoute = async (req: any, res: any) => {
       otpExpiry: null,
     };
 
-    const tempUserCreated = await mongooseService.save(
-      TempSignupModel,
-      newBody
-    );
+    const tempUserCreated = await mongooseService.update(TempSignupModel , {email} , newBody , {upsert : true , new : true});
 
     const response = successResponse({
       handler: "recruiter",
@@ -321,3 +333,57 @@ export const getTeamMembersRoutes = async (req: any, res: any) => {
     
   }
 }
+
+// export const updateTeamMemberRoute = async (req: any, res: any) => {
+//   try {
+//     const user = req.user; // Assuming middleware attaches user from the token
+//     const teamMemberId = req.params.id; // Extract team member ID from params
+//     const updateData = req.body; // Data to update
+
+//     // Validate if the user is a recruiter
+//     if (user.type !== USER_TYPE.RECRUITER) {
+//       return res.status(403).send({
+//         message: "Access denied. Only recruiters can update team members.",
+//       });
+//     }
+
+//     // Check if the team member belongs to this recruiter
+//     const filter: FilterQuery<any> = {
+//       _id: teamMemberId,
+//       recruiter: user.recruiter._id,
+//       type: USER_TYPE.RECRUITER,
+//       role: USER_ROLE.Team,
+//     };
+
+//     const teamMember = await recruiterService.findTeamMembers(filter);
+
+//     if (!teamMember) {
+//       return res.status(404).send({
+//         message: "Team member not found or does not belong to this recruiter.",
+//       });
+//     }
+
+//     // Update team member details
+//     const updatedTeamMember = await recruiterService.updateTeamMember(
+//       teamMemberId,
+//       updateData
+//     );
+
+//     const response = successResponse({
+//       handler: "recruiter",
+//       messageCode: "S008", // Example success message code
+//       data: updatedTeamMember,
+//       req: req,
+//     });
+
+//     return res.status(response.statusCode).send(response);
+//   } catch (error) {
+//     const response = catchResponse({
+//       handler: "recruiter",
+//       messageCode: "E014", // Example error message code
+//       req: req,
+//       error: error,
+//     });
+//     return res.status(response.statusCode).send(response);
+//   }
+// };

@@ -42,18 +42,73 @@ export const addDepartmentRoute = async (req: any, res: any) => {
     }
 }
 
+// export const findPaginateDepartmentRoute = async (req: any, res: any) => {
+//     try{
+//         infoLogger("START:- findPaginateDepartmentRoute function");
+//         const filter = {} as any;
+//         if(req.query.id) {
+//             filter._id = req.query.id
+//         }
+//         else if(req.query.shiptype) {
+//             filter.shiptype = req.query.shiptype
+//         }
+//         else if(req.query.vessel){
+//             filter.vessel = req.query.vessel
+//         }
+
+//         const options = {
+//             page: req.query.page || 1,
+//             limit: req.query.limit || 10,
+//             sort: { createdAt: -1 },
+//         };
+
+//         const result = await departmentService.paginate(filter, options);
+//         const response = successResponse({
+//             handler: "master",
+//             messageCode: "S006",
+//             req: req,
+//             data: result,
+//         });
+//         return res.status(response?.statusCode).send(response);
+
+    
+//         }   catch (error) {
+//         errorLogger("error in findPaginateDepartmentRoute function", error);
+//         const response = catchResponse({
+//             handler: "master",
+//             messageCode: "E013",
+//             req: req,
+//             error: error
+//         });
+//         return res.status(response?.statusCode).send(response); 
+//     }
+// } 
+
+
 export const findPaginateDepartmentRoute = async (req: any, res: any) => {
-    try{
+    try {
         infoLogger("START:- findPaginateDepartmentRoute function");
-        const filter = {} as any;
-        if(req.query.id) {
-            filter._id = req.query.id
-        }
-        else if(req.query.shiptype) {
-            filter.shiptype = req.query.shiptype
-        }
-        else if(req.query.vessel){
-            filter.vessel = req.query.vessel
+
+        const filter: any = {};
+        const id = req.query.id;
+
+        if (id) {
+            // Check if the provided ID is a valid `shiptype` or `vessel`
+            const shiptypeExists = await departmentService.findOneDepartment({ shiptype: id });
+            const vesselExists = await departmentService.findOneDepartment({ vessel: id });
+
+            if (shiptypeExists) {
+                filter.shiptype = id;
+            } else if (vesselExists) {
+                filter.vessel = id;
+            } else {
+                return res.status(404).send({
+                    handler: "master",
+                    messageCode: "E051",
+                    success: false,
+                    message: "No departments found for the provided ID.",
+                });
+            }
         }
 
         const options = {
@@ -63,26 +118,37 @@ export const findPaginateDepartmentRoute = async (req: any, res: any) => {
         };
 
         const result = await departmentService.paginate(filter, options);
+
+        if (result.docs.length === 0) {
+            return res.status(404).send({
+                message: "No departments found.",
+                success: false,
+            });
+        }
+
         const response = successResponse({
             handler: "master",
             messageCode: "S006",
             req: req,
             data: result,
         });
-        return res.status(response?.statusCode).send(response);
 
-    
-        }   catch (error) {
-        errorLogger("error in findPaginateDepartmentRoute function", error);
+        return res.status(response.statusCode).send(response);
+    } catch (error) {
+        errorLogger("Error in findPaginateDepartmentRoute function", error);
+
         const response = catchResponse({
             handler: "master",
             messageCode: "E013",
             req: req,
-            error: error
+            error: error,
         });
-        return res.status(response?.statusCode).send(response); 
+
+        return res.status(response.statusCode).send(response);
     }
-} 
+};
+
+
 
 export const updateDepartmentRoute = async (req: any, res: any) => {
     try {
