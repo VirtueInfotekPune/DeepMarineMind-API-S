@@ -1,12 +1,12 @@
 {
     "en" : {
         "S001" : "Request get successfully",
-        "S002" : "Request Send Successfully",
+        "S002" : "Your Registration Request has Been Sent To Super Admin",
         "S003" : "Request updated successfully",
         "S004" : "Request deleted successfully",
         "S005" : "Request data fetched successfully",
-        "S006" : "Request Approved Successfully",
-        "S007" : "Request Rejected Successfully",
+        "S006" : "Recruiter Request Approved Successfully",
+        "S007" : "Recruiter Request Rejected Successfully",
 
         "E001" : "We Have your Request already in our list",
         "E002" : "Error adding in Request",

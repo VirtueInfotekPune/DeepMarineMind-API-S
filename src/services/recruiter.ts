@@ -51,6 +51,22 @@ export const recruiterService = {
             errorLogger("error in findTeamMembers function in recruiter service", error);
             throw error;
           }
+    },
+
+    updateTeamMember: async (teamMemberId: string, updateData: any) => {
+      try {
+        infoLogger("START:- updateTeamMember function in recruiter service");
+        const result = await TempSignupModel.findByIdAndUpdate(
+          teamMemberId,
+          updateData,
+          { new: true }
+        );
+        dataLogger("result of updateTeamMember", result);
+        return result;
+      } catch (error) {
+        errorLogger("error in updateTeamMember function in recruiter service", error);
+        throw error;
+      }
     }
 
 

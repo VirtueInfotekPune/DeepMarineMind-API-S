@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { Login, registerUser, verifyotp, forgotPassword, resetPassword} from "./function/auth";
-
+import { verifyToken } from "../../auth/authorizer";
 
 const authRoutes = Router()
 
@@ -14,7 +14,8 @@ authRoutes.post("/login" , Login)
 
 authRoutes.post("/forgot-password" , forgotPassword)
 
-authRoutes.post("/reset-password" , resetPassword)
+authRoutes.patch("/reset-password" , verifyToken, resetPassword)
+
 
 
 

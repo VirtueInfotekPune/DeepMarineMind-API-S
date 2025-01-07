@@ -139,7 +139,7 @@ export const registerUser = async (req: any, res: any) => {
         body.payload = JSON.stringify(body);
 
         const updatePayload = {
-          
+
           emailOtp,
           otpExpiry,
           payload: body.payload,
@@ -150,11 +150,11 @@ export const registerUser = async (req: any, res: any) => {
           updatePayload,
           { upsert: true }
         );
-    
+
         if (result) {
           // todo : logic for sending email
           //logic for sending otp
-    
+
           const response = successResponse({
             handler: "auth",
             messageCode: "S001",
@@ -186,7 +186,7 @@ export const registerUser = async (req: any, res: any) => {
 
       body.emailOtp = 123456;
       let otpExpiry = new Date(new Date().getTime() + 1 * 60 * 1000);
-  
+
       body.payload = JSON.stringify(body);
       let payload = {};
       if (tempUser) {
@@ -203,18 +203,18 @@ export const registerUser = async (req: any, res: any) => {
           otpExpiry: otpExpiry,
         };
       }
-  
+
       const result = await mongooseService.update(
         TempSignupModel,
         { email: email },
         payload,
         { upsert: true }
       );
-  
+
       if (result) {
         // todo : logic for sending email
         //logic for sending otp
-  
+
         const response = successResponse({
           handler: "auth",
           messageCode: "S001",
@@ -241,7 +241,7 @@ export const registerUser = async (req: any, res: any) => {
     }
 
 
-    
+
 
 
   } catch (error) {
@@ -256,6 +256,186 @@ export const registerUser = async (req: any, res: any) => {
   }
 };
 
+// export const verifyotp = async (req: any, res: any) => {
+//   try {
+//     infoLogger("START:- verifyotp function");
+//     dataLogger("req.body", req.body);
+//     let query = {} as any;
+
+//     const { type, role, email, emailOtp, verificationType , } = req.body;
+//     if (!email) {
+//       const response = failureResponse({
+//         handler: "auth",
+//         messageCode: "E004",
+//         req: req,
+//       });
+//       return res.status(response?.statusCode).send(response);
+//     } else if (!emailOtp) {
+//       const response = failureResponse({
+//         handler: "auth",
+//         messageCode: "E005",
+//         req: req,
+//       });
+//       return res.status(response?.statusCode).send(response);
+//     } else if (!type) {
+//       const response = failureResponse({
+//         handler: "auth",
+//         messageCode: "E007",
+//         req: req,
+//       });
+//       return res.status(response?.statusCode).send(response);
+//     }
+
+//     // else if (type === "recruiter" && !role) {
+//     //   const response = failureResponse({
+//     //     handler: "auth",
+//     //     messageCode: "E014",
+//     //     req: req,
+//     //   });
+//     //   return res.status(response?.statusCode).send(response);
+//     // }
+//     query.email = email;
+
+//     const tempUser = await mongooseService.findOne(TempSignupModel, query);
+
+//     if (!tempUser) {
+//       const response = failureResponse({
+//         handler: "auth",
+//         messageCode: "E008",
+//         req: req,
+//       });
+//       return res.status(response?.statusCode).send(response);
+//     }
+
+//     dataLogger("tempUser", tempUser);
+
+//     if (verificationType === "register") {
+//       const payload = {} as any;
+//       const verifyOtp = emailOtp === tempUser.emailOtp;
+//       if (!verifyOtp) {
+//         const response = failureResponse({
+//           handler: "auth",
+//           messageCode: "E006",
+//           req: req,
+//         });
+//         return res.status(response?.statusCode).send(response);
+//       }
+
+//       const IsOtpExpire =
+//         new Date(tempUser?.otpExpiry) < new Date(new Date().getTime());
+
+//       if (IsOtpExpire) {
+//         const response = failureResponse({
+//           handler: "auth",
+//           messageCode: "E009",
+//           req: req,
+//         });
+//         return res.status(response?.statusCode).send(response);
+//       }
+
+//       payload.emailVerified = true;
+
+//       const result = await mongooseService.update(
+//         TempSignupModel,
+//         { email: email },
+//         payload,
+//         { new: true }
+//       );
+
+//       if (!result) {
+//         const response = failureResponse({
+//           handler: "auth",
+//           messageCode: "E010",
+//           req: req,
+//         });
+//         return res.status(response?.statusCode).send(response);
+//       }
+
+//       dataLogger("result of update tempUser", result);
+
+//       const insertUser = await verifyUser(req, res, tempUser);
+//     } if (verificationType === "forgotPassword") {
+//       const payload = {} as any;
+//       const verifyOtp = emailOtp === tempUser.emailOtp;
+//       if (!verifyOtp) {
+//         const response = failureResponse({
+//           handler: "auth",
+//           messageCode: "E006",
+//           req: req,
+//         });
+//         return res.status(response?.statusCode).send(response);
+//       }
+//   }
+//     else {
+//       dataLogger("query", query);
+//       const user = await mongooseService.findOne(UserModel, { email: email });
+//       if (!user) {
+//         const response = await failureResponse({
+//           handler: "auth",
+//           messageCode: "E008",
+//           req,
+//         });
+//         return res.status(response?.statusCode).send(response);
+//       }
+
+//       const verifyOtp = emailOtp === tempUser.emailOtp;
+//       if (!verifyOtp) {
+//         const response = failureResponse({
+//           handler: "auth",
+//           messageCode: "E006",
+//           req: req,
+//         });
+//         return res.status(response?.statusCode).send(response);
+//       }
+
+//       const IsOtpExpire =
+//         new Date(tempUser?.otpExpiry) < new Date(new Date().getTime());
+
+//       if (IsOtpExpire) {
+//         const response = failureResponse({
+//           handler: "auth",
+//           messageCode: "E009",
+//           req: req,
+//         });
+//         return res.status(response?.statusCode).send(response);
+//       }
+
+//       const token = jwt.sign(
+//         {
+//           expiresIn: Math.floor(Date.now() / 1000) + 6 * 30 * 24 * 60 * 60,
+//           id: user._id,
+//           client: user.recruiter,
+//           type: user?.type,
+//           email: user.email,
+//           phone: user.phone,
+//         },
+//         process.env.JWT_ACCESS_SECRET as string
+//       );
+//       const response = await successResponse({
+//         handler: "auth",
+//         messageCode: "S004",
+//         req,
+//         data: {
+//           accessToken: token,
+//           refreshToken: token,
+//           user: { ...user._doc, password: undefined },
+//         },
+//       });
+//       return res.status(response?.statusCode).send(response);
+//     }
+//   } catch (error) {
+//     errorLogger("error in verify Otp", error);
+//     const response = await catchResponse({
+//       handler: "auth",
+//       messageCode: "E010",
+//       req,
+//       error,
+//     });
+//     return res.status(response?.statusCode).send(response);
+//   }
+// };
+
+
 export const verifyotp = async (req: any, res: any) => {
   try {
     infoLogger("START:- verifyotp function");
@@ -263,6 +443,8 @@ export const verifyotp = async (req: any, res: any) => {
     let query = {} as any;
 
     const { type, role, email, emailOtp, verificationType } = req.body;
+
+    // Validate input fields
     if (!email) {
       const response = failureResponse({
         handler: "auth",
@@ -286,14 +468,6 @@ export const verifyotp = async (req: any, res: any) => {
       return res.status(response?.statusCode).send(response);
     }
 
-    // else if (type === "recruiter" && !role) {
-    //   const response = failureResponse({
-    //     handler: "auth",
-    //     messageCode: "E014",
-    //     req: req,
-    //   });
-    //   return res.status(response?.statusCode).send(response);
-    // }
     query.email = email;
 
     const tempUser = await mongooseService.findOne(TempSignupModel, query);
@@ -309,32 +483,32 @@ export const verifyotp = async (req: any, res: any) => {
 
     dataLogger("tempUser", tempUser);
 
+    // Common logic for OTP verification
+    const verifyOtp = emailOtp === tempUser.emailOtp;
+    if (!verifyOtp) {
+      const response = failureResponse({
+        handler: "auth",
+        messageCode: "E006",
+        req: req,
+      });
+      return res.status(response?.statusCode).send(response);
+    }
+
+    const IsOtpExpire =
+      new Date(tempUser?.otpExpiry) < new Date(new Date().getTime());
+
+    if (IsOtpExpire) {
+      const response = failureResponse({
+        handler: "auth",
+        messageCode: "E009",
+        req: req,
+      });
+      return res.status(response?.statusCode).send(response);
+    }
+
     if (verificationType === "register") {
-      const payload = {} as any;
-      const verifyOtp = emailOtp === tempUser.emailOtp;
-      if (!verifyOtp) {
-        const response = failureResponse({
-          handler: "auth",
-          messageCode: "E006",
-          req: req,
-        });
-        return res.status(response?.statusCode).send(response);
-      }
-
-      const IsOtpExpire =
-        new Date(tempUser?.otpExpiry) < new Date(new Date().getTime());
-
-      if (IsOtpExpire) {
-        const response = failureResponse({
-          handler: "auth",
-          messageCode: "E009",
-          req: req,
-        });
-        return res.status(response?.statusCode).send(response);
-      }
-
-      payload.emailVerified = true;
-
+      // OTP verification for registration
+      const payload = { emailVerified: true };
       const result = await mongooseService.update(
         TempSignupModel,
         { email: email },
@@ -353,36 +527,17 @@ export const verifyotp = async (req: any, res: any) => {
 
       dataLogger("result of update tempUser", result);
 
+      // Register user
       const insertUser = await verifyUser(req, res, tempUser);
-    } else {
-      dataLogger("query", query);
+
+    } else if (verificationType === "forgotPassword") {
+      // OTP verification for forgot password
       const user = await mongooseService.findOne(UserModel, { email: email });
+
       if (!user) {
-        const response = await failureResponse({
+        const response = failureResponse({
           handler: "auth",
           messageCode: "E008",
-          req,
-        });
-        return res.status(response?.statusCode).send(response);
-      }
-
-      const verifyOtp = emailOtp === tempUser.emailOtp;
-      if (!verifyOtp) {
-        const response = failureResponse({
-          handler: "auth",
-          messageCode: "E006",
-          req: req,
-        });
-        return res.status(response?.statusCode).send(response);
-      }
-
-      const IsOtpExpire =
-        new Date(tempUser?.otpExpiry) < new Date(new Date().getTime());
-
-      if (IsOtpExpire) {
-        const response = failureResponse({
-          handler: "auth",
-          messageCode: "E009",
           req: req,
         });
         return res.status(response?.statusCode).send(response);
@@ -390,18 +545,17 @@ export const verifyotp = async (req: any, res: any) => {
 
       const token = jwt.sign(
         {
-          expiresIn: Math.floor(Date.now() / 1000) + 6 * 30 * 24 * 60 * 60,
+          expiresIn: Math.floor(Date.now() / 1000) + 2 * 60, // Token valid for 2 minutes
           id: user._id,
-          client: user.recruiter,
           type: user?.type,
           email: user.email,
-          phone: user.phone,
         },
         process.env.JWT_ACCESS_SECRET as string
       );
-      const response = await successResponse({
+
+      const response = successResponse({
         handler: "auth",
-        messageCode: "S004",
+        messageCode: "S004", // Success message for forgot password OTP
         req,
         data: {
           accessToken: token,
@@ -409,14 +563,22 @@ export const verifyotp = async (req: any, res: any) => {
           user: { ...user._doc, password: undefined },
         },
       });
+
+      return res.status(response?.statusCode).send(response);
+    } else {
+      const response = failureResponse({
+        handler: "auth",
+        messageCode: "E011", // Invalid verification type
+        req: req,
+      });
       return res.status(response?.statusCode).send(response);
     }
   } catch (error) {
-    errorLogger("error in verify Otp", error);
-    const response = await catchResponse({
+    errorLogger("error in verifyOtp", error);
+    const response = catchResponse({
       handler: "auth",
       messageCode: "E010",
-      req,
+      req: req,
       error,
     });
     return res.status(response?.statusCode).send(response);
@@ -447,7 +609,7 @@ const verifyUser = async (req: any, res: any, tempUser: tempSignupDocument) => {
         ...tempUserPayload,
         _id: userId,
         email: tempUser.email,
-        type : tempUser.type , 
+        type: tempUser.type,
         role: tempUser.role,
         recruiter: recruterId,
       };
@@ -484,7 +646,7 @@ const verifyUser = async (req: any, res: any, tempUser: tempSignupDocument) => {
 
       const response = successResponse({
         handler: "auth",
-        messageCode: "S003",
+        messageCode: "S004",
         req: req,
         data: {
           accessToken: token,
@@ -704,7 +866,7 @@ export const forgotPassword = async (req: any, res: any) => {
     infoLogger("START:- forgotPassword function");
     dataLogger("req.body", req.body);
 
-    const { email, type, role } = req.body;
+    const { email, type} = req.body;
 
     if (!email || !type) {
       const response = failureResponse({
@@ -724,14 +886,15 @@ export const forgotPassword = async (req: any, res: any) => {
         req: req,
       });
       return res.status(response?.statusCode).send(response);
-    } else if (type === "recruiter" && !role) {
-      const response = failureResponse({
-        handler: "auth",
-        messageCode: "E014",
-        req: req,
-      });
-      return res.status(response?.statusCode).send(response);
     }
+    //  else if (type === "recruiter" && !role) {
+    //   const response = failureResponse({
+    //     handler: "auth",
+    //     messageCode: "E014",
+    //     req: req,
+    //   });
+    //   return res.status(response?.statusCode).send(response);
+    // }
 
     // Generate OTP and expiry
     const emailOtp = 123456;
@@ -782,10 +945,11 @@ export const resetPassword = async (req: any, res: any) => {
     infoLogger("START:- resetPassword function");
     dataLogger("req.body", req.body);
 
-    const { email, type, emailOtp, newPassword } = req.body;
+    const { newPassword } = req.body;
+    const requestUser = req.user; 
 
-    // Validate required fields
-    if (!email || !type || !emailOtp || !newPassword) {
+   
+    if (!newPassword) {
       const response = failureResponse({
         handler: "auth",
         messageCode: "E001",
@@ -794,54 +958,20 @@ export const resetPassword = async (req: any, res: any) => {
       return res.status(response?.statusCode).send(response);
     }
 
-    // Fetch the user from TempSignupModel
-    const user = await mongooseService.findOne(TempSignupModel, {
-      email,
-      type,
-    });
 
-    if (!user) {
-      const response = failureResponse({
-        handler: "auth",
-        messageCode: "E008",
-        req: req,
-      });
-      return res.status(response?.statusCode).send(response);
-    }
-
-    // Check if the OTP matches and is not expired
-    if (user.emailOtp !== emailOtp || new Date(user.otpExpiry) < new Date()) {
-      const response = failureResponse({
-        handler: "auth",
-        messageCode: "E009", // Custom message code for invalid or expired OTP
-        req: req,
-      });
-      return res.status(response?.statusCode).send(response);
-    }
-
-    // Hash the new password
     const hashedPassword = await bcryptjs.hash(newPassword, 10);
 
-    // Update the user's password in UserModel
     const updateResult = await mongooseService.update(
       UserModel,
-      { email, type },
+      { email: requestUser.email, type: requestUser.type },
       { password: hashedPassword },
       { new: true }
     );
 
     if (updateResult) {
-      // Remove OTP details from TempSignupModel (optional, for security)
-      await mongooseService.update(
-        TempSignupModel,
-        { email, type },
-        { emailOtp: null, otpExpiry: null },
-        {}
-      );
-
       const response = successResponse({
         handler: "auth",
-        messageCode: "S006", // Custom success message code for password reset
+        messageCode: "S006", 
         req: req,
       });
       return res.status(response?.statusCode).send(response);
@@ -857,10 +987,11 @@ export const resetPassword = async (req: any, res: any) => {
     errorLogger("error in resetPassword function", error);
     const response = catchResponse({
       handler: "auth",
-      messageCode: "E016",
+      messageCode: "E016", 
       req: req,
       error: error,
     });
     return res.status(response?.statusCode).send(response);
   }
 };
+
