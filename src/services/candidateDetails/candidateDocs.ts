@@ -16,7 +16,10 @@ export const candidateDocsService : CandidateDocsServices = {
     save : async (data : any, session?: any) => {
        try{
         infoLogger("START:- save function in certificatesDocs service");
-        const result = await candidateDocsModel.create(data,{session})
+        const isArray = Array.isArray(data);
+        const result = isArray
+        ? await candidateDocsModel.insertMany(data, { session })
+        : await candidateDocsModel.create(data, { session });
         dataLogger("result of save", result)
         return result
        }catch(error){

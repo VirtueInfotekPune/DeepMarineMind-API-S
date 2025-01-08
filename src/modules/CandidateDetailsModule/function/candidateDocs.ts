@@ -8,6 +8,7 @@ export const addCandidateDocsRoute = async (req: any, res: any) => {
         infoLogger("START:- addCertificatedDocsRoute function");
         dataLogger("req.body", req.body);
 
+        // Ensure only candidates can add documents
         if (req.user.type !== USER_TYPE.CANDIDATE) {
             const response = failureResponse({
                 handler: "personalDetails",
@@ -16,13 +17,30 @@ export const addCandidateDocsRoute = async (req: any, res: any) => {
             });
             return res.status(response?.statusCode).send(response);
         }
-        const payload = {
-            ...req.body,
-            candidate: req.user._id
+
+        const { name } = req.body;
+
+        // Validate that `name` is an array and has at least one entry
+        if (!Array.isArray(name) || name.length === 0) {
+            const response = failureResponse({
+                handler: "personalDetails",
+                messageCode: "E068", // Custom error message code for validation
+                req: req,
+                error: "Name must be a non-empty array",
+            });
+            return res.status(response?.statusCode).send(response);
         }
 
-        const result = await candidateDocsService.save(payload);
+        // Prepare payloads for each certificate name
+        const payloads = name.map((certName: string) => ({
+            name: certName,
+            candidate: req.user._id,
+        }));
+
+        // Save all certificates to the database
+        const result = await candidateDocsService.save(payloads);
         dataLogger("result of save", result);
+
         const response = successResponse({
             handler: "personalDetails",
             messageCode: "S031",
@@ -36,11 +54,12 @@ export const addCandidateDocsRoute = async (req: any, res: any) => {
             handler: "personalDetails",
             messageCode: "E067",
             req: req,
-            error: error
+            error: error,
         });
         return res.status(response?.statusCode).send(response);
     }
-}
+};
+
 
 export const findPaginateCandidateDocsRoute = async (req: any, res: any) => {
     try {

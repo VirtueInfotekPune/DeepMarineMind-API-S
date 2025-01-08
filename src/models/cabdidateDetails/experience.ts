@@ -33,7 +33,7 @@ const experienceSchema = new Schema<experienceDocument>({
     cargoType: { type: String, },
     startDate: { type: Date,  },
     endDate: { type: Date,  },
-    type: { type: String, enum: ["onshore", "offshore"], default: "onshore" },
+    type: { type: String, enum: ["sea-exp", "moved-ashore"], default: "sea-exp" },
     totalDuration: { type: String, required: false },
     status : { type: Number, enum: [0, 1], default: 1 },
     expirence : {type : String},

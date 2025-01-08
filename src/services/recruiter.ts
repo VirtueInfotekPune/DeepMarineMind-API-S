@@ -53,21 +53,33 @@ export const recruiterService = {
           }
     },
 
-    updateTeamMember: async (teamMemberId: string, updateData: any) => {
+    updateTeamMember: async (filter: any, payload: recruiterDocument) => {
       try {
         infoLogger("START:- updateTeamMember function in recruiter service");
-        const result = await TempSignupModel.findByIdAndUpdate(
-          teamMemberId,
-          updateData,
+        const result = await TempSignupModel.findOneAndUpdate(
+          filter,
+          payload,
           { new: true }
         );
         dataLogger("result of updateTeamMember", result);
         return result;
       } catch (error) {
-        errorLogger("error in updateTeamMember function in recruiter service", error);
-        throw error;
+        errorLogger("Error in updateTeamMember function in recruiter service", error);
+        throw new Error("Error updating team member.");
+      }
+    },
+
+    deleteTeamMember: async (filter: any) => {
+      try {
+        infoLogger("START:- deleteTeamMember function in recruiter service");
+        const result = await TempSignupModel.findOneAndDelete(filter);
+        dataLogger("result of deleteTeamMember", result);
+        return result;
+      } catch (error) {
+        errorLogger("Error in deleteTeamMember function in recruiter service", error);
+        throw new Error("Error deleting team member.");
       }
     }
-
+    
 
 }
