@@ -15,6 +15,7 @@ import { FilterQuery, QueryOptions } from "mongoose";
 import { dataLogger, infoLogger } from "../../../core/logger";
 import { recruiterService } from "../../../services/recruiter";
 import { recruiterDocument } from "../../../models/recruiter";
+import messageCode from "../../../error-code";
 
 // export const updateRecruiterRoute = async (req: any, res: any) => {
 
@@ -334,56 +335,151 @@ export const getTeamMembersRoutes = async (req: any, res: any) => {
   }
 }
 
-// export const updateTeamMemberRoute = async (req: any, res: any) => {
-//   try {
-//     const user = req.user; // Assuming middleware attaches user from the token
-//     const teamMemberId = req.params.id; // Extract team member ID from params
-//     const updateData = req.body; // Data to update
+export const updateTeamMemberRoute = async (req: any, res: any) => {
+  try {
+    const user = req.user; // Extract logged-in user details
+    const teamMemberId = req.query.id; // Extract the ID from query parameters
+    const updateData = req.body; // Data to update team member fields
 
-//     // Validate if the user is a recruiter
-//     if (user.type !== USER_TYPE.RECRUITER) {
-//       return res.status(403).send({
-//         message: "Access denied. Only recruiters can update team members.",
-//       });
-//     }
+    // Ensure the user is a recruiter
+    if (user.type !== USER_TYPE.RECRUITER) {
+      return res.status(403).send(
+        successResponse({
+          handler: "recruiter",
+          messageCode: "E015",
+          req,
+        })
+      );
+    }
 
-//     // Check if the team member belongs to this recruiter
-//     const filter: FilterQuery<any> = {
-//       _id: teamMemberId,
-//       recruiter: user.recruiter._id,
-//       type: USER_TYPE.RECRUITER,
-//       role: USER_ROLE.Team,
-//     };
+    // Validate the team member ID
+    if (!teamMemberId) {
+      return res.status(400).send(
+        successResponse({
+          handler: "recruiter",
+          messageCode: "E018",
+          req,
+        })
+      );
+    }
 
-//     const teamMember = await recruiterService.findTeamMembers(filter);
+    // Construct filter with recruiter-specific validations
+    const filter: FilterQuery<any> = {
+      _id: teamMemberId,
+      recruiter: user.recruiter._id, // Ensure the team member belongs to the recruiter
+      type: USER_TYPE.RECRUITER,
+      role: USER_ROLE.Team,
+    };
 
-//     if (!teamMember) {
-//       return res.status(404).send({
-//         message: "Team member not found or does not belong to this recruiter.",
-//       });
-//     }
+    // Find the team member based on the filter
+    const teamMember = await recruiterService.findTeamMembers(filter);
 
-//     // Update team member details
-//     const updatedTeamMember = await recruiterService.updateTeamMember(
-//       teamMemberId,
-//       updateData
-//     );
+    if (!teamMember || teamMember.length === 0) {
+      return res.status(404).send(
+        successResponse({
+          handler: "recruiter",
+          messageCode: "E016",
+          req,
+        })
+      );
+    }
 
-//     const response = successResponse({
-//       handler: "recruiter",
-//       messageCode: "S008", // Example success message code
-//       data: updatedTeamMember,
-//       req: req,
-//     });
+    // Update the team member with provided data
+    const updatedTeamMember = await recruiterService.updateTeamMember(
+      filter,
+      updateData
+    );
 
-//     return res.status(response.statusCode).send(response);
-//   } catch (error) {
-//     const response = catchResponse({
-//       handler: "recruiter",
-//       messageCode: "E014", // Example error message code
-//       req: req,
-//       error: error,
-//     });
-//     return res.status(response.statusCode).send(response);
-//   }
-// };
+    // Respond with success if update is successful
+    return res.status(200).send(
+      successResponse({
+        handler: "recruiter",
+        messageCode: "S008",
+        data: updatedTeamMember,
+        req,
+      })
+    );
+  } catch (error) {
+    // Handle errors and send a formatted response
+    return res.status(500).send(
+      catchResponse({
+        handler: "recruiter",
+        messageCode: "E017",
+        req,
+        error,
+      })
+    );
+  }
+};
+
+
+export const deleteTeamMemberRoute = async (req: any, res: any) => {
+  try {
+    const user = req.user; // Extract logged-in user details
+    const teamMemberId = req.query.id; // Extract the ID from query parameters
+
+    // Ensure the user is a recruiter
+    if (user.type !== USER_TYPE.RECRUITER) {
+      return res.status(403).send(
+        successResponse({
+          handler: "recruiter",
+          messageCode: "E015",
+          req,
+        })
+      );
+    }
+
+    // Validate the team member ID
+    if (!teamMemberId) {
+      return res.status(400).send(
+        successResponse({
+          handler: "recruiter",
+          messageCode: "E018",
+          req,
+        })
+      );
+    }
+
+    // Construct filter with recruiter-specific validations
+    const filter: FilterQuery<any> = {
+      _id: teamMemberId,
+      recruiter: user.recruiter._id, // Ensure the team member belongs to the recruiter
+      type: USER_TYPE.RECRUITER,
+      role: USER_ROLE.Team,
+    };
+
+    // Find and delete the team member
+    const deletedTeamMember = await recruiterService.deleteTeamMember(filter);
+
+    // If the team member was not found
+    if (!deletedTeamMember) {
+      return res.status(404).send(
+        successResponse({
+          handler: "recruiter",
+          messageCode: "E016",
+          req,
+        })
+      );
+    }
+
+    // Respond with success if delete is successful
+    return res.status(200).send(
+      successResponse({
+        handler: "recruiter",
+        messageCode: "S009", // Success message code for deletion
+        data: deletedTeamMember,
+        req,
+      })
+    );
+  } catch (error) {
+    // Handle errors and send a formatted response
+    return res.status(500).send(
+      catchResponse({
+        handler: "recruiter",
+        messageCode: "E020", // Error message code for server error
+        req,
+        error,
+      })
+    );
+  }
+};

@@ -49,27 +49,28 @@ export const findPaginateExperienceRoute = async (req: any, res: any) => {
         infoLogger("START:- findPaginateExperienceRouter function");
         const filter = {} as any;
 
-
-
+        // Apply filters for query parameters
         if (req.query.id) {
-            filter._id = req.query.id
+            filter._id = req.query.id;
         }
-        else if (req.user.type === USER_TYPE.CANDIDATE) {
-            filter.candidate = req.user._id
+        if (req.user.type === USER_TYPE.CANDIDATE) {
+            filter.candidate = req.user._id;
         }
-        else if (req.query.candidate) {
-            filter.candidate = req.query.candidate
+        if (req.query.candidate) {
+            filter.candidate = req.query.candidate;
         }
-        else if (req.query.type) {
-            filter.type = req.query.type; // Filter by type (e.g., "offshore")
+        if (req.query.type) {
+            filter.type = req.query.type;
         }
 
+        // Pagination and sorting options
         const options = {
             page: req.query.page || 1,
             limit: req.query.limit || 10,
             sort: { createdAt: -1 },
-
         };
+
+        // Execute the query with filters and options
         const result = await experienceService.paginate(filter, options);
         const response = successResponse({
             handler: "personalDetails",
@@ -80,16 +81,16 @@ export const findPaginateExperienceRoute = async (req: any, res: any) => {
         return res.status(response?.statusCode).send(response);
     } catch (error) {
         errorLogger("error in findPaginateExperienceRouter function", error);
-        const response = catchResponse(
-            {
-                handler: "personalDetails",
-                messageCode: "E042",
-                req: req,
-                error: error
-            });
+        const response = catchResponse({
+            handler: "personalDetails",
+            messageCode: "E042",
+            req: req,
+            error: error,
+        });
         return res.status(response?.statusCode).send(response);
     }
-}
+};
+
 
 export const updateExperienceRoute = async (req: any, res: any) => {
     try {

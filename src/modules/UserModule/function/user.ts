@@ -106,7 +106,7 @@ export const userProfile = async (req: any, res: any) => {
     const response = successResponse({
       handler: "user",
       data: {
-        userData: { ...user, password: undefined },
+        userData: { ...user._doc, password: undefined },
       },
       messageCode: "S005",
       req,

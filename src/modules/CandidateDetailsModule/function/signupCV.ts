@@ -225,7 +225,7 @@ export const handleUploadCVCandidate = async (req: any, res: any) => {
             endDate: convertToDate(experience.date_to),
             // rank: general_purpose_info?.application?.rank,
             cargoType: "",
-            type: "onshore",
+            type: "sea-exp",
             totalDuration: experience.days,
             status: 1,
             expirence: experience.vessel_name,
