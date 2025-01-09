@@ -14,7 +14,7 @@ const fleetService : FleetService = {
    save : async (data : any) => {
        try{
         infoLogger("START:- save function in fleet service");
-        const result = await fleetModel.create(data);
+        const result = await fleetModel.insertMany(data);
         dataLogger("result of save", result);
         return result;
        }catch(error){

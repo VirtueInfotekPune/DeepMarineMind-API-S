@@ -19,7 +19,10 @@ export const addBulkFleetRoute = async (req : any, res: any) => {
             return res.status(response.statusCode).send(response);
         }
 
-        const { vesselDetails, industry } = req.body;
+
+       const vesselTosave = await Promise.all(req.body.map(async (vessel: any) => {
+               
+        const { vesselDetails, industry } = vessel;
 
         // Validate required fields
         if (!vesselDetails) {
@@ -84,12 +87,14 @@ export const addBulkFleetRoute = async (req : any, res: any) => {
 
         // Save data using fleet service
         const savedFleet = await fleetService.save(dataToSave);
+        return savedFleet;
+       }))
 
         // Return success response
         const response = successResponse({
             handler: "fleet",
             messageCode: "S002",
-            data: savedFleet,
+            data: vesselTosave,
         });
         return res.status(response.statusCode).send(response);
     } catch (error) {

@@ -24,12 +24,13 @@
         "E012" : "Failed to add Team member", 
         "E013" : "Failed to fetch Team member",
         "E014" : "Team member already exist",
-        "E015" : "Access denied. Only recruiters can update team members",
+        "E015" : "Access denied. Only Admin can update team members",
         "E016" : "Team member not found or does not belong to this recruiter",
         "E017" : "Error updating team details",
         "E018" : "Missing team member ID",
         "E019" : "Team member not found in the recruiter's list",
-        "E020" : "Error deleting team member"
+        "E020" : "Error deleting team member",
+        "E021" : "Access denied. Only Admin can delete team members"
      
     }
 }
