@@ -128,6 +128,14 @@ export const UpdateWhiteListRoute = async (req: any, res: any) => {
             });
             return res.status(response?.statusCode).send(response);
         }
+        else if (!body.approvalStatus && body.approvalStatus !== "approved" && body.approvalStatus !== "rejected") {
+            const response = failureResponse({
+                handler: "whiteList",
+                messageCode: "E008",
+                req,
+            });
+            return res.status(response?.statusCode).send(response);
+        }
 
         const findRequest = await whitelistService.findOne({ _id: body.id });
         if (!findRequest) {
@@ -144,11 +152,13 @@ export const UpdateWhiteListRoute = async (req: any, res: any) => {
             const otpExpiry = new Date(new Date().getTime() + 1 * 60 * 1000); // OTP valid for 1 minute
 
             const tempUserPayload = {
-                ...findRequest,
-                type: USER_TYPE.RECRUITER,
-                role: USER_ROLE.SUPERADMIN,
+                name: findRequest.name,
+                email: findRequest.email,
+                phone: findRequest.phone,
+                type: "recruiter", 
+                role: "superadmin", 
                 emailOtp,
-                otpExpiry,
+                otpExpiry
             };
 
             const result = await mongooseService.update(
@@ -168,7 +178,9 @@ export const UpdateWhiteListRoute = async (req: any, res: any) => {
                     handler: "whiteList",
                     messageCode: "S006",
                     req,
-                    data: whiteList,
+                    data: { requestDoc : whiteList , 
+                        tempSignupDoc : result,
+                     },
                 });
                 return res.status(response?.statusCode).send(response);
             } else {
@@ -181,18 +193,21 @@ export const UpdateWhiteListRoute = async (req: any, res: any) => {
             }
         }
 
+        else if (body.approvalStatus === "rejected") {
+            
         const updatedWhitelist = await whitelistService.update(
             { _id: body.id },
             body
         );
-
         const response = successResponse({
             handler: "whiteList",
-            messageCode: "S003",
+            messageCode: "S007",
             req,
             data: updatedWhitelist,
         });
         return res.status(response?.statusCode).send(response);
+        }
+
     } catch (error) {
         errorLogger("Error in UpdateWhiteListRoute function", error);
 

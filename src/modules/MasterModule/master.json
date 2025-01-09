@@ -101,7 +101,8 @@
       "E047": "Error deleting ShipType",
       "E048": "Error fetching ShipType data",
       "E049": "ShipTypeId not found",
-      "E050": "ShipTypeId Is Required"
+      "E050": "ShipTypeId Is Required",
+      "E051" : "No departments found for the provided ID."
 
     },
     "ru": {

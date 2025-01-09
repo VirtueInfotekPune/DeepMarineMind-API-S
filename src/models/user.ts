@@ -10,6 +10,7 @@ export interface userDocument extends Document {
     phone?: string;
     password: string;
     firstTimePasswordChange?: boolean;
+    forgotPasswordExpiry?: Date;
     type: string;
     role?: string;
     status: number;
@@ -29,6 +30,8 @@ export interface userDocument extends Document {
        twitter?: string,
        website?: string,
        viber?: string,
+       whatsapp?: string,
+       telegram?: string,
     }
     right ? : {
         fleet: [{
@@ -46,6 +49,7 @@ const userSchema = new Schema<userDocument>({
     phone: { type: String },
     password: { type: String },
     firstTimePasswordChange: { type: Boolean, default: true },
+    forgotPasswordExpiry: { type: Date },
     type: { type: String, required: true , enum : USER_TYPE },
     role: { type: String , enum : USER_ROLE},
     industry: { type: Schema.Types.ObjectId, ref: "industry" },
@@ -64,6 +68,8 @@ const userSchema = new Schema<userDocument>({
         twitter: { type: String },
         website: { type: String },
         viber: { type: String },
+        whatsapp: { type: String },
+        telegram: { type: String },
     },
     right: {
         fleet: [{

@@ -42,7 +42,7 @@ export const whitelistService = {
     update : async (filter : FilterQuery<whitelistDocument> , payload : any) => {
         try{
             infoLogger("START:- update function in whitelist service");
-            const result = await whitelistModel.findOneAndUpdate(filter, payload);
+            const result = await whitelistModel.findOneAndUpdate(filter, payload , {new : true});
             dataLogger("result of update", result);
             return result;
         }catch(error){
