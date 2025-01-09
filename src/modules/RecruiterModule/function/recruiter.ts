@@ -342,9 +342,9 @@ export const updateTeamMemberRoute = async (req: any, res: any) => {
     const updateData = req.body; // Data to update team member fields
 
     // Ensure the user is a recruiter
-    if (user.type !== USER_TYPE.RECRUITER) {
+    if (user.role !== 'superadmin') {
       return res.status(403).send(
-        successResponse({
+        failureResponse({
           handler: "recruiter",
           messageCode: "E015",
           req,
@@ -355,7 +355,7 @@ export const updateTeamMemberRoute = async (req: any, res: any) => {
     // Validate the team member ID
     if (!teamMemberId) {
       return res.status(400).send(
-        successResponse({
+        failureResponse({
           handler: "recruiter",
           messageCode: "E018",
           req,
@@ -376,7 +376,7 @@ export const updateTeamMemberRoute = async (req: any, res: any) => {
 
     if (!teamMember || teamMember.length === 0) {
       return res.status(404).send(
-        successResponse({
+        failureResponse({
           handler: "recruiter",
           messageCode: "E016",
           req,
@@ -417,13 +417,14 @@ export const deleteTeamMemberRoute = async (req: any, res: any) => {
   try {
     const user = req.user; // Extract logged-in user details
     const teamMemberId = req.query.id; // Extract the ID from query parameters
+    console.log("user" , req.user)
 
     // Ensure the user is a recruiter
-    if (user.type !== USER_TYPE.RECRUITER) {
+    if (user.role !== 'superadmin') {
       return res.status(403).send(
-        successResponse({
+        failureResponse({
           handler: "recruiter",
-          messageCode: "E015",
+          messageCode: "E021",
           req,
         })
       );
@@ -432,7 +433,7 @@ export const deleteTeamMemberRoute = async (req: any, res: any) => {
     // Validate the team member ID
     if (!teamMemberId) {
       return res.status(400).send(
-        successResponse({
+        failureResponse({
           handler: "recruiter",
           messageCode: "E018",
           req,
@@ -454,7 +455,7 @@ export const deleteTeamMemberRoute = async (req: any, res: any) => {
     // If the team member was not found
     if (!deletedTeamMember) {
       return res.status(404).send(
-        successResponse({
+        failureResponse({
           handler: "recruiter",
           messageCode: "E016",
           req,
