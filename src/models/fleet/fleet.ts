@@ -6,11 +6,11 @@ import { PaginateModel } from "../../interface/paginate";
 interface fleetDocument extends Document {
     recruiter: Types.ObjectId,
     industry: Types.ObjectId
-    industryName: string,
+    industryName?: string,
     shipType : string,
     vesselDetails: {
         vesselName: string,
-        shipType: string,
+        shipType?: string,
         shipName: string,
         flag: string,
         engineType: {
@@ -44,35 +44,35 @@ interface fleetDocument extends Document {
 
 const fleetSchema = new Schema({
     recruiter: { type: Schema.Types.ObjectId, ref: "recruiter" },
-    industry: { type: Schema.Types.ObjectId, ref: "industry" },
+    industry: { type: Schema.Types.ObjectId, ref: "industry" , required: true },
     industryName: { type: String },
     vesselDetails: {
-        vesselName: { type: String },
+        vesselName: { type: String , required: true},
         shipType: { type: String },
-        shipName: { type: String },
-        flag: { type: String },
+        shipName: { type: String , required: true},
+        flag: { type: String , required: true},
         engineType: {
-            name: { type: String },
+            name: { type: String , required: true},
             visibility: { type:  Boolean, default : true },
         },
         cargoType: {
-            name: { type: String },
+            name: { type: String , required: true},
             visibility: { type:  Boolean, default : true }
         },
         shipBuilt: {
-            name: { type: String },
+            name: { type: String , required: true},
             visibility: { type:  Boolean, default : true }
         },
         DWT: {
-            name: { type: String },
+            name: { type: String , required: true},
             visibility: { type:  Boolean, default : true }
         },
         GT: {
-            name: { type: String },
+            name: { type: String , required: true},
             visibility: { type:  Boolean, default : true }
         },
         imoNumber: {
-            name: { type: String },
+            name: { type: String , required: true},
             visibility: { type:  Boolean, default : true }
         }
     }

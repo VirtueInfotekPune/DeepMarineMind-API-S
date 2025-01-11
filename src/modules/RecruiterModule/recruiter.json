@@ -1,13 +1,13 @@
 {
     "en":{
         "S001" : "Recruiter get successfully",
-        "S002" : "Recruiter updated successfully",
+        "S002" : "Your Profile updated successfully",
         "S003" : "Recruiter deleted successfully",
         "S004" : "Recruiter added successfully",
         "S005" : "Recruiter data fetched successfully",
         "S006" : "Team member added successfully",
-        "S007" : "Team member fetched successfully",
-        "S008" : "Team member details updated successfully",
+        "S007" : "Team member get successfully",
+        "S008" : "Team member profile updated successfully",
         "S009" : "Team member deleted successfully",
 
         "E001" : "All fields are required",
