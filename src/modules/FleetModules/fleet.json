@@ -1,9 +1,9 @@
 {
     "en" : {
         "S001" : "Fleets details get successfully",
-        "S002" : "Fleet details added successfully",
-        "S003" : "Fleet details updated successfully",
-        "S004" : "Fleet details deleted successfully",
+        "S002" : "Fleet added successfully",
+        "S003" : "Fleet updated successfully",
+        "S004" : "Fleet deleted successfully",
 
         "E001" : "Fleet can add by only recruiter",
         "E002" : "Error adding in Fleet details",
@@ -12,7 +12,9 @@
         "E005" : "Fleet Id is required",
         "E006" : "Fleet Id not found",
         "E007" : "Missing required vessel details",
-        "E008" : "User type is required"
+        "E008" : "User type is required",
+        "E009" : "All fields are required",
+        "E010" : "Industry is required"
     },
 
     "ru" : {

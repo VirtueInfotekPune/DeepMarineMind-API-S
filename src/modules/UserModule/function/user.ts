@@ -171,7 +171,7 @@ export const updateUserProfileRoute = async (req: any, res: any) => {
 
     const response = successResponse({
       handler: "user",
-      messageCode: "S002",
+      messageCode: "S007",
       data: result,
     });
     return res.status(response?.statusCode).send(response);

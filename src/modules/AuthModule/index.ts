@@ -19,7 +19,7 @@ authRoutes.post("/forgot-password" , forgotPassword)
 
 authRoutes.post("/verify-forgot-password-otp" , verifyOtpForForgotPassword)
 
-authRoutes.patch("/reset-password" , verifyToken, resetPassword)
+authRoutes.patch("/reset-password" , resetPassword)
 
 
 
