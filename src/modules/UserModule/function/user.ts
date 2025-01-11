@@ -135,17 +135,7 @@ export const updateUserProfileRoute = async (req: any, res: any) => {
 
     dataLogger("requestUser", requestUser);
 
-    // Allow updates only for candidates
-    if (requestUser.type !== "candidate") {
-      const response = failureResponse({
-        handler: "user",
-        messageCode: "E011",
-        req,
-      });
-      return res.status(response?.statusCode).send(response);
-    }
-
-    // Prevent updating email or password
+     // Prevent updating email or password
     if (body.email || body.password) {
       const response = failureResponse({
         handler: "user",
