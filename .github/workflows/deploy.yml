@@ -1,4 +1,4 @@
-name: Build and Deploy to S3
+name: Build, Zip, and Deploy to S3
 
 on:
   push:
@@ -27,8 +27,13 @@ jobs:
     # Step 4: Build the project
     - name: Build the project
       run: npm run build
+      
 
-    # Step 5: Upload build artifacts to AWS S3
+    # Step 5: Zip the dist folder
+    - name: Zip dist folder
+      run: zip -r dist.zip dist
+
+    # Step 6: Upload the zip file to AWS S3
     - name: Deploy to S3
       uses: jakejarvis/s3-sync-action@v0.5.1
       with:
@@ -38,4 +43,4 @@ jobs:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         AWS_REGION: ${{ secrets.AWS_REGION }}
-        SOURCE_DIR: ./dist
+        SOURCE_DIR: dist.zip
