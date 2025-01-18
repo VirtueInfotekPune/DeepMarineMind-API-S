@@ -176,9 +176,9 @@ export const getRecruiterByIdRoute = async (req: any, res: any) => {
 
 export const getTeamMembersRoutes = async (req: any, res: any) => {
   try {
-
     const filter = {} as FilterQuery<tempSignupDocument>;
 
+    // Validate user type and role
     if (req.user.type !== 'recruiter' && req.user.role !== 'superadmin') {
       const response = failureResponse({
         handler: "recruiter",
@@ -188,13 +188,64 @@ export const getTeamMembersRoutes = async (req: any, res: any) => {
       return res.status(response.statusCode).send(response);
     }
 
+    // Set filters for the query
     filter.recruiter = req.user.recruiter._id;
     filter.type = USER_TYPE.RECRUITER;
     filter.role = USER_ROLE.Team;
 
-    const result = await mongooseService.findAll(TempSignupModel, filter);
+  
 
+    // Perform aggregation
+    const result = await TempSignupModel.aggregate([
+      { $match: filter },
+      {
+        $lookup: {
+          from: "users", // The name of the user collection
+          localField: "email",
+          foreignField: "email",
+          as: "userDetails",
+          pipeline: [
+            {
+              $project: {
+                password: 0, // Exclude the password field
+              },
+            },
+          ],
+        },
+      },
+      {
+        $addFields: {
+          user: {
+            $arrayElemAt: [
+              {
+                $filter: {
+                  input: "$userDetails",
+                  as: "user",
+                  cond: { $eq: ["$$user.emailVerified", true] },
+                },
+              },
+              0,
+            ],
+          },
+        },
+      },
+      {
+        $addFields: {
+          combinedData: { $mergeObjects: ["$$ROOT", "$user"] }, // Merge root document with user data
+        },
+      },
+      {
+        $replaceRoot: { newRoot: "$combinedData" }, // Replace the root document with combined data
+      },
+      {
+        $project: {
+          user: 0, 
+          
+        },
+      },
+    ]);
 
+    // Respond with success
     const response = successResponse({
       handler: "recruiter",
       messageCode: "S007",
@@ -202,10 +253,8 @@ export const getTeamMembersRoutes = async (req: any, res: any) => {
       req: req,
     });
     return res.status(response.statusCode).send(response);
-
-
   } catch (error) {
-
+    // Handle errors
     const response = catchResponse({
       handler: "recruiter",
       messageCode: "E013",
@@ -213,9 +262,11 @@ export const getTeamMembersRoutes = async (req: any, res: any) => {
       error: error,
     });
     return res.status(response.statusCode).send(response);
-
   }
-}
+};
+
+
+
 
 export const updateTeamMemberRoute = async (req: any, res: any) => {
   try {
