@@ -1,150 +1,23 @@
+import { FilterQuery, QueryOptions } from "mongoose";
 import { USER_ROLE } from "../../../constants/types/userRole";
 import { USER_TYPE } from "../../../constants/types/userType";
+import { errorLogger, infoLogger } from "../../../core/logger";
 import {
   catchResponse,
   failureResponse,
   successResponse,
 } from "../../../core/response";
+import { recruiterDocument } from "../../../models/recruiter";
 import {
   tempSignupDocument,
   TempSignupModel,
 } from "../../../models/tempSignup";
 import { userDocument, UserModel } from "../../../models/user";
 import mongooseService from "../../../services/mongoose";
-import { FilterQuery, QueryOptions } from "mongoose";
-import { dataLogger, infoLogger } from "../../../core/logger";
 import { recruiterService } from "../../../services/recruiter";
-import { recruiterDocument } from "../../../models/recruiter";
-import messageCode from "../../../error-code";
 import { userService } from "../../../services/user";
 
-// export const updateRecruiterRoute = async (req: any, res: any) => {
 
-//     let session;
-//     let connection;
-
-//     try {
-//         connection = await openDBConnection();
-//         const user = req.user;
-
-//         // Check if user is recruiter
-//         if (user.type !== "recruiter") {
-//             const response = failureResponse({
-//                 handler: "recruiter",
-//                 messageCode: "E010",
-//                 req: req,
-//             });
-//             return res.status(response?.statusCode).send(response);
-//         }
-
-//         // Remove email and phone from request body to prevent updates
-//         const { email, phone, ...updateFields } = req.body;
-
-//         // Start transaction
-//         if (!connection) {
-//             throw new Error('Database connection not found');
-//         }
-//         session = await connection.startSession();
-//         session.startTransaction();
-
-//         // Fields that can be updated in both user and recruiter collections
-//         const commonFields = [
-//             'name', 'image', 'country', 'city', 'state',
-//             'address1', 'address2', 'pincode', 'nearestAirport',
-//             'socialLink', 'status'
-//         ];
-
-//         // Create separate update objects for user and recruiter
-//         const userUpdateFields: any = {};
-//         const recruiterUpdateFields: any = {};
-
-//         // Sort fields into appropriate update objects
-//         Object.entries(updateFields).forEach(([key, value]) => {
-//             if (commonFields.includes(key)) {
-//                 userUpdateFields[key] = value;
-//                 recruiterUpdateFields[key] = value;
-//             } else {
-//                 // Fields specific to recruiter
-//                 if (['organisationName', 'aboutCompany'].includes(key)) {
-//                     recruiterUpdateFields[key] = value;
-//                 }
-//             }
-//         });
-
-//         // Update user document
-//         if (Object.keys(userUpdateFields).length > 0) {
-//             const updatedUser = await UserModel.findByIdAndUpdate(
-//                 user._id,
-//                 { $set: userUpdateFields },
-//                 { session, new: true }
-//             );
-
-//             if (!updatedUser) {
-//                 const response = failureResponse({
-//                     handler: "recruiter",
-//                     messageCode: "E004",
-//                     req: req,
-//                 })
-//                 return res.status(response?.statusCode).send(response);
-//             }
-//         }
-
-//         // Update recruiter document
-//         if (Object.keys(recruiterUpdateFields).length > 0) {
-//             const updatedRecruiter = await RecruiterModel.findByIdAndUpdate(
-//                 user.recruiter._id,
-//                 { $set: recruiterUpdateFields },
-//                 { session, new: true }
-//             );
-
-//             if (!updatedRecruiter) {
-//                 const response = failureResponse({
-//                     handler: "recruiter",
-//                     messageCode: "E004",
-//                     req: req,
-//                 })
-//                 return res.status(response?.statusCode).send(response);
-//             }
-//         }
-
-//         // Explicitly commit the transaction
-//         await session.commitTransaction();
-
-//         // Fetch updated data after successful commit
-//         const updatedUser = await UserModel.findById(user._id)
-//             .populate('recruiter')
-//             .lean();
-
-//         const response = successResponse({
-//             handler: "recruiter",
-//             messageCode: "S002",
-//             data: {...updatedUser , password : undefined},
-//             req: req,
-//         });
-
-//         return res.status(response.statusCode).send(response);
-
-//     } catch (error) {
-//         // Abort transaction on error if session exists
-//         if (session) {
-//             await session.abortTransaction();
-//         }
-
-//         const response = catchResponse({
-//             handler: "recruiter",
-//             messageCode: "E004",
-//             req: req,
-//             error: error,
-//         });
-//         return res.status(response?.statusCode).send(response);
-//     } finally {
-//         // End session if it exists
-//         if (session) {
-//             await session.endSession();
-//         }
-
-//     }
-// };
 
 export const updateRecruiterRoute = async (req: any, res: any) => {
   try {
@@ -185,7 +58,7 @@ export const updateRecruiterRoute = async (req: any, res: any) => {
 
 export const addTeamRoute = async (req: any, res: any) => {
   try {
-    const { email} = req.body;
+    const { email } = req.body;
     let body = req.body;
 
     const user: userDocument = await mongooseService.findOne(UserModel, {
@@ -229,7 +102,7 @@ export const addTeamRoute = async (req: any, res: any) => {
       otpExpiry: null,
     };
 
-    const tempUserCreated = await mongooseService.update(TempSignupModel , {email} , newBody , {upsert : true , new : true});
+    const tempUserCreated = await mongooseService.update(TempSignupModel, { email }, newBody, { upsert: true, new: true });
 
     const response = successResponse({
       handler: "recruiter",
@@ -251,88 +124,86 @@ export const addTeamRoute = async (req: any, res: any) => {
 
 export const getRecruiterByIdRoute = async (req: any, res: any) => {
   try {
-      infoLogger("START:- getRecruiterByIdRoute function");
+    infoLogger("START:- getRecruiterByIdRoute function");
 
-   
 
-      if (req.query.id) {
-          const recruiter = await recruiterService.findOne({ _id: req.query.id });
-          const response = successResponse({
-              handler: "recruiter",
-              messageCode: "S001",
-              data: recruiter,
-              req: req,
-          });
-          return res.status(response.statusCode).send(response);
-      }
 
-      const filter = {} as FilterQuery<recruiterDocument>;
-      const options = {
-          page : req.query.page || 1,
-          limit : req.query.limit || 10,
-          sort: { createdAt: -1 },
-      } as QueryOptions<recruiterDocument>;
-
-      if(req.query.search) {
-          filter.$or = [
-              { organisationName: { $regex: req.query.search, $options: "i" } },
-              { companyEmail: { $regex: req.query.search, $options: "i" } },
-              { companyPhone: { $regex: req.query.search, $options: "i" } },
-          ];
-      }
-
-      const recruiter = await recruiterService.paginate(filter, options);
-      
+    if (req.query.id) {
+      const recruiter = await recruiterService.findOne({ _id: req.query.id });
       const response = successResponse({
-          handler: "recruiter",
-          messageCode: "S001",
-          data: recruiter,
-          req: req,
+        handler: "recruiter",
+        messageCode: "S001",
+        data: recruiter,
+        req: req,
       });
       return res.status(response.statusCode).send(response);
+    }
+
+    const filter = {} as FilterQuery<recruiterDocument>;
+    const options = {
+      page: req.query.page || 1,
+      limit: req.query.limit || 10,
+      sort: { createdAt: -1 },
+    } as QueryOptions<recruiterDocument>;
+
+    if (req.query.search) {
+      filter.$or = [
+        { organisationName: { $regex: req.query.search, $options: "i" } },
+        { companyEmail: { $regex: req.query.search, $options: "i" } },
+        { companyPhone: { $regex: req.query.search, $options: "i" } },
+      ];
+    }
+
+    const recruiter = await recruiterService.paginate(filter, options);
+
+    const response = successResponse({
+      handler: "recruiter",
+      messageCode: "S001",
+      data: recruiter,
+      req: req,
+    });
+    return res.status(response.statusCode).send(response);
   } catch (error) {
-      const response = catchResponse({
-          handler: "recruiter",
-          messageCode: "E006",
-          req: req,
-          error: error,
-      });
-      return res.status(response.statusCode).send(response);
+    const response = catchResponse({
+      handler: "recruiter",
+      messageCode: "E006",
+      req: req,
+      error: error,
+    });
+    return res.status(response.statusCode).send(response);
   }
 }
 
 export const getTeamMembersRoutes = async (req: any, res: any) => {
   try {
 
-    const user = req.user;
     const filter = {} as FilterQuery<tempSignupDocument>;
 
-    filter.recruiter = user.recruiter._id;
+    if (req.user.type !== 'recruiter' && req.user.role !== 'superadmin') {
+      const response = failureResponse({
+        handler: "recruiter",
+        messageCode: "E022",
+        req: req,
+      });
+      return res.status(response.statusCode).send(response);
+    }
+
+    filter.recruiter = req.user.recruiter._id;
     filter.type = USER_TYPE.RECRUITER;
     filter.role = USER_ROLE.Team;
 
-    // this use team member in TeamSignUpModel 
-    const teamMembersTempUser = await recruiterService.findTeamMembers(filter);
-    
-    // this use team member in in Team signup only email can change 
-    const teamMembersInUsers = await userService.findOneUserInUsers(filter);
+    const result = await mongooseService.findOne(TempSignupModel, filter);
 
-
-    const combinedTeamResult = {
-      teamMembersTempUser,
-      teamMembersInUsers,
-    };
-    
 
     const response = successResponse({
       handler: "recruiter",
       messageCode: "S007",
-      data: combinedTeamResult,
+      data: result,
       req: req,
     });
     return res.status(response.statusCode).send(response);
 
-    
+
   } catch (error) {
 
     const response = catchResponse({
@@ -342,42 +213,39 @@ export const getTeamMembersRoutes = async (req: any, res: any) => {
       error: error,
     });
     return res.status(response.statusCode).send(response);
-    
+
   }
 }
 
 export const updateTeamMemberRoute = async (req: any, res: any) => {
   try {
     const user = req.user; // Extract logged-in user details
-    const teamMemberId = req.query.id; // Extract the ID from query parameters
-    const updateData = req.body; // Data to update team member fields
+    const { id, ...payload } = req.body; // Extract the ID from query parameters
 
     // Ensure the user is a recruiter
-    if (user.role !== 'superadmin') {
-      return res.status(403).send(
-        failureResponse({
-          handler: "recruiter",
-          messageCode: "E015",
-          req,
-        })
-      );
+    if (user.role !== 'superadmin' && user.type !== 'recruiter') {
+      const reponse = failureResponse({
+        handler: "recruiter",
+        messageCode: "E015",
+        req,
+      })
+      return res.status(reponse.statusCode).send(reponse);
     }
 
     // Validate the team member ID
-    if (!teamMemberId) {
-      return res.status(400).send(
-        failureResponse({
-          handler: "recruiter",
-          messageCode: "E018",
-          req,
-        })
-      );
+    if (!id) {
+      const response = failureResponse({
+        handler: "recruiter",
+        messageCode: "E018",
+        req,
+      })
+      return res.status(response.statusCode).send(response);
     }
 
     // Construct filter with recruiter-specific validations
-    const filter: FilterQuery<any> = {
-      _id: teamMemberId,
-      recruiter: user.recruiter._id, // Ensure the team member belongs to the recruiter
+    const filter: FilterQuery<tempSignupDocument> = {
+      _id: id,
+      recruiter: user.recruiter._id,
       type: USER_TYPE.RECRUITER,
       role: USER_ROLE.Team,
     };
@@ -385,155 +253,100 @@ export const updateTeamMemberRoute = async (req: any, res: any) => {
     // Find the team member based on the filter
     const teamMember = await recruiterService.findTeamMembers(filter);
 
-    if (!teamMember || teamMember.length === 0) {
-      return res.status(404).send(
-        failureResponse({
-          handler: "recruiter",
-          messageCode: "E016",
-          req,
-        })
-      );
+    if (!teamMember) {
+      const response = failureResponse({
+        handler: "recruiter",
+        messageCode: "E016",
+        req,
+      })
+      return res.status(response.statusCode).send(response);
     }
 
-    // Update the team member with provided data
-    const updatedTeamMember = await recruiterService.updateTeamMember(
-      filter,
-      updateData
-    );
+    if (teamMember.emailVerified === false) {
+      // Update the team member with provided data
+      const updatedTeamMember = await recruiterService.updateTeamMember(
+        { _id: id },
+        payload
+      );
 
-    // Respond with success if update is successful
-    return res.status(200).send(
-      successResponse({
+      // Respond with success if update is successful
+      const response = successResponse({
         handler: "recruiter",
         messageCode: "S008",
         data: updatedTeamMember,
         req,
       })
-    );
+
+      return res.status(response.statusCode).send(response);
+
+    }
+
+    const userQuery = {
+      email: teamMember.email
+    } as FilterQuery<userDocument>;
+
+    const { email, ...userPayload } = req.body;
+
+    const updateUser = await userService.updateUser(userQuery, userPayload);
+
+
+    const response = successResponse({
+      handler: "recruiter",
+      messageCode: "S008",
+      data: updateUser,
+      req,
+    })
+
+    return res.status(response.statusCode).send(response);
+
+
   } catch (error) {
     // Handle errors and send a formatted response
-    return res.status(500).send(
-      catchResponse({
-        handler: "recruiter",
-        messageCode: "E017",
-        req,
-        error,
-      })
-    );
+    errorLogger("error in updateTeamMemberRoute", error);
+    const response = catchResponse({
+      handler: "recruiter",
+      messageCode: "E017",
+      req,
+      error,
+    })
+
+    return res.status(response.statusCode).send(response);
   }
 };
 
 
-// export const updateTeamMemberRoute = async (req: any, res: any) => {
-//   try {
-//     const user = req.user; // Extract logged-in user details
-//     const teamMemberId = req.query.id; // Extract the ID from query parameters
-//     const updateData = req.body; // Data to update team member fields
-
-//     // Ensure the user is a recruiter
-//     if (user.role !== 'superadmin') {
-//       return res.status(403).send(
-//         failureResponse({
-//           handler: "recruiter",
-//           messageCode: "E015",
-//           req,
-//         })
-//       );
-//     }
-
-//     // Validate the team member ID
-//     if (!teamMemberId) {
-//       return res.status(400).send(
-//         failureResponse({
-//           handler: "recruiter",
-//           messageCode: "E018",
-//           req,
-//         })
-//       );
-//     }
-
-//     // Construct filter with recruiter-specific validations
-//     const filter: FilterQuery<any> = {
-//       _id: teamMemberId,
-//       recruiter: user.recruiter._id, // Ensure the team member belongs to the recruiter
-//       type: USER_TYPE.RECRUITER,
-//       role: USER_ROLE.Team,
-//     };
-
-//     // Find the team member based on the filter
-//     const teamMember = await recruiterService.findTeamMembers(filter);
-
-//     if (!teamMember || teamMember.length === 0) {
-//       return res.status(404).send(
-//         failureResponse({
-//           handler: "recruiter",
-//           messageCode: "E016",
-//           req,
-//         })
-//       );
-//     }
-
-//     // Update the team member with provided data
-//     const updatedTeamMember = await recruiterService.updateTeamMember(
-//       filter,
-//       updateData
-//     );
-
-//     // Respond with success if update is successful
-//     return res.status(200).send(
-//       successResponse({
-//         handler: "recruiter",
-//         messageCode: "S008",
-//         data: updatedTeamMember,
-//         req,
-//       })
-//     );
-//   } catch (error) {
-//     // Handle errors and send a formatted response
-//     return res.status(500).send(
-//       catchResponse({
-//         handler: "recruiter",
-//         messageCode: "E017",
-//         req,
-//         error,
-//       })
-//     );
-//   }
-// };
 
 
 export const deleteTeamMemberRoute = async (req: any, res: any) => {
   try {
     const user = req.user; // Extract logged-in user details
-    const teamMemberId = req.query.id; // Extract the ID from query parameters
-    console.log("user" , req.user)
+    const { email } = req.body; // Extract the ID from query parameters
+    console.log("user", req.user)
 
     // Ensure the user is a recruiter
     if (user.role !== 'superadmin') {
-      return res.status(403).send(
-        failureResponse({
-          handler: "recruiter",
-          messageCode: "E021",
-          req,
-        })
-      );
+      const response = failureResponse({
+        handler: "recruiter",
+        messageCode: "E021",
+        req,
+      })
+      return res.status(response.statusCode).send(response);
     }
 
     // Validate the team member ID
-    if (!teamMemberId) {
-      return res.status(400).send(
-        failureResponse({
-          handler: "recruiter",
-          messageCode: "E018",
-          req,
-        })
-      );
+    if (!email) {
+      const response = failureResponse({
+        handler: "recruiter",
+        messageCode: "E018",
+        req,
+      })
+      return res.status(response.statusCode).send(response);
     }
 
     // Construct filter with recruiter-specific validations
-    const filter: FilterQuery<any> = {
-      _id: teamMemberId,
-      recruiter: user.recruiter._id, // Ensure the team member belongs to the recruiter
+    const filter: FilterQuery<tempSignupDocument> = {
+      email,
+      recruiter: user.recruiter._id,
       type: USER_TYPE.RECRUITER,
       role: USER_ROLE.Team,
     };
@@ -543,33 +356,30 @@ export const deleteTeamMemberRoute = async (req: any, res: any) => {
 
     // If the team member was not found
     if (!deletedTeamMember) {
-      return res.status(404).send(
-        failureResponse({
-          handler: "recruiter",
-          messageCode: "E016",
-          req,
-        })
-      );
+      const response = failureResponse({
+        handler: "recruiter",
+        messageCode: "E016",
+        req,
+      })
+      return res.status(response.statusCode).send(response);
     }
 
     // Respond with success if delete is successful
-    return res.status(200).send(
-      successResponse({
-        handler: "recruiter",
-        messageCode: "S009", // Success message code for deletion
-        data: deletedTeamMember,
-        req,
-      })
-    );
+    const response = successResponse({
+      handler: "recruiter",
+      messageCode: "S009", // Success message code for deletion
+      data: deletedTeamMember,
+      req,
+    })
+    return res.status(response.statusCode).send(response);
   } catch (error) {
     // Handle errors and send a formatted response
-    return res.status(500).send(
-      catchResponse({
-        handler: "recruiter",
-        messageCode: "E020", // Error message code for server error
-        req,
-        error,
-      })
-    );
+    const response = catchResponse({
+      handler: "recruiter",
+      messageCode: "E020", // Error message code for server error
+      req,
+      error,
+    })
+    return res.status(response.statusCode).send(response);
   }
 };

@@ -27,10 +27,11 @@
         "E015" : "Access denied. Only Admin can update team members",
         "E016" : "Team member not found or does not belong to this recruiter",
         "E017" : "Error updating team details",
-        "E018" : "Missing team member ID",
+        "E018" : "Missing team member Email",
         "E019" : "Team member not found in the recruiter's list",
         "E020" : "Error deleting team member",
-        "E021" : "Access denied. Only Admin can delete team members"
+        "E021" : "Access denied. Only Admin can delete team members",
+        "E022" : "Access denied. Only Admin can View team members"
      
     }
 }
