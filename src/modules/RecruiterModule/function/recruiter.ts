@@ -16,6 +16,7 @@ import { dataLogger, infoLogger } from "../../../core/logger";
 import { recruiterService } from "../../../services/recruiter";
 import { recruiterDocument } from "../../../models/recruiter";
 import messageCode from "../../../error-code";
+import { userService } from "../../../services/user";
 
 // export const updateRecruiterRoute = async (req: any, res: any) => {
 
@@ -157,7 +158,7 @@ export const updateRecruiterRoute = async (req: any, res: any) => {
       });
       return res.status(response?.statusCode).send(response);
     }
-    const { email, phone, ...updateFields } = req.body;
+    const { email, ...updateFields } = req.body;
 
     const updateRecruiter = await recruiterService.update(
       { _id: user.recruiter._id },
@@ -310,13 +311,23 @@ export const getTeamMembersRoutes = async (req: any, res: any) => {
     filter.type = USER_TYPE.RECRUITER;
     filter.role = USER_ROLE.Team;
 
+    // this use team member in TeamSignUpModel 
+    const teamMembersTempUser = await recruiterService.findTeamMembers(filter);
+    
+    // this use team member in in Team signup only email can change 
+    const teamMembersInUsers = await userService.findOneUserInUsers(filter);
 
-    const teamMembers = await recruiterService.findTeamMembers(filter);
+
+    const combinedTeamResult = {
+      teamMembersTempUser,
+      teamMembersInUsers,
+    };
+    
 
     const response = successResponse({
       handler: "recruiter",
       messageCode: "S007",
-      data: teamMembers,
+      data: combinedTeamResult,
       req: req,
     });
     return res.status(response.statusCode).send(response);
@@ -411,6 +422,84 @@ export const updateTeamMemberRoute = async (req: any, res: any) => {
     );
   }
 };
+
+
+// export const updateTeamMemberRoute = async (req: any, res: any) => {
+//   try {
+//     const user = req.user; // Extract logged-in user details
+//     const teamMemberId = req.query.id; // Extract the ID from query parameters
+//     const updateData = req.body; // Data to update team member fields
+
+//     // Ensure the user is a recruiter
+//     if (user.role !== 'superadmin') {
+//       return res.status(403).send(
+//         failureResponse({
+//           handler: "recruiter",
+//           messageCode: "E015",
+//           req,
+//         })
+//       );
+//     }
+
+//     // Validate the team member ID
+//     if (!teamMemberId) {
+//       return res.status(400).send(
+//         failureResponse({
+//           handler: "recruiter",
+//           messageCode: "E018",
+//           req,
+//         })
+//       );
+//     }
+
+//     // Construct filter with recruiter-specific validations
+//     const filter: FilterQuery<any> = {
+//       _id: teamMemberId,
+//       recruiter: user.recruiter._id, // Ensure the team member belongs to the recruiter
+//       type: USER_TYPE.RECRUITER,
+//       role: USER_ROLE.Team,
+//     };
+
+//     // Find the team member based on the filter
+//     const teamMember = await recruiterService.findTeamMembers(filter);
+
+//     if (!teamMember || teamMember.length === 0) {
+//       return res.status(404).send(
+//         failureResponse({
+//           handler: "recruiter",
+//           messageCode: "E016",
+//           req,
+//         })
+//       );
+//     }
+
+//     // Update the team member with provided data
+//     const updatedTeamMember = await recruiterService.updateTeamMember(
+//       filter,
+//       updateData
+//     );
+
+//     // Respond with success if update is successful
+//     return res.status(200).send(
+//       successResponse({
+//         handler: "recruiter",
+//         messageCode: "S008",
+//         data: updatedTeamMember,
+//         req,
+//       })
+//     );
+//   } catch (error) {
+//     // Handle errors and send a formatted response
+//     return res.status(500).send(
+//       catchResponse({
+//         handler: "recruiter",
+//         messageCode: "E017",
+//         req,
+//         error,
+//       })
+//     );
+//   }
+// };
 
 
 export const deleteTeamMemberRoute = async (req: any, res: any) => {
