@@ -192,7 +192,7 @@ export const getTeamMembersRoutes = async (req: any, res: any) => {
     filter.type = USER_TYPE.RECRUITER;
     filter.role = USER_ROLE.Team;
 
-    const result = await mongooseService.findOne(TempSignupModel, filter);
+    const result = await mongooseService.findAll(TempSignupModel, filter);
 
 
     const response = successResponse({
