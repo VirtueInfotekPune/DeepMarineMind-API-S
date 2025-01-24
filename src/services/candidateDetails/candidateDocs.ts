@@ -6,6 +6,7 @@ interface CandidateDocsServices {
     save : (data : any, session?: any) => Promise<any>
     update : (filter : any , payload : any) => Promise<any>
     delete : (filter : any) => Promise<any>
+    deleteMany : (filter : any) => Promise<any>
     findOne : (filter : any) => Promise<any>
     findAll : (filter : any) => Promise<any>
     paginate : (filter : any , options : any) => Promise<any>
@@ -43,6 +44,18 @@ export const candidateDocsService : CandidateDocsServices = {
         try{
             infoLogger("START:- delete function in certificatesDocs service");
             const result = await candidateDocsModel.deleteOne(filter);
+            dataLogger("result of delete", result);
+            return result;
+        }catch(error){
+            errorLogger("error in delete function in certificatesDocs service", error);
+            throw error;
+        }
+    },
+
+    deleteMany : async (filter : any) => {
+        try{
+            infoLogger("START:- delete function in certificatesDocs service");
+            const result = await candidateDocsModel.deleteMany(filter);
             dataLogger("result of delete", result);
             return result;
         }catch(error){

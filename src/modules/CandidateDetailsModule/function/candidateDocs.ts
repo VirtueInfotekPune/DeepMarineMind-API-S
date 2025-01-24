@@ -100,38 +100,50 @@ export const findPaginateCandidateDocsRoute = async (req: any, res: any) => {
 
 export const updateCandidateDocsRoute = async (req: any, res: any) => {
     try {
-        infoLogger("START:- updateCertificatedDocsRoute function");
+        infoLogger("START:- updateCandidateDocsRoute function");
         dataLogger("req.body", req.body);
-        const body = req.body;
-        const filter = {} as any;
-        if (!body.id) {
+
+        const { certificates, candidate } = req.body;
+
+        if (!Array.isArray(certificates) || certificates.length === 0) {
             const response = failureResponse({
                 handler: "personalDetails",
-                messageCode: "E070",
+                messageCode: "E068",
                 req: req,
+                error: "Certificates must be a non-empty array",
             });
-            return res.status(response?.statusCode || 400).send(response); // Default to 400 for missing ID
+            return res.status(response?.statusCode).send(response);
         }
-        filter._id = body.id;
-        const result = await candidateDocsService.update(filter, body);
+
+        await candidateDocsService.deleteMany({ candidate });
+
+        const payloads = certificates.map((certName: string) => ({
+            name: certName,
+            candidate: req.user._id,
+        }));
+
+        const result = await candidateDocsService.save(payloads);
+        dataLogger("result of save", result);
+
         const response = successResponse({
             handler: "personalDetails",
-            data: result,
             messageCode: "S032",
             req: req,
+            data: result,
         });
         return res.status(response?.statusCode).send(response);
     } catch (error) {
-        errorLogger("error in updateCertificatedDocsRoute function", error);
+        errorLogger("error in updateCandidateDocsRoute function", error);
         const response = catchResponse({
             handler: "personalDetails",
             messageCode: "E068",
             req: req,
-            error: error
+            error: error,
         });
         return res.status(response?.statusCode).send(response);
     }
-}
+};
+
 
 export const deleteCandidateDocsRoute = async (req: any, res: any) => {
     try {
