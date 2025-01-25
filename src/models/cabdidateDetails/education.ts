@@ -17,7 +17,7 @@ export interface educationDocument extends Document {
 }
 
 const educationSchema = new Schema<educationDocument>({
-    candidate: { type: Schema.Types.ObjectId, ref: "users" },
+    candidate: { type: Schema.Types.ObjectId, ref: "user" },
     fieldOfStudy: { type: String },
     degree: { type: String },
     collage: { type: String },
