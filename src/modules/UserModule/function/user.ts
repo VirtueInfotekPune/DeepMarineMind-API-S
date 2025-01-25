@@ -19,7 +19,7 @@ export const updateUserRoute = async (req: any, res: any) => {
 
     dataLogger("requestUser", requestUser);
 
-    if (body.password && requestUser.type !== "superadmin") {
+    if (body.password && requestUser.type !== "superadmin" ) {
       if (requestUser.firstTimePasswordChange === false) {
         const response = failureResponse({
           handler: "user",
@@ -52,7 +52,8 @@ export const updateUserRoute = async (req: any, res: any) => {
         req,
       });
       return res.status(response?.statusCode).send(response);
-    } else if (body.phone) {
+    } 
+    else if (body.phone) {
       const response = failureResponse({
         handler: "user",
         messageCode: "E009",
@@ -106,7 +107,7 @@ export const userProfile = async (req: any, res: any) => {
     const response = successResponse({
       handler: "user",
       data: {
-        userData: { ...user, password: undefined },
+        userData: { ...user._doc, password: undefined },
       },
       messageCode: "S005",
       req,
@@ -135,17 +136,7 @@ export const updateUserProfileRoute = async (req: any, res: any) => {
 
     dataLogger("requestUser", requestUser);
 
-    // Allow updates only for candidates
-    if (requestUser.type !== "candidate") {
-      const response = failureResponse({
-        handler: "user",
-        messageCode: "E011",
-        req,
-      });
-      return res.status(response?.statusCode).send(response);
-    }
-
-    // Prevent updating email or password
+     // Prevent updating email or password
     if (body.email || body.password) {
       const response = failureResponse({
         handler: "user",
@@ -171,7 +162,7 @@ export const updateUserProfileRoute = async (req: any, res: any) => {
 
     const response = successResponse({
       handler: "user",
-      messageCode: "S002",
+      messageCode: "S007",
       data: result,
     });
     return res.status(response?.statusCode).send(response);
@@ -187,5 +178,4 @@ export const updateUserProfileRoute = async (req: any, res: any) => {
     return res.status(response?.statusCode).send(response);
   }
 };
-
 

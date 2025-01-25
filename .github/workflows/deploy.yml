@@ -27,6 +27,7 @@ jobs:
     # Step 4: Build the project
     - name: Build the project
       run: npm run build
+      
 
     # Step 5: Zip the dist folder
     - name: Zip dist folder

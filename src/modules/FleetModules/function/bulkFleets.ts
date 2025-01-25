@@ -19,7 +19,10 @@ export const addBulkFleetRoute = async (req : any, res: any) => {
             return res.status(response.statusCode).send(response);
         }
 
-        const { vesselDetails, industry } = req.body;
+
+       const vesselTosave = await Promise.all(req.body.map(async (vessel: any) => {
+       
+        const { vesselDetails, industry } = vessel;
 
         // Validate required fields
         if (!vesselDetails) {
@@ -28,8 +31,26 @@ export const addBulkFleetRoute = async (req : any, res: any) => {
                 messageCode: "E007",
                 req: req,
             });
-            return res.status(400).send(response);
+            return res.status(response?.statusCode).send(response);
         }
+
+        // if (
+        //     !vesselDetails.vesselName || 
+        //     !vesselDetails.shipName || 
+        //     !vesselDetails.engineType?.name || 
+        //     !vesselDetails.shipBuilt?.name ||
+        //     !vesselDetails.DWT?.name || 
+        //     !vesselDetails.GT?.name ||
+        //     !vesselDetails.imoNumber?.name
+        // ) {
+        //     const response = failureResponse({
+        //         handler: "fleet",
+        //         messageCode: "E009",
+        //         req: req,
+        //     });
+        //     return res.status(response?.statusCode).send(response);
+        // }
+       
 
         let industryId = null;
         let industryName = null;
@@ -84,12 +105,14 @@ export const addBulkFleetRoute = async (req : any, res: any) => {
 
         // Save data using fleet service
         const savedFleet = await fleetService.save(dataToSave);
+        return savedFleet;
+       }))
 
         // Return success response
         const response = successResponse({
             handler: "fleet",
             messageCode: "S002",
-            data: savedFleet,
+            data: vesselTosave,
         });
         return res.status(response.statusCode).send(response);
     } catch (error) {

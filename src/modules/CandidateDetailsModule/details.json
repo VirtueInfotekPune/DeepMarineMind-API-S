@@ -38,8 +38,8 @@
         "S029" : "Candidate Profile successfully created",
 
         "S030" : "Candidate Docs get successfully",
-        "S031" : "Candidate Docs added successfully",
-        "S032" : "Candidate Docs updated successfully",
+        "S031" : "Certificates & Licences has been added!",
+        "S032" : "Certificates & Licences has been updated!",
         "S033" : "Candidate Docs deleted successfully",
 
         "E001": "All fields are required",

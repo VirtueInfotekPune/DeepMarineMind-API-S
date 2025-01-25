@@ -694,7 +694,7 @@ const verifyUser = async (req: any, res: any, tempUser: tempSignupDocument) => {
 
       const response = successResponse({
         handler: "auth",
-        messageCode: "S003",
+        messageCode: "S002",
         req: req,
         data: {
           accessToken: token,
@@ -742,7 +742,7 @@ const verifyUser = async (req: any, res: any, tempUser: tempSignupDocument) => {
 
       const response = successResponse({
         handler: "auth",
-        messageCode: "S003",
+        messageCode: "S002",
         req: req,
         data: {
           accessToken: token,

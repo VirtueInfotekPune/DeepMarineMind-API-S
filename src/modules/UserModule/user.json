@@ -1,11 +1,13 @@
 {
     "en": {
         "S001": "User get successfully",
-        "S002" : "User updated successfully",
+        "S002" : "Register Successfully",
         "S003" : "User deleted successfully",
         "S004" : "User added successfully",
         "S005" : "User data fetched successfully",
-        "S006" : "Registeration Successfully",
+        "S006" : "Registeration Successfull",
+        "S007" : "Your profile updated successfully",
+        "S008" : "Team profile updated successfully",
 
 
 
@@ -19,7 +21,9 @@
         "E008": "You cannot send Email in Body of update Request",
         "E009": "You cannot send phone in Body of update Request" , 
         "E010" : "You already setup your first Password , Please use the 'Forgot Password' option.",
-        "E011" : "Only candidates are allowed to update their profiles."
+        "E011" : "Only candidates are allowed to update their profiles.",
+        "E012" : "Team member not found in users list",
+        "E013" : "Missing team member ID"
          
 
 

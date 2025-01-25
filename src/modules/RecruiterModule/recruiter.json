@@ -1,12 +1,14 @@
 {
     "en":{
         "S001" : "Recruiter get successfully",
-        "S002" : "Recruiter updated successfully",
+        "S002" : "Your Profile updated successfully",
         "S003" : "Recruiter deleted successfully",
         "S004" : "Recruiter added successfully",
         "S005" : "Recruiter data fetched successfully",
         "S006" : "Team member added successfully",
-        "S007" : "Team member fetched successfully",
+        "S007" : "Team member get successfully",
+        "S008" : "Team member profile updated successfully",
+        "S009" : "Team member deleted successfully",
 
         "E001" : "All fields are required",
         "E002" : "Recruiter does not exist",
@@ -21,7 +23,15 @@
         "E011" : "missing recruiter ID",
         "E012" : "Failed to add Team member", 
         "E013" : "Failed to fetch Team member",
-        "E014" : "Team member already exist"
+        "E014" : "Team member already exist",
+        "E015" : "Access denied. Only Admin can update team members",
+        "E016" : "Team member not found or does not belong to this recruiter",
+        "E017" : "Error updating team details",
+        "E018" : "Missing team member Email",
+        "E019" : "Team member not found in the recruiter's list",
+        "E020" : "Error deleting team member",
+        "E021" : "Access denied. Only Admin can delete team members",
+        "E022" : "Access denied. Only Admin can View team members"
      
     }
 }

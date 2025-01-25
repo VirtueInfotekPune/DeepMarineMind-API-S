@@ -16,10 +16,28 @@ export const userService = {
         }
     },
 
+    
+
      findOneUser : async (filter : any) => {
             try {
                 infoLogger("START:- findOneUser function in mongoose service");
                 const result = await TempSignupModel.findOne(filter);
+                dataLogger("result of findOneUser", result);
+                return result;
+            } catch (error) {
+                errorLogger("error in findOneUser function in mongoose service", error);
+                throw error;
+            }
+        },
+
+        findOneUserInUsers: async (filter: any) => {
+            try {
+                infoLogger("START:- findOneUser function in mongoose service");
+        
+                // Ensure the filter is an object
+                const query = typeof filter === "string" ? { _id: filter } : filter;
+        
+                const result = await UserModel.findOne(query);
                 dataLogger("result of findOneUser", result);
                 return result;
             } catch (error) {
